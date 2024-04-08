@@ -1,180 +1,266 @@
 ;; -*- mode: org-mode; eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t); -*-
 #+PROPERTY: header-args  :tangle "~/.emacs.d/init.el"
  
-* Emacs configure
-** Global setting
+* Global setting
 #+name: global
 #+begin_src elisp
 
 #+end_src
 
-** Keyboard Bindings
-*** memow
+
+* Keyboard Bindings
+** memow
 #+name: meow
 #+begin_src elisp
-(require 'meow)
-(meow-global-mode 1)
-(setq meow-use-keypad-when-execute-kbd nil
-      meow-expand-exclude-mode-list nil
-      meow-use-clipboard t
-      ;; meow-cursor-type-normal 'box
-      ;; meow-cursor-type-insert '(bar . 1)
-      meow-replace-state-name-list '((normal . "N")
-                                     (motion . "M")
-                                     (keypad . "K")
-                                     (insert . "I")
-                                     (beacon . "B"))
-      meow-use-enhanced-selection-effect t
-      meow-cheatsheet-layout meow-cheatsheet-layout-qwerty
-      meow-keypad-start-keys '((?c . ?c)
-                               (?x . ?x))
-      meow-char-thing-table '((?\( . round)
-                              (?\) . round)
-                              (?\[ . square)
-                              (?\] . square)
-                              (?\{ . curly)
-                              (?\} . curly)
-                              (?\" . string)
-                              (?w . symbol)
-                              ;; (?w . window)
-                              (?b . buffer)
-                              (?p . paragraph)
-                              (?l . line)
-                              (?d . defun)
-                              (?s . sentence))
-      )
-;; motion keys
-(meow-motion-overwrite-define-key '("j" . meow-next)
-                                  '("k" . meow-prev)
-                                  '("h" . meow-left)
-                                  '("l" . meow-right)
-                                  '("<escape>" . ignore)
-                                  '("." . repeat))
-;; normal keys
-(meow-normal-define-key '("0" . meow-expand-0)
-                        '("9" . meow-expand-9)
-                        '("8" . meow-expand-8)
-                        '("7" . meow-expand-7)
-                        '("6" . meow-expand-6)
-                        '("5" . meow-expand-5)
-                        '("4" . meow-expand-4)
-                        '("3" . meow-expand-3)
-                        '("2" . meow-expand-2)
-                        '("1" . meow-expand-1)
+  (straight-use-package 'meow)
+  (require 'meow)
+  (meow-global-mode 1)
+  (setq meow-use-keypad-when-execute-kbd nil
+	meow-expand-exclude-mode-list nil
+	meow-use-clipboard t
+	;; meow-cursor-type-normal 'box
+	;; meow-cursor-type-insert '(bar . 1)
+	meow-replace-state-name-list '((normal . "N")
+				       (motion . "M")
+				       (keypad . "K")
+					 (insert . "I")
+					 (beacon . "B"))
+	  meow-use-enhanced-selection-effect t
+	  meow-cheatsheet-layout meow-cheatsheet-layout-qwerty
+	  meow-keypad-start-keys '((?c . ?c)
+				   (?x . ?x))
+	  meow-char-thing-table '((?\( . round)
+				  (?\) . round)
+				  (?\[ . square)
+				  (?\] . square)
+				  (?\{ . curly)
+				  (?\} . curly)
+				  (?\" . string)
+				  (?w . symbol)
+				  ;; (?w . window)
+				  (?b . buffer)
+				  (?p . paragraph)
+				  (?l . line)
+				  (?d . defun)
+				  (?s . sentence))
+	  )
+    ;; motion keys
+    (meow-motion-overwrite-define-key '("j" . meow-next)
+				      '("k" . meow-prev)
+				      '("h" . meow-left)
+				      '("l" . meow-right)
+				      '("<escape>" . ignore)
+				      '("." . repeat))
+    ;; normal keys
+    (meow-normal-define-key '("0" . meow-expand-0)
+			    '("9" . meow-expand-9)
+			    '("8" . meow-expand-8)
+			    '("7" . meow-expand-7)
+			    '("6" . meow-expand-6)
+			    '("5" . meow-expand-5)
+			    '("4" . meow-expand-4)
+			    '("3" . meow-expand-3)
+			    '("2" . meow-expand-2)
+			    '("1" . meow-expand-1)
 
-                        '("a" . meow-vim-append)
-                        ;; '("A" . meow-append-vim)
-                        '("b" . meow-back-word)
-                        '("B" . meow-back-symbol)
-                        '("c c" . meow-change)
-                        '("d" . meow-kill)
-                        '("e" . meow-next-word)
-                        '("E" . meow-next-symbol)
-                        '("f" . meow-find)
-                        '("g" . g-extra-commands)
-                        '("G" . meow-grab)
-                        '("h" . meow-left)
-                        '("H" . meow-left-expand)
-                        '("i" . meow-insert)
-                        ;; '("I" . meow-insert-vim)
-                        '("j" . meow-next)
-                        '("J" . meow-next-expand)
-                        '("k" . meow-prev)
-                        '("K" . meow-prev-expand)
-                        '("l" . meow-right)
-                        '("L" . meow-right-expand)
-                        '("m" . consult-register-store)
-                        '("M" . meow-block)
-                        '("n" . meow-search)
-                        '("N" . meow-pop-selection);;
+			    '("a" . meow-vim-append)
+			    ;; '("A" . meow-append-vim)
+			    '("b" . meow-back-word)
+			    '("B" . meow-back-symbol)
+			    '("c c" . meow-change)
+			    '("d" . meow-kill)
+			    '("e" . meow-next-word)
+			    '("E" . meow-next-symbol)
+			    '("f" . meow-find)
+			    '("g" . g-extra-commands)
+			    '("G" . meow-grab)
+			    '("h" . meow-left)
+			    '("H" . meow-left-expand)
+			    '("i" . meow-insert)
+			    ;; '("I" . meow-insert-vim)
+			    '("j" . meow-next)
+			    '("J" . meow-next-expand)
+			    '("k" . meow-prev)
+			    '("K" . meow-prev-expand)
+			    '("l" . meow-right)
+			    '("L" . meow-right-expand)
+			    '("m" . consult-register-store)
+			    '("M" . meow-block)
+			    '("n" . meow-search)
+			    '("N" . meow-pop-selection);;
 
-                        '("o" . meow-open-below)
-                        '("O" . meow-open-above)
-                        '("p" . meow-yank)
-                        '("P" . meow-yank-pop);;
-                        '("q" . meow-quit)
-                        '("Q" . consult-goto-line)
-                        '("r" . meow-replace)
-                        '("R" . meow-swap-grab)
-                        '("s" . meow-line)
-                        '("S" . meow-kmacro-lines) ;;
-                        '("t" . meow-till)
-                        '("u" . meow-undo)
-                        '("U" . vundo)
-                        '("v v" . meow-visit) ;;
-                        '("V" . meow-kmacro-matches) ;;
-                        '("w" . meow-mark-word)
-                        '("W" . meow-mark-symbol)
+			    '("o" . meow-open-below)
+			    '("O" . meow-open-above)
+			    '("p" . meow-yank)
+			    '("P" . meow-yank-pop);;
+			    '("q" . meow-quit)
+			    '("Q" . consult-goto-line)
+			    '("r" . meow-replace)
+			    '("R" . meow-swap-grab)
+			    '("s" . meow-line)
+			    '("S" . meow-kmacro-lines) ;;
+			    '("t" . meow-till)
+			    '("u" . meow-undo)
+			    '("U" . vundo)
+			    '("v v" . meow-visit) ;;
+			    '("V" . meow-kmacro-matches) ;;
+			    '("w" . meow-mark-word)
+			    '("W" . meow-mark-symbol)
 
-                        '("x" . meow-delete)
-                        '("X" . meow-backward-delete)
-                        '("y" . meow-save)
-                        ;; '("Y" . meow-sync-save)
-                        '("z a" . hs-toggle-hiding)
-                        '("z c" . hs-hide-block)
-                        '("z o" . hs-show-block)
-                        '("z m" . hs-hide-all)
-                        '("z r" . hs-show-all)
-                        '("z z" . recenter-top-bottom)
+			    '("x" . meow-delete)
+			    '("X" . meow-backward-delete)
+			    '("y" . meow-save)
+			    ;; '("Y" . meow-sync-save)
+			    '("z a" . hs-toggle-hiding)
+			    '("z c" . hs-hide-block)
+			    '("z o" . hs-show-block)
+			    '("z m" . hs-hide-all)
+			    '("z r" . hs-show-all)
+			    '("z z" . recenter-top-bottom)
 
-                        '("v i" . meow-inner-of-thing)
-                        '("v a" . meow-bounds-of-thing)
-                        '("v =" . insert-equation)
+			    '("v i" . meow-inner-of-thing)
+			    '("v a" . meow-bounds-of-thing)
+			    '("v =" . insert-equation)
 
-                        '("-" . negative-argument)
-                        '("=" . indent-region)
-                        '("[" . meow-beginning-of-thing)
-                        '("]" . meow-end-of-thing)
-                        '("\\" . quoted-insert)
-                        '(";" . meow-expand-1)
-                        ;; '(":" . async-shell-command)
-                        '("'" . consult-register-load)
-                        '("," . meow-reverse)
-                        '("." . repeat)
+			    '("-" . negative-argument)
+			    '("=" . indent-region)
+			    '("[" . meow-beginning-of-thing)
+			    '("]" . meow-end-of-thing)
+			    '("\\" . quoted-insert)
+			    '(";" . meow-expand-1)
+			    ;; '(":" . async-shell-command)
+			    '("'" . consult-register-load)
+			    '("," . meow-reverse)
+			    '("." . repeat)
 
-                        '("<escape>" . ignore)
-                        '("!" . meow-start-kmacro-or-insert-counter)
-                        '("@" . meow-end-or-call-kmacro)
-                        '("#" . embark-toggle-highlight)
-                        '("^" . meow-join)
-                        '("*" . embark-next-symbol)
-                        '("/" . isearch-forward))
-(defun meow-vim-append ()
-  "Like vim, move to the end of selection, switch to INSERT state."
-  (interactive)
-  (if meow--temp-normal
-      (progn
-        (message "Quit temporary normal mode")
-        (meow--switch-state 'motion))
-    (if (not (region-active-p))
-        (progn
-          (when (and meow-use-cursor-position-hack
-                     (< (point) (point-max)))
-            (forward-char 1))
-          (forward-char 1)
-          )
-      (meow--direction-forward)
-      (meow--cancel-selection))
-    (meow--switch-state 'insert)))
+			    '("<escape>" . ignore)
+			    '("!" . meow-start-kmacro-or-insert-counter)
+			    '("@" . meow-end-or-call-kmacro)
+			    '("#" . embark-toggle-highlight)
+			    '("^" . meow-join)
+			    '("*" . embark-next-symbol)
+			    '("/" . isearch-forward))
+    (defun meow-vim-append ()
+      "Like vim, move to the end of selection, switch to INSERT state."
+      (interactive)
+      (if meow--temp-normal
+	  (progn
+	    (message "Quit temporary normal mode")
+	    (meow--switch-state 'motion))
+	(if (not (region-active-p))
+	    (progn
+	      (when (and meow-use-cursor-position-hack
+			 (< (point) (point-max)))
+		(forward-char 1))
+	      (forward-char 1)
+	      )
+	  (meow--direction-forward)
+	  (meow--cancel-selection))
+	(meow--switch-state 'insert)))
 
-(defun toggle-between-meow-normal-motion()
-  (interactive)
-  (if meow-motion-mode (meow-normal-mode) (meow-motion-mode)))
-(global-set-key (kbd "M-\\") #'toggle-between-meow-normal-motion)
+    (defun toggle-between-meow-normal-motion()
+      (interactive)
+      (if meow-motion-mode (meow-normal-mode) (meow-motion-mode)))
+    (global-set-key (kbd "M-\\") #'toggle-between-meow-normal-motion)
 #+end_src
 
-*** which-key
+** which-key
 #+name: which-key
 #+begin_src elisp
-(require 'which-key)
-(which-key-mode)
+  (straight-use-package 'which-key)
+  (require 'which-key)
+  (which-key-mode)
 #+end_src
 
-** Completion
-*** Vertico
+* Completion
+** Vertico
 #+name: vertico
 #+begin_src elisp
-(setq vertico-cycle t)
-(vertico-mode)
+  (straight-use-package 'vertico)
+  (setq vertico-cycle t)
+  (vertico-mode)
+#+end_src
+
+* Window Management
+** winner-mode
+#+name: winner-mode
+#+begin_src elisp
+(winner-mode t)
+#+end_src
+
+* Input
+** posframe
+#+name: posframe
+#+begin_src elisp
+(straight-use-package 'posframe)
+  (require 'posframe)
+#+end_src
+
+** rime
+#+name: rime
+#+begin_src elisp
+(straight-use-package 'rime)
+(setq default-input-method "rime")
+  (with-eval-after-load 'rime
+  (setq rime-disable-predicates '(meow-normal-mode-p
+				     meow-motion-mode-p
+				     meow-keypad-mode-p
+				     rime-predicate-prog-in-code-p
+				     rime-predicate-punctuation-line-begin-p ;;在行首要输入符号时
+				     rime-predicate-after-alphabet-char-p ;;在英文字符串之后（必须为以字母开头的英文字符串）
+				     rime-predicate-current-input-punctuation-p ;;当要输入的是符号时
+				     ;; rime-predicate-after-ascii-char-p ;;任意英文字符后 ,enable this to use with <s
+				     rime-predicate-current-uppercase-letter-p ;; 将要输入的为大写字母时
+				     rime-predicate-space-after-cc-p ;;在中文字符且有空格之后
+				     )
+	   rime-show-candidate 'posframe
+	   rime-posframe-properties (list :internal-border-width 1
+					  :font lewis-fixed-font
+					  )
+	   rime-user-data-dir "~/Documents/rime/"
+	   rime-inline-ascii-trigger 'shift-r
+	   ))
+  (when (eq system-type 'darwin)
+    (setq
+     ;; rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/" ;; use build-emacs
+     rime-emacs-module-header-root "/opt/homebrew/opt/emacs-plus@30/include" ;;use emacs-plus
+     rime-librime-root "~/Downloads/librime/dist"
+     ))
+#+end_src
+
+
+
+* git
+** magit
+#+name: magit
+#+begin_src elisp
+(require 'magit)
+#+end_src
+
+* Programe
+** Language
+*** elisp
+**** helpfull
+#+name: helpfull
+#+begin_src elisp
+    (straight-use-package 'helpfull)
+  ;; Note that the built-in `describe-function' includes both functions
+  ;; and macros. `helpful-function' is functions only, so we provide
+  ;; `helpful-callable' as a drop-in replacement.
+    (global-set-key (kbd "C-h f") #'helpful-callable)
+
+    (global-set-key (kbd "C-h v") #'helpful-variable)
+    (global-set-key (kbd "C-h k") #'helpful-key)
+    (global-set-key (kbd "C-h x") #'helpful-command)
+
+;; Lookup the current symbol at point. C-c C-d is a common keybinding
+;; for this in lisp modes.
+(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+
+;; Look up *F*unctions (excludes macros).
+;;
+;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+;; already links to the manual, if a function is referenced there.
+(global-set-key (kbd "C-h F") #'helpful-function)
 #+end_src
 
