@@ -7,6 +7,15 @@
 
 #+end_src
 
+* UI
+** Theme
+*** ef-themes
+#+name: ef-themes
+#+begin_src elisp
+  (straight-use-package 'ef-themes)
+  (require 'ef-themes)
+  (load-theme 'ef-light t)
+#+end_src
 
 * Keyboard Bindings
 ** memow
@@ -234,16 +243,17 @@
 ** magit
 #+name: magit
 #+begin_src elisp
-(require 'magit)
+  (straight-use-package 'magit)
+  (require 'magit)
 #+end_src
 
 * Programe
 ** Language
 *** elisp
-**** helpfull
-#+name: helpfull
+**** helpful
+#+name: helpful
 #+begin_src elisp
-    (straight-use-package 'helpfull)
+    (straight-use-package 'helpful)
   ;; Note that the built-in `describe-function' includes both functions
   ;; and macros. `helpful-function' is functions only, so we provide
   ;; `helpful-callable' as a drop-in replacement.
