@@ -164,4 +164,11 @@
 (which-key-mode)
 #+end_src
 
+** Completion
+*** Vertico
+#+name: vertico
+#+begin_src elisp
+(setq vertico-cycle t)
+(vertico-mode)
+#+end_src
 

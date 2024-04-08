@@ -150,3 +150,6 @@
 
 (require 'which-key)
 (which-key-mode)
+
+(setq vertico-cycle t)
+(vertico-mode)
