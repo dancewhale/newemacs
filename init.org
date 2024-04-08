@@ -1,7 +1,13 @@
 ;; -*- mode: org-mode; eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t); -*-
+#+PROPERTY: header-args  :tangle "~/.emacs.d/init.el"
  
 * Emacs configure
-#+PROPERTY: header-args  :tangle "~/.emacs.d/init.el"
+** Global setting
+#+name: global
+#+begin_src elisp
+
+#+end_src
+
 ** Keyboard Bindings
 *** memow
 #+name: meow

@@ -18,4 +18,4 @@
   (load bootstrap-file nil 'nomessage))
 
 ;;; load package load file.
-(load-file  "packages.el")
+(load-file  "~/.emacs.d/packages.el")

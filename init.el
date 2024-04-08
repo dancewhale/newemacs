@@ -1,3 +1,5 @@
+(setq server-socket-dir "~/.emacs.d/cache/server")
+
 (require 'meow)
 (meow-global-mode 1)
 (setq meow-use-keypad-when-execute-kbd nil
