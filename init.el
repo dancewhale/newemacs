@@ -1,4 +1,5 @@
-
+(straight-use-package 'general)
+(require 'general)
 
 (straight-use-package 'ef-themes)
 (require 'ef-themes)
@@ -16,6 +17,15 @@
 
 (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
 (add-hook 'org-mode-hook 'org-appear-mode)
+
+(straight-use-package 'hydra)
+(straight-use-package
+ '(org-fc
+   :type git :host nil :repo "https://git.sr.ht/~l3kn/org-fc"
+   :files (:defaults "awk" "demo.org")
+   :custom (org-fc-directories '("~/org/"))
+   :config
+   (require 'org-fc-hydra)))
 
 (straight-use-package 'meow)
 (require 'meow)

@@ -4,7 +4,8 @@
 * Global setting
 #+name: global
 #+begin_src elisp
-
+  (straight-use-package 'general)
+  (require 'general)
 #+end_src
 
 * UI
@@ -38,6 +39,21 @@
 #+begin_src elisp
 (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
 (add-hook 'org-mode-hook 'org-appear-mode)
+#+end_src
+
+* Learn
+** org-fc
+#+name: org-fc
+#+begin_src elisp
+  (straight-use-package 'hydra)
+  (straight-use-package
+   '(org-fc
+     :type git :repo "https://git.sr.ht/~l3kn/org-fc"
+     :files (:defaults "awk" "demo.org")
+     :custom (org-fc-directories '("~/org/"))
+     :config
+     (require 'org-fc-hydra)))
+  
 #+end_src
 
 
