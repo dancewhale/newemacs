@@ -18,6 +18,41 @@
 (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
 (add-hook 'org-mode-hook 'org-appear-mode)
 
+(defun edit-src-block (src fn language)
+  "Replace SRC org-element's value property with the result of FN.
+  FN is a function that operates on org-element's value and returns a string.
+  LANGUAGE is a string referring to one of orb-babel's supported languages.
+  (https://orgmode.org/manual/Languages.html#Languages)"
+  (let ((src-language (org-element-property :language src))
+        (value (org-element-property :value src)))
+    (when (string= src-language language)
+      (let ((copy (org-element-copy src)))
+        (org-element-put-property copy :value
+                                  (funcall fn value))
+        (org-element-set-element src copy)))))
+
+(defun format-elisp-string (string)
+  "Indents elisp buffer string and reformats dangling parens."
+  (with-temp-buffer
+    (let ((inhibit-message t))
+        (emacs-lisp-mode)
+        (insert 
+         (replace-regexp-in-string "[[:space:]]*
+  [[:space:]]*)" ")" string))
+        (indent-region (point-min) (point-max))
+        (buffer-substring (point-min) (point-max)))))
+
+  (defun format-elisp-src-blocks ()
+    "Format Elisp src blocks in the current org buffer"
+    (interactive)
+    (save-mark-and-excursion
+      (let ((AST (org-element-parse-buffer)))
+        (org-element-map AST 'src-block
+          (lambda (element) 
+            (edit-src-block element #'format-elisp-string "emacs-lisp")))
+        (delete-region (point-min) (point-max))
+        (insert (org-element-interpret-data AST)))))
+
 (straight-use-package 'hydra)
 (straight-use-package
  '(org-fc
@@ -222,15 +257,23 @@
 (straight-use-package 'magit)
 (require 'magit)
 
-(straight-use-package 'helpful)
-  ;; Note that the built-in `describe-function' includes both functions
-  ;; and macros. `helpful-function' is functions only, so we provide
-  ;; `helpful-callable' as a drop-in replacement.
-    (global-set-key (kbd "C-h f") #'helpful-callable)
+(defun cao-emacs-magit ()
+  (interactive)
+  (magit-status-setup-buffer "~/.emacs.d"))
 
-    (global-set-key (kbd "C-h v") #'helpful-variable)
-    (global-set-key (kbd "C-h k") #'helpful-key)
-    (global-set-key (kbd "C-h x") #'helpful-command)
+
+(general-define-key  :prefix "s-e"
+      "s-e g"    #'cao-emacs-magit)
+
+(straight-use-package 'helpful)
+;; Note that the built-in `describe-function' includes both functions
+;; and macros. `helpful-function' is functions only, so we provide
+;; `helpful-callable' as a drop-in replacement.
+(global-set-key (kbd "C-h f") #'helpful-callable)
+
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-h x") #'helpful-command)
 
 ;; Lookup the current symbol at point. C-c C-d is a common keybinding
 ;; for this in lisp modes.
