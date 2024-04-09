@@ -7,6 +7,7 @@
   (straight-use-package 'general)
   (require 'general)
 #+end_src
+
 * UI
 ** Theme
 *** ef-themes
@@ -16,6 +17,7 @@
   (require 'ef-themes)
   (load-theme 'ef-light t)
 #+end_src
+
 * Org Mode
 ** ui
 *** org mode basic style
@@ -31,18 +33,21 @@
           org-agenda-tags-column 0
           )
 #+end_src
+
 *** org-appear
 #+name: org-appear
 #+begin_src elisp
   (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
   (add-hook 'org-mode-hook 'org-appear-mode)
 #+end_src
+
 *** org-modern
 #+name: org-modern
 #+begin_src elisp
   (straight-use-package 'org-modern)
   (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
+
 ** setting
 ** Note
 *** Roam
@@ -50,6 +55,7 @@
 #+begin_src elisp
     (straight-use-package 'org-roam)
     (require 'org-roam)
+    (require 'org-roam-dailies)
     (setq roam_path (file-truename "~/Dropbox/roam"))
     (setq journal_path (file-truename "~/Dropbox/roam/daily"))
     (setq worklog_path (file-truename "~/Dropbox/worklog"))
@@ -67,9 +73,13 @@
         "s-e n l"    #'org-roam-buffer-toggle
         "s-e n f"    #'org-roam-node-find
         "s-e n i"    #'org-roam-node-insert
+        "s-e d c"    #'org-roam-dailies-capture-today
+        "s-e d d"    #'org-roam-dailies-goto-date
+        "s-e d n"    #'org-roam-dailies-goto-next-note
+        "s-e d p"    #'org-roam-dailies-goto-previous-note
         )
-
 #+end_src
+
 *** org-journal
 #+name: org-journal enable
 #+begin_src elisp
@@ -92,7 +102,6 @@
 
   (setq org-journal-file-header 'org-journal-file-header-func)
 #+end_src
-
 
 ** custom
 org src 代码块中的代码进行格式化
@@ -133,6 +142,7 @@ org src 代码块中的代码进行格式化
           (delete-region (point-min) (point-max))
           (insert (org-element-interpret-data AST)))))
 #+end_src
+
 * Learn
 ** org-fc
 #+name: org-fc
@@ -146,6 +156,7 @@ org src 代码块中的代码进行格式化
      :config
      (require 'org-fc-hydra)))
 #+end_src
+
 * Keyboard Bindings
 ** memow
 #+name: meow
@@ -301,6 +312,7 @@ org src 代码块中的代码进行格式化
       (if meow-motion-mode (meow-normal-mode) (meow-motion-mode)))
     (global-set-key (kbd "M-\\") #'toggle-between-meow-normal-motion)
 #+end_src
+
 ** which-key
 #+name: which-key
 #+begin_src elisp
@@ -308,6 +320,7 @@ org src 代码块中的代码进行格式化
   (require 'which-key)
   (which-key-mode)
 #+end_src
+
 * Completion
 ** Vertico
 #+name: vertico
@@ -324,13 +337,13 @@ org src 代码块中的代码进行格式化
   (yas-global-mode)
 #+end_src
 
-
 * Window Management
 ** winner-mode
 #+name: winner-mode
 #+begin_src elisp
   (winner-mode t)
 #+end_src
+
 * Input
 ** posframe
 #+name: posframe
@@ -338,6 +351,7 @@ org src 代码块中的代码进行格式化
   (straight-use-package 'posframe)
     (require 'posframe)
 #+end_src
+
 ** rime
 #+name: rime 配置
 #+begin_src elisp
@@ -452,6 +466,7 @@ org src 代码块中的代码进行格式化
         "s-e g"    #'cao-emacs-magit)
 
 #+end_src
+
 * Programe
 ** Language
 *** elisp
@@ -480,15 +495,3 @@ org src 代码块中的代码进行格式化
 #+end_src
 
 
-
-* TODO
-需要改进的点。
-** DONE 输入法完善，开启rime 的相关配置。
-** DONE Add snippet package
-** TODO M-x 补全不智能
-ivy 或者 ver
-** TODO find-file 补全不智能
-** TODO magit 页面上的快捷键完善
-** TODO elisp src 自动格式美化
-** TODO 安装org-journal 和org-roam
-** TODO auto-save-list cache eln-cache move to dot dir

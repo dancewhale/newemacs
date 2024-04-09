@@ -23,6 +23,7 @@
 
 (straight-use-package 'org-roam)
 (require 'org-roam)
+(require 'org-roam-dailies)
 (setq roam_path (file-truename "~/Dropbox/roam"))
 (setq journal_path (file-truename "~/Dropbox/roam/daily"))
 (setq worklog_path (file-truename "~/Dropbox/worklog"))
@@ -40,6 +41,10 @@
     "s-e n l"    #'org-roam-buffer-toggle
     "s-e n f"    #'org-roam-node-find
     "s-e n i"    #'org-roam-node-insert
+    "s-e d c"    #'org-roam-dailies-capture-today
+    "s-e d d"    #'org-roam-dailies-goto-date
+    "s-e d n"    #'org-roam-dailies-goto-next-note
+    "s-e d p"    #'org-roam-dailies-goto-previous-note
     )
 
 (straight-use-package 'org-journal)
