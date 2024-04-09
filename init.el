@@ -21,6 +21,46 @@
 (straight-use-package 'org-modern)
 (with-eval-after-load 'org (global-org-modern-mode))
 
+(straight-use-package 'org-roam)
+(require 'org-roam)
+(setq roam_path (file-truename "~/Dropbox/roam"))
+(setq journal_path (file-truename "~/Dropbox/roam/daily"))
+(setq worklog_path (file-truename "~/Dropbox/worklog"))
+(setq org-roam-db-location (file-truename "~/Dropbox/roam/.org-roam.db"))
+(setq org-roam-directory roam_path)
+(setq org-roam-file-extensions '("org" "md"))
+(setq org-roam-dailies-directory "daily")
+(setq find-file-visit-truename t)
+(setq org-roam-mode-sections
+	(list #'org-roam-backlinks-section
+	      ;; #'org-roam-reflinks-section
+	      #'org-roam-unlinked-references-section
+	      ))
+(general-define-key 
+    "s-e n l"    #'org-roam-buffer-toggle
+    "s-e n f"    #'org-roam-node-find
+    "s-e n i"    #'org-roam-node-insert
+    )
+
+(straight-use-package 'org-journal)
+(require 'org-journal)
+;; Org Journal config
+(setq org-journal-dir worklog_path)
+;; (setq org-journal-file-type 'weekly)
+(setq org-journal-file-type 'monthly)
+(setq org-journal-file-format "%Y-%m-%d.org")
+(setq org-journal-date-format "%A, %x")
+(setq org-journal-date-prefix "* ")
+(setq org-journal-encrypt-journal nil)
+(setq org-journal-enable-cache t)
+
+;; change org-level-2 color.
+(add-hook 'org-journal-mode-hook
+  (lambda ()
+    (face-remap-add-relative 'org-level-2 '(:foreground "white" :weight 'normal))))
+
+(setq org-journal-file-header 'org-journal-file-header-func)
+
 (defun edit-src-block (src fn language)
   "Replace SRC org-element's value property with the result of FN.
   FN is a function that operates on org-element's value and returns a string.
