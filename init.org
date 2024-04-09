@@ -43,6 +43,8 @@
   (straight-use-package 'org-modern)
   (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
+** setting
+
 ** custom
 org src 代码块中的代码进行格式化
 #+name: babel
@@ -265,6 +267,14 @@ org src 代码块中的代码进行格式化
   (setq vertico-cycle t)
   (vertico-mode)
 #+end_src
+** Yasnippet
+#+name: yasnippet
+#+begin_src elisp
+  (straight-use-package 'yasnippet)
+  (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
+  (yas-global-mode)
+#+end_src
+
 * Window Management
 ** winner-mode
 #+name: winner-mode
@@ -361,3 +371,4 @@ org src 代码块中的代码进行格式化
 ** magit 页面上的快捷键完善
 ** elisp src 自动格式美化
 ** 安装org-journal 和org-roam
+** auto-save-list cache eln-cache move to dot dir

@@ -224,6 +224,10 @@
 (setq vertico-cycle t)
 (vertico-mode)
 
+(straight-use-package 'yasnippet)
+(setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
+(yas-global-mode)
+
 (winner-mode t)
 
 (straight-use-package 'posframe)
