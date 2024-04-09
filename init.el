@@ -248,10 +248,9 @@
 				     rime-predicate-space-after-cc-p ;;在中文字符且有空格之后
 				     )
 	   rime-show-candidate 'posframe
-	   rime-posframe-properties (list :internal-border-width 1
-					  :font lewis-fixed-font
-					  )
-	   rime-user-data-dir "~/Documents/rime/"
+	   rime-posframe-properties (list :internal-border-width 1)
+	   rime-user-data-dir "~/Dropbox/rimeSync/"
+	   rime-share-data-dir "~/.local/share/rime/ice"
 	   rime-inline-ascii-trigger 'shift-r
 	   ))
   (when (eq system-type 'darwin)
@@ -260,6 +259,69 @@
      rime-emacs-module-header-root "/opt/homebrew/opt/emacs-plus@30/include" ;;use emacs-plus
      rime-librime-root "~/Downloads/librime/dist"
      ))
+
+(setq rime-translate-keybindings
+  	'("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
+  	  "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
+
+
+    (defun +rime-force-enable ()
+      "[ENHANCED] Force into Chinese input state.
+  If current input method is not `rime', active it first. If it is
+  currently in the `evil' non-editable state, then switch to
+  `evil-insert-state'."
+      (interactive)
+      (let ((input-method "rime"))
+        (unless (string= current-input-method input-method)
+  	(activate-input-method input-method))
+        (when (rime-predicate-evil-mode-p)
+  	(if (= (1+ (point)) (line-end-position))
+  	    (evil-append 1)
+  	  (evil-insert 1)))
+        (rime-force-enable)))
+
+    (defun +rime-convert-string-at-point ()
+      "Convert the string at point to Chinese using the current input scheme.
+  First call `+rime-force-enable' to active the input method, and
+  then search back from the current cursor for available string (if
+  a string is selected, use it) as the input code, call the current
+  input scheme to convert to Chinese."
+      (interactive)
+      (+rime-force-enable)
+      (let ((string (if mark-active
+  		      (buffer-substring-no-properties
+  		       (region-beginning) (region-end))
+  		    (buffer-substring-no-properties
+  		     (point) (max (line-beginning-position) (- (point) 80)))))
+  	  code
+  	  length)
+        (cond ((string-match "\\([a-z]+\\|[[:punct:]]\\)[[:blank:]]*$" string)
+  	     (setq code (replace-regexp-in-string
+  			 "^[-']" ""
+  			 (match-string 0 string)))
+  	     (setq length (length code))
+  	     (setq code (replace-regexp-in-string " +" "" code))
+  	     (if mark-active
+  		 (delete-region (region-beginning) (region-end))
+  	       (when (> length 0)
+  		 (delete-char (- 0 length))))
+  	     (when (> length 0)
+  	       (setq unread-command-events
+  		     (append (listify-key-sequence code)
+  			     unread-command-events))))
+  	    (t (message "`+rime-convert-string-at-point' did nothing.")))))
+
+    (define-advice rime--posframe-display-content (:filter-args (args) resolve-posframe-issue-a)
+      "给 `rime--posframe-display-content' 传入的字符串加一个全角空
+  格，以解决 `posframe' 偶尔吃字的问题。"
+      (cl-destructuring-bind (content) args
+        (let ((newresult (if (string-blank-p content)
+  			   content
+  			 (concat content "　"))))
+  	(list newresult))))
+
+(general-define-key 
+      "s-j"    #'+rime-convert-string-at-point)
 
 (straight-use-package 'magit)
 (require 'magit)
