@@ -102,13 +102,37 @@
         (insert (org-element-interpret-data AST)))))
 
 (straight-use-package 'hydra)
-(straight-use-package
- '(org-fc
-   :type git :host nil :repo "https://git.sr.ht/~l3kn/org-fc"
-   :files (:defaults "awk" "demo.org")
-   :custom (org-fc-directories '("~/org/"))
-   :config
-   (require 'org-fc-hydra)))
+  (straight-use-package
+   '(org-fc
+     :type git :host github :repo "l3kn/org-fc"
+     :files (:defaults "awk" "demo.org")
+     :branch "develop" :build (:not compile)))
+
+  (require 'org-fc-hydra)
+  (require 'org-fc)
+  (setq org-fc-directories '("~/Dropbox/roam/"))
+  (setq org-fc-algo-fsrs-history-file "~/Dropbox/roam/.org-fc-reviews-fsrs.tsv")
+  (setq org-fc-algo-sm2-history-file "~/Dropbox/roam/.org-fc-reviews-sm2.tsv")
+
+(general-define-key
+ :definer 'minor-mode
+ :states 'normal
+ :keymaps 'org-fc-review-flip-mode
+ "RET" 'org-fc-review-flip
+ "n" 'org-fc-review-flip
+ "s" 'org-fc-review-suspend-card
+ "q" 'org-fc-review-quit)
+
+(general-define-key
+ :definer 'minor-mode
+ :states 'normal
+ :keymaps 'org-fc-review-rate-mode
+ "a" 'org-fc-review-rate-again
+ "h" 'org-fc-review-rate-hard
+ "g" 'org-fc-review-rate-good
+ "e" 'org-fc-review-rate-easy
+ "s" 'org-fc-review-suspend-card
+ "q" 'org-fc-review-quit)
 
 (straight-use-package 'meow)
 (require 'meow)
