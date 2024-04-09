@@ -18,6 +18,9 @@
 (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
 (add-hook 'org-mode-hook 'org-appear-mode)
 
+(straight-use-package 'org-modern)
+(with-eval-after-load 'org (global-org-modern-mode))
+
 (defun edit-src-block (src fn language)
   "Replace SRC org-element's value property with the result of FN.
   FN is a function that operates on org-element's value and returns a string.
