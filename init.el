@@ -289,9 +289,24 @@
 (require 'which-key)
 (which-key-mode)
 
-(straight-use-package 'vertico)
-(setq vertico-cycle t)
-(vertico-mode)
+;  (straight-use-package 'vertico)
+;  (setq vertico-cycle t)
+;  (vertico-mode)
+
+(straight-use-package 'ivy)
+ (straight-use-package 'swiper)
+ (straight-use-package 'ivy-hydra)
+ (straight-use-package 'ivy-avy)
+ (straight-use-package 'counsel)
+ (straight-use-package 'ivy-rich)
+ (straight-use-package 'wgrep)
+ (straight-use-package 'ivy-posframe)
+ (straight-use-package 'nerd-icons-ivy-rich)
+
+(general-define-key
+"M-x" 'counsel-M-x
+"s-x" 'counsel-M-x
+"s-f" 'swiper)
 
 (straight-use-package 'yasnippet)
 (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
