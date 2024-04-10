@@ -66,6 +66,9 @@
 
 (setq org-journal-file-header 'org-journal-file-header-func)
 
+(general-define-key 
+  "s-e j n"    #'org-journal-new-entry)
+
 (defun edit-src-block (src fn language)
   "Replace SRC org-element's value property with the result of FN.
   FN is a function that operates on org-element's value and returns a string.
@@ -428,7 +431,8 @@
 
 
 (general-define-key  :prefix "s-e"
-      "s-e g"    #'cao-emacs-magit)
+      "g l"    #'magit
+      "g g"    #'cao-emacs-magit)
 
 (straight-use-package 'helpful)
 ;; Note that the built-in `describe-function' includes both functions
