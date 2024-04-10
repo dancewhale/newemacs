@@ -368,12 +368,22 @@ org src 代码块中的代码进行格式化
    (straight-use-package 'ivy-posframe)
    (straight-use-package 'nerd-icons-ivy-rich)
 
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
   (general-define-key
-  "M-x" 'counsel-M-x
-  "s-x" 'counsel-M-x
+  "M-x"     'counsel-M-x
+  "s-x"     'counsel-M-x
   "C-x C-f" 'counsel-find-file
   "C-c C-o" 'ivy-occur
-  "s-f" 'swiper)
+  "C-s"     'swiper
+  "C-c C-r" 'ivy-resume
+  "C-c g"   'counsel-git
+  "C-c j"   'counsel-git-grep
+  "C-c k"   'counsel-ag
+  "C-x l"   'counsel-locate
+  "C-S-o"   'counsel-rhythmbox
+  )
 
 #+end_src
 ** Yasnippet
@@ -524,21 +534,21 @@ org src 代码块中的代码进行格式化
   ;; Note that the built-in `describe-function' includes both functions
   ;; and macros. `helpful-function' is functions only, so we provide
   ;; `helpful-callable' as a drop-in replacement.
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-h x") #'helpful-command)
-
   ;; Lookup the current symbol at point. C-c C-d is a common keybinding
   ;; for this in lisp modes.
-  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
-
   ;; Look up *F*unctions (excludes macros).
   ;;
   ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
   ;; already links to the manual, if a function is referenced there.
-  (global-set-key (kbd "C-h F") #'helpful-function)
+  (general-define-key
+   "C-h f"  #'helpful-callable
+   "C-h v"  #'helpful-variable
+   "C-h F"  #'helpful-function
+   "C-h s"  #'helpful-symbol
+   "C-h k"  #'helpful-key
+   "C-h x"  #'helpful-command
+   "C-h C-d"  #'helpful-at-point
+   )
 #+end_src
 
 
