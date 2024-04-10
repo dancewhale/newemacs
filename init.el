@@ -306,6 +306,8 @@
 (general-define-key
 "M-x" 'counsel-M-x
 "s-x" 'counsel-M-x
+"C-x C-f" 'counsel-find-file
+"C-c C-o" 'ivy-occur
 "s-f" 'swiper)
 
 (straight-use-package 'yasnippet)
@@ -437,3 +439,7 @@
 ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
 ;; already links to the manual, if a function is referenced there.
 (global-set-key (kbd "C-h F") #'helpful-function)
+
+(straight-use-package 'crux)
+
+(load-file "private.el")

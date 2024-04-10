@@ -371,6 +371,8 @@ org src 代码块中的代码进行格式化
   (general-define-key
   "M-x" 'counsel-M-x
   "s-x" 'counsel-M-x
+  "C-x C-f" 'counsel-find-file
+  "C-c C-o" 'ivy-occur
   "s-f" 'swiper)
 
 #+end_src
@@ -540,3 +542,19 @@ org src 代码块中的代码进行格式化
 #+end_src
 
 
+* Tools
+用于做组合快捷操作的工具包.
+
+** crux
+#+name: curx
+#+begin_src elisp
+  (straight-use-package 'crux)
+
+#+end_src
+
+* Load
+用来导入自己的包和配置文件
+#+name: curx
+#+begin_src elisp
+(load-file "private.el")
+#+end_src
