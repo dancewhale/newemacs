@@ -1,6 +1,8 @@
 (straight-use-package 'general)
 (require 'general)
 
+(straight-use-package 'use-package)
+
 (straight-use-package 'ef-themes)
 (require 'ef-themes)
 (load-theme 'ef-light t)

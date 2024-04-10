@@ -8,6 +8,16 @@
   (require 'general)
 #+end_src
 
+* Package manager
+** use-package
+#+name: use-package
+#+begin_src elisp
+    (straight-use-package 'use-package)
+
+  #+end_src
+
+
+
 * UI
 ** Theme
 *** ef-themes

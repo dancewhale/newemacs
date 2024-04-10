@@ -6,6 +6,7 @@
 
 #+name: $1
 #+begin_src elisp
+(straight-use-package '$2)
 $0
 #+end_src
 
