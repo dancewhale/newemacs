@@ -477,8 +477,6 @@
   :straight t
   :commands lsp-ui-mode
   :ensure t
-  :custom-face
-  (lsp-ui-doc-background ((t (:background ni))))
   :init (setq lsp-ui-doc-enable t
 		lsp-ui-doc-include-signature t
 
@@ -512,4 +510,4 @@
 
 (straight-use-package 'crux)
 
-(load-file "private.el")
+(load-file "~/.emacs.d/private.el")

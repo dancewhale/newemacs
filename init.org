@@ -604,8 +604,6 @@ org src 代码块中的代码进行格式化
     :straight t
     :commands lsp-ui-mode
     :ensure t
-    :custom-face
-    (lsp-ui-doc-background ((t (:background ni))))
     :init (setq lsp-ui-doc-enable t
 		lsp-ui-doc-include-signature t
 
@@ -671,5 +669,5 @@ org src 代码块中的代码进行格式化
 用来导入自己的包和配置文件
 #+name: curx
 #+begin_src elisp
-(load-file "private.el")
+(load-file "~/.emacs.d/private.el")
 #+end_src
