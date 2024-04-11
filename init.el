@@ -1,5 +1,8 @@
 (straight-use-package 'general)
 (require 'general)
+(general-define-key 
+    "s-f s-f"    #'View-scroll-half-page-forward
+    "s-f s-b"    #'View-scroll-half-page-backward)
 
 (straight-use-package 'use-package)
 
