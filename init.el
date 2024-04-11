@@ -304,11 +304,13 @@
  (straight-use-package 'ivy-avy)
  (straight-use-package 'counsel)
  (straight-use-package 'ivy-rich)
+ (straight-use-package 'ivy-prescient)
  (straight-use-package 'wgrep)
  (straight-use-package 'ivy-posframe)
  (straight-use-package 'nerd-icons-ivy-rich)
 
 (ivy-mode)
+(ivy-prescient-mode)
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
 (general-define-key
