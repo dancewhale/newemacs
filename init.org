@@ -416,6 +416,20 @@ org src 代码块中的代码进行格式化
   (winner-mode t)
 #+end_src
 
+** ace-window
+#+name: ace-window
+#+begin_src elisp
+  (straight-use-package 'ace-window)
+
+  (general-define-key
+   "C-x o"  #'ace-window
+   "s-o"    #'ace-window)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
+        aw-scope 'frame)
+
+   #+end_src
+
+
 * Input
 ** posframe
 #+name: posframe

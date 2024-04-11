@@ -331,6 +331,14 @@
 
 (winner-mode t)
 
+(straight-use-package 'ace-window)
+
+(general-define-key
+ "C-x o"  #'ace-window
+ "s-o"    #'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
+      aw-scope 'frame)
+
 (straight-use-package 'posframe)
   (require 'posframe)
 

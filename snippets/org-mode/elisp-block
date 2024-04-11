@@ -7,6 +7,9 @@
 #+name: $1
 #+begin_src elisp
 (straight-use-package '$2)
+
+(general-define-key
+  "s-j"    #'+rime-convert-string-at-point)
 $0
 #+end_src
 
