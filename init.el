@@ -525,6 +525,13 @@
 
 (use-package dap-mode :straight t)
 
+(straight-use-package 'better-jumper)
+(require 'better-jumper)
+(better-jumper-mode +1)
+(general-define-key
+ "C-o"    'better-jumper-jump-backward
+ "C-i"    'better-jumper-jump-forward)
+
 (straight-use-package 'crux)
 
 (load-file "~/.emacs.d/private.el")
