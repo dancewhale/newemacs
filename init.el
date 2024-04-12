@@ -6,142 +6,6 @@
 
 (straight-use-package 'use-package)
 
-(straight-use-package 'ef-themes)
-(require 'ef-themes)
-(load-theme 'ef-light t)
-
-(setq org-auto-align-tags nil
-        org-tags-column 0
-        org-ellipsis "⤵"
-        org-hide-emphasis-markers t
-        org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
-        org-habit-graph-column 50
-        ;; Agenda styling
-        org-agenda-tags-column 0
-        )
-
-(straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
-(add-hook 'org-mode-hook 'org-appear-mode)
-
-(straight-use-package 'org-modern)
-(with-eval-after-load 'org (global-org-modern-mode))
-
-(straight-use-package 'org-roam)
-(require 'org-roam)
-(require 'org-roam-dailies)
-(setq roam_path (file-truename "~/Dropbox/roam"))
-(setq journal_path (file-truename "~/Dropbox/roam/daily"))
-(setq worklog_path (file-truename "~/Dropbox/worklog"))
-(setq org-roam-db-location (file-truename "~/Dropbox/roam/.org-roam.db"))
-(setq org-roam-directory roam_path)
-(setq org-roam-file-extensions '("org" "md"))
-(setq org-roam-dailies-directory "daily")
-(setq find-file-visit-truename t)
-(setq org-roam-mode-sections
-	(list #'org-roam-backlinks-section
-	      ;; #'org-roam-reflinks-section
-	      #'org-roam-unlinked-references-section
-	      ))
-(general-define-key 
-    "s-e n l"    #'org-roam-buffer-toggle
-    "s-e n f"    #'org-roam-node-find
-    "s-e n i"    #'org-roam-node-insert
-    "s-e d c"    #'org-roam-dailies-capture-today
-    "s-e d d"    #'org-roam-dailies-goto-date
-    "s-e d n"    #'org-roam-dailies-goto-next-note
-    "s-e d p"    #'org-roam-dailies-goto-previous-note
-    )
-
-(straight-use-package 'org-journal)
-(require 'org-journal)
-;; Org Journal config
-(setq org-journal-dir worklog_path)
-;; (setq org-journal-file-type 'weekly)
-(setq org-journal-file-type 'monthly)
-(setq org-journal-file-format "%Y-%m-%d.org")
-(setq org-journal-date-format "%A, %x")
-(setq org-journal-date-prefix "* ")
-(setq org-journal-encrypt-journal nil)
-(setq org-journal-enable-cache t)
-
-;; change org-level-2 color.
-(add-hook 'org-journal-mode-hook
-  (lambda ()
-    (face-remap-add-relative 'org-level-2 '(:foreground "white" :weight 'normal))))
-
-(setq org-journal-file-header 'org-journal-file-header-func)
-
-(general-define-key 
-  "s-e j n"    #'org-journal-new-entry)
-
-(defun edit-src-block (src fn language)
-  "Replace SRC org-element's value property with the result of FN.
-  FN is a function that operates on org-element's value and returns a string.
-  LANGUAGE is a string referring to one of orb-babel's supported languages.
-  (https://orgmode.org/manual/Languages.html#Languages)"
-  (let ((src-language (org-element-property :language src))
-        (value (org-element-property :value src)))
-    (when (string= src-language language)
-      (let ((copy (org-element-copy src)))
-        (org-element-put-property copy :value
-                                  (funcall fn value))
-        (org-element-set-element src copy)))))
-
-(defun format-elisp-string (string)
-  "Indents elisp buffer string and reformats dangling parens."
-  (with-temp-buffer
-    (let ((inhibit-message t))
-        (emacs-lisp-mode)
-        (insert 
-         (replace-regexp-in-string "[[:space:]]*
-  [[:space:]]*)" ")" string))
-        (indent-region (point-min) (point-max))
-        (buffer-substring (point-min) (point-max)))))
-
-  (defun format-elisp-src-blocks ()
-    "Format Elisp src blocks in the current org buffer"
-    (interactive)
-    (save-mark-and-excursion
-      (let ((AST (org-element-parse-buffer)))
-        (org-element-map AST 'src-block
-          (lambda (element) 
-            (edit-src-block element #'format-elisp-string "emacs-lisp")))
-        (delete-region (point-min) (point-max))
-        (insert (org-element-interpret-data AST)))))
-
-(straight-use-package 'hydra)
-  (straight-use-package
-   '(org-fc
-     :type git :host github :repo "l3kn/org-fc"
-     :files (:defaults "awk" "demo.org")
-     :branch "develop" :build (:not compile)))
-
-  (require 'org-fc-hydra)
-  (require 'org-fc)
-  (setq org-fc-directories '("~/Dropbox/roam/"))
-  (setq org-fc-algo-fsrs-history-file "~/Dropbox/roam/.org-fc-reviews-fsrs.tsv")
-  (setq org-fc-algo-sm2-history-file "~/Dropbox/roam/.org-fc-reviews-sm2.tsv")
-
-(general-define-key
- :definer 'minor-mode
- :states 'normal
- :keymaps 'org-fc-review-flip-mode
- "RET" 'org-fc-review-flip
- "n" 'org-fc-review-flip
- "s" 'org-fc-review-suspend-card
- "q" 'org-fc-review-quit)
-
-(general-define-key
- :definer 'minor-mode
- :states 'normal
- :keymaps 'org-fc-review-rate-mode
- "a" 'org-fc-review-rate-again
- "h" 'org-fc-review-rate-hard
- "g" 'org-fc-review-rate-good
- "e" 'org-fc-review-rate-easy
- "s" 'org-fc-review-suspend-card
- "q" 'org-fc-review-quit)
-
 (straight-use-package 'meow)
 (require 'meow)
 (meow-global-mode 1)
@@ -295,7 +159,156 @@
 
 (straight-use-package 'which-key)
 (require 'which-key)
+(setq which-key-idle-delay 0.1)
 (which-key-mode)
+
+(straight-use-package 'hydra)
+(require 'hydra)
+
+(straight-use-package 'ef-themes)
+(require 'ef-themes)
+(load-theme 'ef-light t)
+
+(setq org-auto-align-tags nil
+        org-tags-column 0
+        org-ellipsis "⤵"
+        org-hide-emphasis-markers t
+        org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
+        org-habit-graph-column 50
+        ;; Agenda styling
+        org-agenda-tags-column 0
+        )
+
+(straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
+(add-hook 'org-mode-hook 'org-appear-mode)
+
+(straight-use-package 'org-modern)
+(with-eval-after-load 'org (global-org-modern-mode))
+
+(straight-use-package 'org-roam)
+(require 'org-roam)
+(require 'org-roam-dailies)
+(setq roam_path (file-truename "~/Dropbox/roam"))
+(setq journal_path (file-truename "~/Dropbox/roam/daily"))
+(setq worklog_path (file-truename "~/Dropbox/worklog"))
+(setq org-roam-db-location (file-truename "~/Dropbox/roam/.org-roam.db"))
+(setq org-roam-directory roam_path)
+(setq org-roam-file-extensions '("org" "md"))
+(setq org-roam-dailies-directory "daily")
+(setq find-file-visit-truename t)
+(setq org-roam-mode-sections
+	(list #'org-roam-backlinks-section
+	      ;; #'org-roam-reflinks-section
+	      #'org-roam-unlinked-references-section
+	      ))
+(general-define-key 
+    "s-e n l"    #'org-roam-buffer-toggle
+    "s-e n f"    #'org-roam-node-find
+    "s-e n i"    #'org-roam-node-insert
+    "s-e d c"    #'org-roam-dailies-capture-today
+    "s-e d d"    #'org-roam-dailies-goto-date
+    "s-e d n"    #'org-roam-dailies-goto-next-note
+    "s-e d p"    #'org-roam-dailies-goto-previous-note
+    )
+
+(straight-use-package 'org-journal)
+(require 'org-journal)
+;; Org Journal config
+(setq org-journal-dir worklog_path)
+;; (setq org-journal-file-type 'weekly)
+(setq org-journal-file-type 'monthly)
+(setq org-journal-file-format "%Y-%m-%d.org")
+(setq org-journal-date-format "%A, %x")
+(setq org-journal-date-prefix "* ")
+(setq org-journal-encrypt-journal nil)
+(setq org-journal-enable-cache t)
+
+;; change org-level-2 color.
+(add-hook 'org-journal-mode-hook
+  (lambda ()
+    (face-remap-add-relative 'org-level-2 '(:foreground "white" :weight 'normal))))
+
+(setq org-journal-file-header 'org-journal-file-header-func)
+
+(general-define-key 
+  "s-e j n"    #'org-journal-new-entry)
+
+(defun edit-src-block (src fn language)
+  "Replace SRC org-element's value property with the result of FN.
+  FN is a function that operates on org-element's value and returns a string.
+  LANGUAGE is a string referring to one of orb-babel's supported languages.
+  (https://orgmode.org/manual/Languages.html#Languages)"
+  (let ((src-language (org-element-property :language src))
+        (value (org-element-property :value src)))
+    (when (string= src-language language)
+      (let ((copy (org-element-copy src)))
+        (org-element-put-property copy :value
+                                  (funcall fn value))
+        (org-element-set-element src copy)))))
+
+(defun format-elisp-string (string)
+  "Indents elisp buffer string and reformats dangling parens."
+  (with-temp-buffer
+    (let ((inhibit-message t))
+        (emacs-lisp-mode)
+        (insert 
+         (replace-regexp-in-string "[[:space:]]*
+  [[:space:]]*)" ")" string))
+        (indent-region (point-min) (point-max))
+        (buffer-substring (point-min) (point-max)))))
+
+  (defun format-elisp-src-blocks ()
+    "Format Elisp src blocks in the current org buffer"
+    (interactive)
+    (save-mark-and-excursion
+      (let ((AST (org-element-parse-buffer)))
+        (org-element-map AST 'src-block
+          (lambda (element) 
+            (edit-src-block element #'format-elisp-string "emacs-lisp")))
+        (delete-region (point-min) (point-max))
+        (insert (org-element-interpret-data AST)))))
+
+(straight-use-package
+   '(org-fc
+     :type git :host github :repo "l3kn/org-fc"
+     :files (:defaults "awk" "demo.org")
+     :branch "develop" :build (:not compile)))
+
+  (require 'org-fc-hydra)
+  (require 'org-fc)
+  (setq org-fc-directories '("~/Dropbox/roam/"))
+  (setq org-fc-algo-fsrs-history-file "~/Dropbox/roam/.org-fc-reviews-fsrs.tsv")
+  (setq org-fc-algo-sm2-history-file "~/Dropbox/roam/.org-fc-reviews-sm2.tsv")
+
+(general-define-key
+ :definer 'minor-mode
+ :states 'normal
+ :keymaps 'org-fc-review-flip-mode
+ "RET" 'org-fc-review-flip
+ "n" 'org-fc-review-flip
+ "s" 'org-fc-review-suspend-card
+ "q" 'org-fc-review-quit)
+
+(general-define-key
+ :definer 'minor-mode
+ :states 'normal
+ :keymaps 'org-fc-review-rate-mode
+ "a" 'org-fc-review-rate-again
+ "h" 'org-fc-review-rate-hard
+ "g" 'org-fc-review-rate-good
+ "e" 'org-fc-review-rate-easy
+ "s" 'org-fc-review-suspend-card
+ "q" 'org-fc-review-quit)
+
+(winner-mode t)
+
+(straight-use-package 'ace-window)
+
+(general-define-key
+ "C-x o"  #'ace-window
+ "s-o"    #'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
+      aw-scope 'frame)
 
 ;  (straight-use-package 'vertico)
 ;  (setq vertico-cycle t)
@@ -333,16 +346,6 @@
 (straight-use-package 'yasnippet)
 (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
 (yas-global-mode)
-
-(winner-mode t)
-
-(straight-use-package 'ace-window)
-
-(general-define-key
- "C-x o"  #'ace-window
- "s-o"    #'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
-      aw-scope 'frame)
 
 (straight-use-package 'posframe)
   (require 'posframe)
@@ -446,6 +449,7 @@
 
 
 (general-define-key  :prefix "s-e"
+      "g"      '(:ignore t  :which-key "magit prefix")
       "g l"    #'magit
       "g g"    #'cao-emacs-magit)
 
