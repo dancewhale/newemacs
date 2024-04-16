@@ -55,16 +55,28 @@
 ;; -------->>  [[file:init.org::evil][evil]]
 (straight-use-package 'evil)
 (straight-use-package 'goto-chg)
+(require 'evil)
+(evil-mode 1)
+;; --------<<  evil ends here
+
+
+
+;; -------->>  [[file:init.org::evil-collection][evil-collection]]
 (straight-use-package 'evil-collection)
 
 (setq evil-want-integration t)
 (setq evil-want-keybinding nil)
-(require 'evil)
-(evil-mode 1)
 
 (when (require 'evil-collection nil t)
 (evil-collection-init))
-;; --------<<  evil ends here
+;; --------<<  evil-collection ends here
+
+
+
+;; -------->>  [[file:init.org::org-evil][org-evil]]
+(straight-use-package 'org-evil)
+(require 'org-evil)
+;; --------<<  org-evil ends here
 
 
 
@@ -329,10 +341,7 @@
 (straight-use-package 'rime)
 (setq default-input-method "rime")
   (with-eval-after-load 'rime
-  (setq rime-disable-predicates '(meow-normal-mode-p
-				     meow-motion-mode-p
-				     meow-keypad-mode-p
-				     rime-predicate-prog-in-code-p
+  (setq rime-disable-predicates '(   rime-predicate-prog-in-code-p
 				     rime-predicate-punctuation-line-begin-p ;;在行首要输入符号时
 				     rime-predicate-after-alphabet-char-p ;;在英文字符串之后（必须为以字母开头的英文字符串）
 				     rime-predicate-current-input-punctuation-p ;;当要输入的是符号时

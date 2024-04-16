@@ -1,0 +1,97 @@
+* org-evil
+** Moving Around
+
+=org-evil= aims to make motion in Org intuitive for Evil users,
+so you can expect motions such as ~$~ to be similar to ~evil-end-of-line~,
+~^~ to ~evil-first-non-blank~, and so on and so forth.
+
+*** General Motions
+
+The following are the default motion bindings for =org-evil-motion=, use
+~M-x describe-function BINDING~ for more information on each motion.
+
+| Key    | Binding                                |
+|--------+----------------------------------------|
+| ~[[~   | ~org-evil-motion-backward-block-begin~ |
+| ~]]~   | ~org-evil-motion-forward-block-begin~  |
+| ~gH~   | ~org-evil-motion-up-heading-top~       |
+| ~gh~   | ~org-evil-motion-up-heading~           |
+| ~{~    | ~org-evil-motion-backward-heading~     |
+| ~}~    | ~org-evil-motion-forward-heading~      |
+
+*** Block Motions
+
+The following bindings apply when inside an Org block:
+
+| Key | Binding                             |
+|-----+-------------------------------------|
+| ~(~ | ~org-evil-block-beginning-of-block~ |
+| ~)~ | ~org-evil-block-end-of-block~       |
+
+*** List Motions
+
+The following bindings apply when inside a list:
+
+| Key | Binding                                    |
+|-----+--------------------------------------------|
+| ~(~ | ~org-evil-list-beginning-of-previous-item~ |
+| ~)~ | ~org-evil-list-beginning-of-next-item~     |
+| ~^~ | ~org-evil-list-beginning-of-item~          |
+
+*** Table Motions
+
+The following bindings apply when inside an Org table:
+
+| Key   | Binding                                |
+|-------+----------------------------------------|
+| ~gR~  | ~org-evil-table-goto-line-from-bottom~ |
+| ~gc~  | ~org-evil-table-goto-column~           |
+| ~gr~  | ~org-evil-table-goto-line~             |
+| \vert | ~org-evil-table-goto-column~           |
+
+** Operators
+
+*** Heading Operators
+
+The following bindings apply when at a heading:
+
+| Key | Binding                                         |
+|-----+-------------------------------------------------|
+| ~<~ | ~org-evil-promote~                              |
+| ~>~ | ~org-evil-demote~                               |
+| ~O~ | ~org-evil-heading-open-sibling-or-insert-above~ |
+| ~o~ | ~org-evil-heading-open-sibling-or-insert-below~ |
+
+*** List Operators
+
+The following bindings apply when in a list:
+
+| Key | Binding                                   |
+|-----+-------------------------------------------|
+| ~<~ | ~org-evil-list-outdent-item-tree~         |
+| ~>~ | ~org-evil-list-indent-item-tree~          |
+| ~O~ | ~org-evil-list-open-item-or-insert-above~ |
+| ~o~ | ~org-evil-list-open-item-or-insert-below~ |
+
+*** Table Operators
+
+The following bindings apply when inside an Org table:
+
+| Key | Binding                            |
+|-----+------------------------------------|
+| ~<~ | ~org-evil-table-move-column-left~  |
+| ~>~ | ~org-evil-table-move-column-right~ |
+| ~D~ | ~org-evil-table-kill-row-to-end~   |
+| ~O~ | ~org-evil-table-insert-row-above~  |
+| ~o~ | ~org-evil-table-insert-row-below~  |
+
+** Text Objects
+
+*** Block Text Objects
+
+The following text objects are enabled within an Org block:
+
+| Key  | Binding                      |
+|------+------------------------------|
+| ~ab~ | ~org-evil-block-a-block~     |
+| ~ib~ | ~org-evil-block-inner-block~ |
