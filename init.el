@@ -12,6 +12,12 @@
 
 (straight-use-package 'undo-fu)
 
+(straight-use-package 'dash)
+
+(straight-use-package 's)
+
+(straight-use-package 'f)
+
 (straight-use-package 'use-package)
 
 (straight-use-package 'evil)
