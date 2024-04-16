@@ -556,6 +556,13 @@
 
 
 
+;; -------->>  [[file:init.org::flycheck][flycheck]]
+(straight-use-package 'flycheck)
+(global-flycheck-mode 1 )
+;; --------<<  flycheck ends here
+
+
+
 ;; -------->>  [[file:init.org::better-jumper][better-jumper]]
 (straight-use-package 'better-jumper)
 (require 'better-jumper)
