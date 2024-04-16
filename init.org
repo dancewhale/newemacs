@@ -71,6 +71,7 @@
 * Keyboard Bindings
 ** evil
 *** evil
+[[file:docs/evil.org][evil-guide]] from noctuid
 #+name: evil
 #+begin_src elisp :comments link
   (straight-use-package 'evil)
@@ -94,7 +95,7 @@
     #+end_src
 
 *** org-evil
-[[file:docs/evil.org::*org-evil][org-evil 的试用说明]]
+[[file:docs/org-evil.org::*org-evil][org-evil 的试用说明]]
 #+name: org-evil
 #+begin_src elisp  :comments link
   (straight-use-package 'org-evil)
