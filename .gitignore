@@ -1,7 +1,12 @@
+.*
+*~
 straight
 auto-save-list
 eln-cache
-*~
 transient
 cache/*
 url
+eshell
+recentf
+bookmarks
+org-journal.cache
