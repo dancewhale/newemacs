@@ -4,7 +4,7 @@
 * Global setting
 ** key map
 #+name: global
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'general)
   (require 'general)
   (general-define-key 
@@ -19,20 +19,20 @@
 ** undo
 *** vundo
 #+name: vundo
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'vundo)
     #+end_src
 
 *** undo-tree 
 #+name: undo-tree
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'undo-tree)
 
     #+end_src
 
 *** undo-fu
 #+name: undo-fu
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'undo-fu)
 
     #+end_src
@@ -40,21 +40,21 @@
 * Package Libray
 ** dash
 #+name: dash
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'dash)
 
     #+end_src
 
 ** s
 #+name: s
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 's)
 
     #+end_src
 
 ** f
 #+name: f
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'f)
 
     #+end_src
@@ -63,7 +63,7 @@
 * Package manager
 ** use-package
 #+name: use-package
-#+begin_src elisp
+#+begin_src elisp :comments link
     (straight-use-package 'use-package)
 
   #+end_src
@@ -72,7 +72,7 @@
 ** evil
 *** evil
 #+name: evil
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'evil)
   (straight-use-package 'goto-chg)
   (straight-use-package 'evil-collection)
@@ -90,7 +90,7 @@
 
 ** which-key
 #+name: which-key
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'which-key)
   (require 'which-key)
   (setq which-key-idle-delay 0.1)
@@ -98,7 +98,7 @@
 #+end_src
 
 ** hydra
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'hydra)
   (require 'hydra)
 #+end_src
@@ -107,7 +107,7 @@
 ** Theme
 *** ef-themes
 #+name: ef-themes
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'ef-themes)
   (require 'ef-themes)
   (load-theme 'ef-light t)
@@ -117,7 +117,7 @@
 ** ui
 *** org mode basic style
 #+name: basic-style
-#+begin_src elisp
+#+begin_src elisp :comments link
   (setq org-auto-align-tags nil
           org-tags-column 0
           org-ellipsis "⤵"
@@ -131,14 +131,14 @@
 
 *** org-appear
 #+name: org-appear
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
   (add-hook 'org-mode-hook 'org-appear-mode)
 #+end_src
 
 *** org-modern
 #+name: org-modern
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'org-modern)
   (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
@@ -147,7 +147,7 @@
 ** Note
 *** Roam
 #+name: roam enable
-#+begin_src elisp
+#+begin_src elisp :comments link
     (straight-use-package 'org-roam)
     (require 'org-roam)
     (require 'org-roam-dailies)
@@ -177,7 +177,7 @@
 
 *** org-journal
 #+name: org-journal enable
-#+begin_src elisp
+#+begin_src elisp :comments link
       (straight-use-package 'org-journal)
       (require 'org-journal)
       ;; Org Journal config
@@ -206,7 +206,7 @@
 ** custom
 org src 代码块中的代码进行格式化
 #+name: babel
-#+begin_src elisp
+#+begin_src elisp :comments link
     (defun edit-src-block (src fn language)
     "Replace SRC org-element's value property with the result of FN.
     FN is a function that operates on org-element's value and returns a string.
@@ -247,7 +247,7 @@ org src 代码块中的代码进行格式化
 ** org-fc
 需要安装5.1 以上gawk, find, xargs
 #+name: org-fc
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package
    '(org-fc
      :type git :host github :repo "l3kn/org-fc"
@@ -284,13 +284,13 @@ org src 代码块中的代码进行格式化
 * Window Management
 ** winner-mode
 #+name: winner-mode
-#+begin_src elisp
+#+begin_src elisp :comments link
   (winner-mode t)
 #+end_src
 
 ** ace-window
 #+name: ace-window
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'ace-window)
 
   (general-define-key
@@ -304,7 +304,7 @@ org src 代码块中的代码进行格式化
 * Completion
 ** Vertico
 #+name: vertico
-#+begin_src elisp
+#+begin_src elisp :comments link
 ;  (straight-use-package 'vertico)
 ;  (setq vertico-cycle t)
 ;  (vertico-mode)
@@ -312,7 +312,7 @@ org src 代码块中的代码进行格式化
 
 ** ivy
 #+name: pacakge install
-#+begin_src elisp
+#+begin_src elisp :comments link
    (straight-use-package 'ivy)
    (straight-use-package 'swiper)
    (straight-use-package 'ivy-hydra)
@@ -346,7 +346,7 @@ org src 代码块中的代码进行格式化
 
 ** Yasnippet
 #+name: yasnippet
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'yasnippet)
   (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
   (yas-global-mode)
@@ -355,14 +355,14 @@ org src 代码块中的代码进行格式化
 * Input
 ** posframe
 #+name: posframe
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'posframe)
     (require 'posframe)
 #+end_src
 
 ** rime
 #+name: rime 配置
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'rime)
   (setq default-input-method "rime")
     (with-eval-after-load 'rime
@@ -393,7 +393,7 @@ org src 代码块中的代码进行格式化
 
 
 #+name: rime 扩展函数
-#+begin_src elisp
+#+begin_src elisp :comments link
     (setq rime-translate-keybindings
   	'("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
   	  "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
@@ -461,7 +461,7 @@ org src 代码块中的代码进行格式化
 * git
 ** magit
 #+name: magit
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'magit)
   (require 'magit)
 
@@ -479,10 +479,10 @@ org src 代码块中的代码进行格式化
 
 * Programe
 ** Language
-*** elisp
+*** elisp :comments link
 **** helpful
 #+name: helpful
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'helpful)
   ;; Note that the built-in `describe-function' includes both functions
   ;; and macros. `helpful-function' is functions only, so we provide
@@ -507,7 +507,7 @@ org src 代码块中的代码进行格式化
 *** golang
 **** go-mode
 #+name: go-mode
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'go-mode)
 
   #+end_src
@@ -515,7 +515,7 @@ org src 代码块中的代码进行格式化
 ** lsp
 *** lsp-mode
 #+name: lsp-mode
-#+begin_src elisp
+#+begin_src elisp :comments link
   (use-package lsp-mode :straight t
     :init
     (setq lsp-keymap-prefix "C-c l")
@@ -535,7 +535,7 @@ org src 代码块中的代码进行格式化
 
 *** lsp-ui
 #+name: lsp-ui
-#+begin_src elisp
+#+begin_src elisp :comments link
   (use-package lsp-ui
     :straight t
     :commands lsp-ui-mode
@@ -570,7 +570,7 @@ org src 代码块中的代码进行格式化
 
 *** lsp-ivy
 #+name: lsp-ivy
-#+begin_src elisp
+#+begin_src elisp :comments link
   (use-package lsp-ivy :straight t :commands lsp-ivy-workspace-symbol)
 
 
@@ -578,14 +578,14 @@ org src 代码块中的代码进行格式化
 
 *** lsp-treemacs
 #+name: lsp-treemacs
-#+begin_src elisp
+#+begin_src elisp :comments link
   (use-package lsp-treemacs :straight t :commands lsp-treemacs-errors-list)
 
   #+end_src
 
 *** dap-mode
 #+name: dap-mode
-#+begin_src elisp
+#+begin_src elisp :comments link
   (use-package dap-mode :straight t)
 
 
@@ -594,7 +594,7 @@ org src 代码块中的代码进行格式化
 ** Useful Tools
 *** better-jumper
 #+name: better-jumper
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'better-jumper)
   (require 'better-jumper)
   (better-jumper-mode +1)
@@ -610,7 +610,7 @@ org src 代码块中的代码进行格式化
 
 ** crux
 #+name: curx
-#+begin_src elisp
+#+begin_src elisp :comments link
   (straight-use-package 'crux)
 
 #+end_src
@@ -619,6 +619,6 @@ org src 代码块中的代码进行格式化
 * Load
 用来导入自己的包和配置文件
 #+name: curx
-#+begin_src elisp
+#+begin_src elisp :comments link
 (load-file "~/.emacs.d/private.el")
 #+end_src

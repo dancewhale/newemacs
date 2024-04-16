@@ -1,3 +1,4 @@
+;; -------->>  [[file:init.org::global][global]]
 (straight-use-package 'general)
 (require 'general)
 (general-define-key 
@@ -5,21 +6,53 @@
     "s-f s-b"    'View-scroll-half-page-backward
     "C-c C-l"      'org-store-link
 )
+;; --------<<  global ends here
 
+
+
+;; -------->>  [[file:init.org::vundo][vundo]]
 (straight-use-package 'vundo)
+;; --------<<  vundo ends here
 
+
+
+;; -------->>  [[file:init.org::undo-tree][undo-tree]]
 (straight-use-package 'undo-tree)
+;; --------<<  undo-tree ends here
 
+
+
+;; -------->>  [[file:init.org::undo-fu][undo-fu]]
 (straight-use-package 'undo-fu)
+;; --------<<  undo-fu ends here
 
+
+
+;; -------->>  [[file:init.org::dash][dash]]
 (straight-use-package 'dash)
+;; --------<<  dash ends here
 
+
+
+;; -------->>  [[file:init.org::s][s]]
 (straight-use-package 's)
+;; --------<<  s ends here
 
+
+
+;; -------->>  [[file:init.org::f][f]]
 (straight-use-package 'f)
+;; --------<<  f ends here
 
+
+
+;; -------->>  [[file:init.org::use-package][use-package]]
 (straight-use-package 'use-package)
+;; --------<<  use-package ends here
 
+
+
+;; -------->>  [[file:init.org::evil][evil]]
 (straight-use-package 'evil)
 (straight-use-package 'goto-chg)
 (straight-use-package 'evil-collection)
@@ -31,19 +64,35 @@
 
 (when (require 'evil-collection nil t)
 (evil-collection-init))
+;; --------<<  evil ends here
 
+
+
+;; -------->>  [[file:init.org::which-key][which-key]]
 (straight-use-package 'which-key)
 (require 'which-key)
 (setq which-key-idle-delay 0.1)
 (which-key-mode)
+;; --------<<  which-key ends here
 
+
+
+;; -------->>  [[file:init.org::*hydra][hydra:1]]
 (straight-use-package 'hydra)
 (require 'hydra)
+;; --------<<  hydra:1 ends here
 
+
+
+;; -------->>  [[file:init.org::ef-themes][ef-themes]]
 (straight-use-package 'ef-themes)
 (require 'ef-themes)
 (load-theme 'ef-light t)
+;; --------<<  ef-themes ends here
 
+
+
+;; -------->>  [[file:init.org::basic-style][basic-style]]
 (setq org-auto-align-tags nil
         org-tags-column 0
         org-ellipsis "⤵"
@@ -53,13 +102,25 @@
         ;; Agenda styling
         org-agenda-tags-column 0
         )
+;; --------<<  basic-style ends here
 
+
+
+;; -------->>  [[file:init.org::org-appear][org-appear]]
 (straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
 (add-hook 'org-mode-hook 'org-appear-mode)
+;; --------<<  org-appear ends here
 
+
+
+;; -------->>  [[file:init.org::org-modern][org-modern]]
 (straight-use-package 'org-modern)
 (with-eval-after-load 'org (global-org-modern-mode))
+;; --------<<  org-modern ends here
 
+
+
+;; -------->>  [[file:init.org::roam enable][roam enable]]
 (straight-use-package 'org-roam)
 (require 'org-roam)
 (require 'org-roam-dailies)
@@ -85,7 +146,11 @@
     "s-e d n"    #'org-roam-dailies-goto-next-note
     "s-e d p"    #'org-roam-dailies-goto-previous-note
     )
+;; --------<<  roam enable ends here
 
+
+
+;; -------->>  [[file:init.org::org-journal enable][org-journal enable]]
 (straight-use-package 'org-journal)
 (require 'org-journal)
 ;; Org Journal config
@@ -107,7 +172,11 @@
 
 (general-define-key 
   "s-e j n"    #'org-journal-new-entry)
+;; --------<<  org-journal enable ends here
 
+
+
+;; -------->>  [[file:init.org::babel][babel]]
 (defun edit-src-block (src fn language)
   "Replace SRC org-element's value property with the result of FN.
   FN is a function that operates on org-element's value and returns a string.
@@ -142,7 +211,11 @@
             (edit-src-block element #'format-elisp-string "emacs-lisp")))
         (delete-region (point-min) (point-max))
         (insert (org-element-interpret-data AST)))))
+;; --------<<  babel ends here
 
+
+
+;; -------->>  [[file:init.org::org-fc][org-fc]]
 (straight-use-package
    '(org-fc
      :type git :host github :repo "l3kn/org-fc"
@@ -174,9 +247,17 @@
  "e" 'org-fc-review-rate-easy
  "s" 'org-fc-review-suspend-card
  "q" 'org-fc-review-quit)
+;; --------<<  org-fc ends here
 
+
+
+;; -------->>  [[file:init.org::winner-mode][winner-mode]]
 (winner-mode t)
+;; --------<<  winner-mode ends here
 
+
+
+;; -------->>  [[file:init.org::ace-window][ace-window]]
 (straight-use-package 'ace-window)
 
 (general-define-key
@@ -184,11 +265,19 @@
  "s-o"    #'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
       aw-scope 'frame)
+;; --------<<  ace-window ends here
 
+
+
+;; -------->>  [[file:init.org::vertico][vertico]]
 ;  (straight-use-package 'vertico)
 ;  (setq vertico-cycle t)
 ;  (vertico-mode)
+;; --------<<  vertico ends here
 
+
+
+;; -------->>  [[file:init.org::pacakge install][pacakge install]]
 (straight-use-package 'ivy)
  (straight-use-package 'swiper)
  (straight-use-package 'ivy-hydra)
@@ -217,14 +306,26 @@
 "C-x l"   'counsel-locate
 "C-S-o"   'counsel-rhythmbox
 )
+;; --------<<  pacakge install ends here
 
+
+
+;; -------->>  [[file:init.org::yasnippet][yasnippet]]
 (straight-use-package 'yasnippet)
 (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
 (yas-global-mode)
+;; --------<<  yasnippet ends here
 
+
+
+;; -------->>  [[file:init.org::posframe][posframe]]
 (straight-use-package 'posframe)
   (require 'posframe)
+;; --------<<  posframe ends here
 
+
+
+;; -------->>  [[file:init.org::rime 配置][rime 配置]]
 (straight-use-package 'rime)
 (setq default-input-method "rime")
   (with-eval-after-load 'rime
@@ -251,7 +352,11 @@
      rime-emacs-module-header-root "/opt/homebrew/opt/emacs-plus@30/include" ;;use emacs-plus
      rime-librime-root "~/Downloads/librime/dist"
      ))
+;; --------<<  rime 配置 ends here
 
+
+
+;; -------->>  [[file:init.org::rime 扩展函数][rime 扩展函数]]
 (setq rime-translate-keybindings
   	'("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
   	  "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
@@ -314,7 +419,11 @@
 
 (general-define-key 
       "s-j"    #'+rime-convert-string-at-point)
+;; --------<<  rime 扩展函数 ends here
 
+
+
+;; -------->>  [[file:init.org::magit][magit]]
 (straight-use-package 'magit)
 (require 'magit)
 
@@ -327,7 +436,11 @@
       "g"      '(:ignore t  :which-key "magit prefix")
       "g l"    #'magit
       "g g"    #'cao-emacs-magit)
+;; --------<<  magit ends here
 
+
+
+;; -------->>  [[file:init.org::helpful][helpful]]
 (straight-use-package 'helpful)
 ;; Note that the built-in `describe-function' includes both functions
 ;; and macros. `helpful-function' is functions only, so we provide
@@ -347,9 +460,17 @@
  "C-h x"  #'helpful-command
  "C-h C-d"  #'helpful-at-point
  )
+;; --------<<  helpful ends here
 
+
+
+;; -------->>  [[file:init.org::go-mode][go-mode]]
 (straight-use-package 'go-mode)
+;; --------<<  go-mode ends here
 
+
+
+;; -------->>  [[file:init.org::lsp-mode][lsp-mode]]
 (use-package lsp-mode :straight t
   :init
   (setq lsp-keymap-prefix "C-c l")
@@ -364,7 +485,11 @@
    (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   )
+;; --------<<  lsp-mode ends here
 
+
+
+;; -------->>  [[file:init.org::lsp-ui][lsp-ui]]
 (use-package lsp-ui
   :straight t
   :commands lsp-ui-mode
@@ -393,20 +518,47 @@
   :config
   (setq lsp-ui-sideline-ignore-duplicate t)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+;; --------<<  lsp-ui ends here
 
+
+
+;; -------->>  [[file:init.org::lsp-ivy][lsp-ivy]]
 (use-package lsp-ivy :straight t :commands lsp-ivy-workspace-symbol)
+;; --------<<  lsp-ivy ends here
 
+
+
+;; -------->>  [[file:init.org::lsp-treemacs][lsp-treemacs]]
 (use-package lsp-treemacs :straight t :commands lsp-treemacs-errors-list)
+;; --------<<  lsp-treemacs ends here
 
+
+
+;; -------->>  [[file:init.org::dap-mode][dap-mode]]
 (use-package dap-mode :straight t)
+;; --------<<  dap-mode ends here
 
+
+
+;; -------->>  [[file:init.org::better-jumper][better-jumper]]
 (straight-use-package 'better-jumper)
 (require 'better-jumper)
 (better-jumper-mode +1)
 (general-define-key
  "C-o"    'better-jumper-jump-backward
  "C-i"    'better-jumper-jump-forward)
+;; --------<<  better-jumper ends here
 
+
+
+;; -------->>  [[file:init.org::curx][curx]]
 (straight-use-package 'crux)
+;; --------<<  curx ends here
 
+
+
+;; -------->>  [[file:init.org::curx][curx]]
 (load-file "~/.emacs.d/private.el")
+;; --------<<  curx ends here
+
+
