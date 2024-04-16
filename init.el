@@ -1,8 +1,16 @@
 (straight-use-package 'general)
 (require 'general)
 (general-define-key 
-    "s-f s-f"    #'View-scroll-half-page-forward
-    "s-f s-b"    #'View-scroll-half-page-backward)
+    "s-f s-f"    'View-scroll-half-page-forward
+    "s-f s-b"    'View-scroll-half-page-backward
+    "C-c C-l"      'org-store-link
+)
+
+(straight-use-package 'vundo)
+
+(straight-use-package 'undo-tree)
+
+(straight-use-package 'undo-fu)
 
 (straight-use-package 'use-package)
 

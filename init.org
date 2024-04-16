@@ -2,16 +2,41 @@
 #+property: header-args  :tangle "~/.emacs.d/init.el"
  
 * Global setting
+** key map
 #+name: global
 #+begin_src elisp
   (straight-use-package 'general)
   (require 'general)
   (general-define-key 
-      "s-f s-f"    #'View-scroll-half-page-forward
-      "s-f s-b"    #'View-scroll-half-page-backward)
+      "s-f s-f"    'View-scroll-half-page-forward
+      "s-f s-b"    'View-scroll-half-page-backward
+      "C-c C-l"      'org-store-link
+  )
 
 
 #+end_src
+
+** undo
+*** vundo
+#+name: vundo
+#+begin_src elisp
+  (straight-use-package 'vundo)
+    #+end_src
+*** undo-tree 
+#+name: undo-tree
+#+begin_src elisp
+  (straight-use-package 'undo-tree)
+
+    #+end_src
+
+
+*** undo-fu
+#+name: undo-fu
+#+begin_src elisp
+  (straight-use-package 'undo-fu)
+
+    #+end_src
+
 
 * Package manager
 ** use-package
