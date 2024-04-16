@@ -98,7 +98,7 @@
 [[file:docs/org-evil.org::*org-evil][org-evil 的试用说明]]
 #+name: org-evil
 #+begin_src elisp  :comments link
-  (straight-use-package 'org-evil)
+  (straight-use-package '(org-evil :build (:not compile)))
   (require 'org-evil)
     #+end_src
 
@@ -116,7 +116,7 @@
 #+begin_src elisp :comments link
   (straight-use-package 'which-key)
   (require 'which-key)
-  (setq which-key-idle-delay 0.1)
+  ;;(setq which-key-idle-delay 0.1)
   (which-key-mode)
 #+end_src
 
@@ -499,7 +499,7 @@ org src 代码块中的代码进行格式化
 
 * Programe
 ** Language
-*** elisp :comments link
+*** elisp
 **** helpful
 #+name: helpful
 #+begin_src elisp :comments link

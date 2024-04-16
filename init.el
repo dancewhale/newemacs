@@ -74,7 +74,7 @@
 
 
 ;; -------->>  [[file:init.org::org-evil][org-evil]]
-(straight-use-package 'org-evil)
+(straight-use-package '(org-evil :build (:not compile)))
 (require 'org-evil)
 ;; --------<<  org-evil ends here
 
@@ -90,7 +90,7 @@
 ;; -------->>  [[file:init.org::which-key][which-key]]
 (straight-use-package 'which-key)
 (require 'which-key)
-(setq which-key-idle-delay 0.1)
+;;(setq which-key-idle-delay 0.1)
 (which-key-mode)
 ;; --------<<  which-key ends here
 
