@@ -10,7 +10,7 @@
   (general-define-key 
       "s-f s-f"    'View-scroll-half-page-forward
       "s-f s-b"    'View-scroll-half-page-backward
-      "C-c C-l"      'org-store-link
+      "C-c l"      'org-store-link
   )
 
 
@@ -100,6 +100,15 @@
 #+begin_src elisp  :comments link
   (straight-use-package 'org-evil)
   (require 'org-evil)
+    #+end_src
+
+*** evil-surround
+[[file:docs/evil-surround.org::*evil-surround Usage][evil-surround 使用说明]]
+#+name: evil-surround
+#+begin_src elisp  :comments link
+  (straight-use-package 'evil-surround)
+  (global-evil-surround-mode 1 )
+
     #+end_src
 
 ** which-key

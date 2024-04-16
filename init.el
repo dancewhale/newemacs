@@ -4,7 +4,7 @@
 (general-define-key 
     "s-f s-f"    'View-scroll-half-page-forward
     "s-f s-b"    'View-scroll-half-page-backward
-    "C-c C-l"      'org-store-link
+    "C-c l"      'org-store-link
 )
 ;; --------<<  global ends here
 
@@ -77,6 +77,13 @@
 (straight-use-package 'org-evil)
 (require 'org-evil)
 ;; --------<<  org-evil ends here
+
+
+
+;; -------->>  [[file:init.org::evil-surround][evil-surround]]
+(straight-use-package 'evil-surround)
+(global-evil-surround-mode 1 )
+;; --------<<  evil-surround ends here
 
 
 
