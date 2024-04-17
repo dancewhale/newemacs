@@ -633,6 +633,232 @@ org src 代码块中的代码进行格式化
 
    #+end_src
 
+* Term
+** vterm
+#+name: vterm
+#+begin_src elisp  :comments link
+        (straight-use-package 'vterm)
+        (straight-use-package 'vterm-toggle)
+
+        (require 'vterm)
+        (require 'vterm-toggle)
+
+        (setq vterm-toggle-hide-method 'reset-window-configration)
+
+      (setq vterm-toggle-fullscreen-p 't)
+
+      (evil-set-initial-state 'vterm-mode 'emacs)
+
+      (setq-default vterm-keymap-exceptions '("C-c" "C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-y"  "M-y"))
+      (setq-default vterm-max-scrollback (- 20000 42))
+      (setq-default vterm-min-window-width 10)
+      (setq-default vterm-copy-mode-remove-fake-newlines t)
+      (setq-default vterm-enable-manipulate-selection-data-by-osc52 t)
+      (setq-default vterm-module-cmake-args " -DUSE_SYSTEM_LIBVTERM=yes ")
+      (setq vterm-toggle-cd-auto-create-buffer t)
+      (setq-default vterm-clear-scrollback-when-clearing t)
+      (setq-default term-prompt-regexp "^[^#$%>\n]*[#$%>] *") ;默认 regex 相当于没定义，term-bol 无法正常中转到开头处
+      (setq vterm-buffer-name-string "*vterm* %s")
+
+
+      (add-hook 'vterm-toggle-show-hook #'evil-insert-state)
+      (add-hook 'vterm-toggle-hide-hook #'evil-normal-state)
+      (setq vterm-toggle-reset-window-configration-after-exit 'kill-window-only)
+      ;; (setq vterm-toggle-hide-method 'bury-all-vterm-buffer)
+      ;; 使用 swith-to-buffer 来 hide vterm,以确保使用共同的 window,与 tabline 更好的兼容
+      ;; 主要是维护 buffer-list,以确保下次切回来，仍是最近使用的 vterm
+      ;; 我个人没有使用tabline
+      ;; (add-hook 'vterm-toggle-hide-hook #'(lambda() (switch-to-buffer (current-buffer))))
+      ;; (setq vterm-toggle-hide-method nil)
+
+
+      (defun vterm-ctrl-g ()
+        "vterm ctrl-g"
+        (interactive)
+        (if (save-excursion (goto-char (point-at-bol))(search-forward-regexp "filter>" nil t))
+            (if (equal last-command 'vterm-ctrl-g)
+      	  (evil-normal-state)
+      	(call-interactively 'vmacs-vterm-self-insert))
+          (if (equal last-command 'vterm-copy-mode)
+      	(call-interactively 'vmacs-vterm-self-insert)
+            (if (equal last-command 'evil-normal-state)
+      	  (progn
+      	    (vterm-copy-mode 1)
+      	    (setq this-command 'vterm-copy-mode)
+      	    )
+      	(setq this-command 'evil-normal-state)
+      	(evil-normal-state)))))
+
+
+      (defun vmacs-vterm-kill-line()
+        (interactive)
+        (let ((succ (vterm-goto-char (point)))
+      	(beg (point))
+      	(end (vterm--get-end-of-line)))
+          (save-excursion
+            (goto-char end)
+            (when (looking-back "[ \t\n]+" beg t)
+      	(setq end (match-beginning 0)))
+            (when (> end beg) (kill-ring-save beg end)))
+          (vterm-send-key "k" nil nil :ctrl)))
+
+      (defun vmacs-vterm-self-insert()
+        (interactive)
+        (unless (evil-insert-state-p)
+          (evil-insert-state))
+        (call-interactively 'vterm--self-insert))
+
+      (defun vmacs-vterm-enable-output()
+        (when (member major-mode '(vterm-mode))
+          (vterm-copy-mode -1)))
+
+      (defun vmacs-vterm-copy-mode-hook()
+        (if vterm-copy-mode
+            (progn
+      	(message "vterm-copy-mode enabled")
+      	(unless (evil-normal-state-p)
+      	  (evil-normal-state)))
+          (unless (evil-insert-state-p)
+            (evil-insert-state))))
+
+      (add-hook 'vterm-copy-mode-hook #'vmacs-vterm-copy-mode-hook)
+      (add-hook 'evil-insert-state-entry-hook 'vmacs-vterm-enable-output)
+
+      (defun vterm-eob()
+        (interactive)
+        (goto-char (point-max))
+        (skip-chars-backward "\n[:space:]"))
+
+      (evil-define-operator evil-vterm-delete-char (beg end type register)
+        "Delete previous character."
+        :motion evil-forward-char
+        (interactive "<R><x>")
+        (evil-collection-vterm-delete beg end type register))
+
+
+      (defun vmacs-vterm-hook()
+        (evil-define-key 'insert 'local   (kbd "<escape>") 'vterm--self-insert)
+        (let ((p (get-buffer-process (current-buffer))))
+          (when p (set-process-query-on-exit-flag p nil))))
+
+      (add-hook 'vterm-mode-hook 'vmacs-vterm-hook)
+
+
+
+      (defun vterm-toggle-after-ssh-login (method user host port localdir)
+        (when (string-equal "docker" method)
+          (vterm-send-string "bash")
+          (vterm-send-return))
+        (when (member host '("BJ-DEV-GO" "dev.com"))
+          (vterm-send-string "zsh")
+          (vterm-send-return)
+          (vterm-send-string "j;clear" )
+          (vterm-send-return)))
+
+      (add-hook 'vterm-toggle-after-remote-login-function 'vterm-toggle-after-ssh-login)
+
+      (defun vterm-edit-command-action ()
+        (interactive)
+        (let* ((delete-trailing-lines t)
+      	 (vtermbuf (current-buffer))
+      	 (begin (vterm--get-prompt-point))
+      	 (buffer (get-buffer-create "vterm-edit-command"))
+      	 (n (length (filter-buffer-substring begin (point))))
+      	 foreground
+      	 (content (filter-buffer-substring
+      		   begin (point-max))))
+          (with-current-buffer buffer
+            (setq vterm-edit-vterm-buffer vtermbuf)
+            (erase-buffer)
+            (insert content)
+            (delete-trailing-whitespace)
+            (goto-char (1+ n))
+            ;; delete zsh auto-suggest candidates
+            (setq foreground (plist-get (get-text-property (point) 'font-lock-face) :foreground ))
+            (when (equal foreground  (face-background 'vterm-color-black nil 'default))
+      	(delete-region (point) (point-max)))
+            (sh-mode)
+            (vterm-edit-command-mode)
+            (evil-insert-state)
+            (setq-local header-line-format
+      		  (substitute-command-keys
+      		   (concat "Edit, then "
+      			   (mapconcat
+      			    'identity
+      			    (list "\\[vterm-edit-command-commit]: Finish"
+      				  "\\[vterm-edit-command-abort]: Abort"
+      				  )
+      			    ", "))))
+            (split-window-sensibly)
+            (switch-to-buffer-other-window buffer)))
+        )
+
+      (defun vterm-edit-command-commit ()
+        (interactive)
+        (let ((delete-trailing-lines t)
+      	content)
+          (delete-trailing-whitespace)
+          (goto-char (point-max))
+          (when (looking-back "\n") (backward-delete-char 1))
+          (setq content (buffer-string))
+          (with-current-buffer vterm-edit-vterm-buffer
+            (vterm-send-key "a" nil nil t)
+            (vterm-send-key "k" nil nil t t)
+            (unless (vterm--at-prompt-p)
+      	(vterm-send-key "c" nil nil t))
+            (vterm-send-string content)))
+        (vterm-edit-command-abort))
+
+      (defun vterm-edit-command-abort ()
+        (interactive)
+        (kill-buffer-and-window))
+
+      (defvar vterm-edit-command-mode-map
+        (let ((keymap (make-sparse-keymap)))
+          (define-key keymap (kbd "C-c C-c") #'vterm-edit-command-commit)
+          (define-key keymap (kbd "C-c C-k") #'vterm-edit-command-abort)
+          keymap))
+
+      (define-minor-mode vterm-edit-command-mode
+        "Vterm Edit Command Mode")
+
+
+    (general-define-key
+        :prefix "s-e"
+        "i"      '(vterm-toggle :which-key "toggle vterm")
+    )
+      
+  (general-define-key
+      :keymaps 'vterm-mode-map
+      :states '(normal insert)
+      "G"      '(vtermeob :which-key "go to end of buffer")
+      "C-l"    '(vterm-clear :which-key "clear term")
+      "C-g"    '(vterm-ctrl-g :which-key "ctrl-g quit")
+      "C-\\"   '(toggle-input-method :which-key "toggle input method")
+      "C-/"    '(vterm-undo :which-key "vterm undo")
+  )
+
+  (general-define-key
+      :keymaps 'vterm-mode-map
+      :states 'emacs
+      "C-c C-e"  '(compilation-shell-minor-mode  :which-key "vterm shell")
+      "C-q"      '(vterm-send-next-key	      :which-key "vterm send key")
+      "C-g"      '(vterm-ctrl-g		      :which-key "vterm ctrl-g")
+      "C-l"      '(vterm-clear		      :which-key "vterm clear")
+      "C-y"      '(vterm-yank		      :which-key "vterm yank")
+      "C-k"      '(vmacs-vterm-kill-line	      :which-key "vterm kill")
+      "C-p"      '(vmacs-vterm-self-insert	      :which-key "vterm precise cmd")
+      "C-n"      '(vmacs-vterm-self-insert	      :which-key "vterm next cmd")
+      "C-r"      '(vmacs-vterm-self-insert	      :which-key "vterm cmd  search")
+      "C-\\"     '(toggle-input-method	      :which-key "vterm input method")
+      "C-x C-e"  '(vterm-edit-command-action     :which-key "vterm edit action")
+      "C-x e"    '(vterm-edit-command-action     :which-key "vterm edit action")
+      "C-/"      '(vterm-undo		      :which-key "vterm undo")
+
+  )
+
+    #+end_src
+
 
 * Tools
 用于做组合快捷操作的工具包.
