@@ -57,6 +57,22 @@
 (straight-use-package 'goto-chg)
 (require 'evil)
 (evil-mode 1)
+
+(evil-define-minor-mode-key 'insert lsp-mode-map
+  (kbd "TAB") 'completion-at-point
+)
+
+(evil-define-key nil evil-motion-state-map
+  (kbd "C-a") 'evil-beginning-of-line
+  (kbd "C-e") 'evil-end-of-line
+)
+
+(evil-define-key nil evil-insert-state-map
+  (kbd "C-a") 'beginning-of-line
+  (kbd "C-e") 'end-of-line
+  (kbd "C-n") 'next-line
+  (kbd "C-p") 'previous-line
+)
 ;; --------<<  evil ends here
 
 
