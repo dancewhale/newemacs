@@ -6,6 +6,10 @@
     "s-f s-b"    'View-scroll-half-page-backward
     "C-c l"      'org-store-link
 )
+
+(general-define-key
+  :keymaps 'ivy-minibuffer-map
+    "C-w"  'evil-delete-backward-word)
 ;; --------<<  global ends here
 
 
@@ -58,7 +62,7 @@
 (require 'evil)
 (evil-mode 1)
 
-(evil-define-minor-mode-key 'insert lsp-mode-map
+(evil-define-minor-mode-key 'insert 'lsp-mode
   (kbd "TAB") 'completion-at-point
 )
 

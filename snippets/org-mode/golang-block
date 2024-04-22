@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: golang-block
+# key: :gb
+# type: snippet
+# --
+
+#+name: $1
+#+begin_src golang  :comments link  :tangle /tmp/$2   :mkdirp yes
+
+$0
+
+#+end_src
+

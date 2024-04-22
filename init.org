@@ -5,14 +5,17 @@
 ** key map
 #+name: global
 #+begin_src elisp :comments link
-  (straight-use-package 'general)
-  (require 'general)
-  (general-define-key 
-      "s-f s-f"    'View-scroll-half-page-forward
-      "s-f s-b"    'View-scroll-half-page-backward
-      "C-c l"      'org-store-link
-  )
+   (straight-use-package 'general)
+   (require 'general)
+   (general-define-key 
+       "s-f s-f"    'View-scroll-half-page-forward
+       "s-f s-b"    'View-scroll-half-page-backward
+       "C-c l"      'org-store-link
+   )
 
+   (general-define-key
+     :keymaps 'ivy-minibuffer-map
+       "C-w"  'evil-delete-backward-word)
 
 #+end_src
 
@@ -79,7 +82,7 @@
   (require 'evil)
   (evil-mode 1)
 
-  (evil-define-minor-mode-key 'insert lsp-mode-map
+  (evil-define-minor-mode-key 'insert 'lsp-mode
     (kbd "TAB") 'completion-at-point
   )
 
