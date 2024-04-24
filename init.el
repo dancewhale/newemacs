@@ -10,6 +10,10 @@
 (general-define-key
   :keymaps 'ivy-minibuffer-map
     "C-w"  'evil-delete-backward-word)
+
+(general-define-key
+  :keymaps 'minibuffer-mode-map
+    "C-w"  'evil-delete-backward-word)
 ;; --------<<  global ends here
 
 
