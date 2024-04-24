@@ -510,6 +510,14 @@
 
 
 
+;; -------->>  [[file:init.org::markdown][markdown]]
+(use-package markdown-mode
+ :straight t
+ :mode "//.md//'")
+;; --------<<  markdown ends here
+
+
+
 ;; -------->>  [[file:init.org::lsp-mode][lsp-mode]]
 (use-package lsp-mode :straight t
   :init
@@ -577,6 +585,47 @@
 ;; -------->>  [[file:init.org::dap-mode][dap-mode]]
 (use-package dap-mode :straight t)
 ;; --------<<  dap-mode ends here
+
+
+
+;; -------->>  [[file:init.org::lsp-bridge][lsp-bridge]]
+(use-package lsp-bridge
+:straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+          :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+          :build (:not compile))
+:init
+(global-lsp-bridge-mode))
+(setq acm-enable-copilot t)
+
+(setq lsp-bridge-python-command "/usr/bin/python3")
+
+(general-define-key  :prefix "s-l"
+     "b"      '(:ignore t  :which-key "lsp-bridge prefix")
+     "b d"    '(lsp-bridge-find-def :which-key "find define")
+     "b p"    '(lsp-bridge-peek :which-key "bridge peek")
+     "b r"    '(lsp-bridge-rename :which-key "bridge peek")
+     "b f"    '(lsp-bridge-code-format :which-key "format code"))
+;; --------<<  lsp-bridge ends here
+
+
+
+;; -------->>  [[file:init.org::copilot][copilot]]
+(use-package copilot
+ :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+ :ensure t)
+ (add-hook 'go-mode-hook 'copilot-mode)
+
+(general-define-key  :prefix "s-l"
+         "c"      '(:ignore t  :which-key "copilot prefix")
+         "c c"    '(copilot-complete :which-key "complete")
+         "c C"    '(copilot-panel-complete :which-key "panel complete")
+         "c p"    '(copilot-previous-completion :which-key "select previous")
+         "c n"    '(copilot-next-completion :which-key "select next")
+         "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
+         "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
+         "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
+         "c a"    '(copilot-accept-completion :which-key "accept complete"))
+;; --------<<  copilot ends here
 
 
 

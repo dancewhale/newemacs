@@ -553,6 +553,17 @@ org src 代码块中的代码进行格式化
 
   #+end_src
 
+*** markdown
+#+name: markdown
+#+begin_src elisp  :comments link
+(use-package markdown-mode
+ :straight t
+ :mode "//.md//'")
+
+
+    #+end_src
+
+
 ** lsp
 *** lsp-mode
 #+name: lsp-mode
@@ -608,7 +619,6 @@ org src 代码块中的代码进行格式化
 
   #+end_src
 
-
 *** lsp-ivy
 #+name: lsp-ivy
 #+begin_src elisp :comments link
@@ -631,6 +641,50 @@ org src 代码块中的代码进行格式化
 
 
   #+end_src
+
+*** lsp-bridge
+#+name: lsp-bridge
+#+begin_src elisp  :comments link
+  (use-package lsp-bridge
+  :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+            :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+            :build (:not compile))
+  :init
+  (global-lsp-bridge-mode))
+  (setq acm-enable-copilot t)
+
+  (setq lsp-bridge-python-command "/usr/bin/python3")
+
+  (general-define-key  :prefix "s-l"
+       "b"      '(:ignore t  :which-key "lsp-bridge prefix")
+       "b d"    '(lsp-bridge-find-def :which-key "find define")
+       "b p"    '(lsp-bridge-peek :which-key "bridge peek")
+       "b r"    '(lsp-bridge-rename :which-key "bridge peek")
+       "b f"    '(lsp-bridge-code-format :which-key "format code"))
+
+    #+end_src
+
+*** copilot
+#+name: copilot
+#+begin_src elisp  :comments link
+   (use-package copilot
+   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+   :ensure t)
+   (add-hook 'go-mode-hook 'copilot-mode)
+
+  (general-define-key  :prefix "s-l"
+           "c"      '(:ignore t  :which-key "copilot prefix")
+           "c c"    '(copilot-complete :which-key "complete")
+           "c C"    '(copilot-panel-complete :which-key "panel complete")
+           "c p"    '(copilot-previous-completion :which-key "select previous")
+           "c n"    '(copilot-next-completion :which-key "select next")
+           "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
+           "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
+           "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
+           "c a"    '(copilot-accept-completion :which-key "accept complete"))
+    #+end_src
+
+
 
 ** code diagnostics
 *** flycheck
@@ -879,7 +933,6 @@ org src 代码块中的代码进行格式化
   )
 
     #+end_src
-
 
 * Tools
 用于做组合快捷操作的工具包.
