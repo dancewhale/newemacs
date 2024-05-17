@@ -1,0 +1,43 @@
+* install
+
+
+#+name: tool install
+#+begin_src shell  :comments link
+
+  pacman -Sy emacs vim
+
+  pacman -Sy cmake docker
+
+  sudo usermod -aG docker $USER
+
+  sudo pacman -Sy ripgrep the_silver_searcher
+  # rime-ice install
+  yay -Sy rime-ice-git
+
+  mkdir ~/.local/share/rime
+  push ~/.local/share/rime
+  ln -s   ~/.cache/yay/rime-ice-git/src/rime-ice/  rime
+  pop
+
+
+   #+end_src
+
+
+#+name: lsp install
+#+begin_src shell  :comments link
+  # lsp-bridge install
+  pacman -Sy python3 nodejs npm
+
+  sudo npm install -g copilot-node-server
+
+  yay -Sy python-epc python-orjson python-sexpdata python-six python-setuptools python-paramiko python-rapidfuzz
+
+  # install golang lsp dep
+  pacman -Sy glom gopls 
+  yay -Sy  golangci-lint-bin
+
+  go install github.com/nametake/golangci-lint-langserver@latest
+  # 注意修改bashrc 的PATH 包含~/go/bin/
+
+   #+end_src
+
