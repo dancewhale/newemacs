@@ -163,6 +163,14 @@
 
 
 
+;; -------->>  [[file:init.org::org-ml][org-ml]]
+(straight-use-package 'org-ml)
+
+(require 'org-ml)
+;; --------<<  org-ml ends here
+
+
+
 ;; -------->>  [[file:init.org::roam enable][roam enable]]
 (straight-use-package 'org-roam)
 (require 'org-roam)
@@ -477,6 +485,12 @@
       "g l"    #'magit
       "g g"    #'cao-emacs-magit)
 ;; --------<<  magit ends here
+
+
+
+;; -------->>  [[file:init.org::magit-forge][magit-forge]]
+(straight-use-package 'forge)
+;; --------<<  magit-forge ends here
 
 
 
@@ -882,3 +896,14 @@
 ;; --------<<  curx ends here
 
 
+
+;; -------->>  [[file:init.org::function][function]]
+(defun cao-emacs-counsel-ag ()
+  (interactive)
+  (counsel-ag nil default-directory))
+
+(general-define-key
+    :prefix "s-e"
+    "s-f"      '(cao-emacs-counsel-ag :which-key "grep in current directory.")
+)
+;; --------<<  function ends here

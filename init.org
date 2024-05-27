@@ -158,6 +158,17 @@
 #+end_src
 
 * Org Mode
+** setting
+#+name: org
+#+begin_src elisp  :comments link
+  (straight-use-package '(org :type git :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git"
+    				:local-repo "org" :depth full
+      			        :build (:not autoloads)  :branch "release_9.6.30"
+  			      :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
+
+   #+end_src
+
+
 ** ui
 *** org mode basic style
 #+name: basic-style
@@ -187,7 +198,17 @@
   (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
 
-** setting
+** library
+#+name: org-ml
+#+begin_src elisp  :comments link
+  (straight-use-package 'org-ml)
+
+  (require 'org-ml)
+
+
+   #+end_src
+
+
 ** Note
 *** Roam
 #+name: roam enable
@@ -517,6 +538,14 @@ org src 代码块中的代码进行格式化
         "g g"    #'cao-emacs-magit)
 
 #+end_src
+
+** magit-forge
+#+name: magit-forge
+#+begin_src elisp  :comments link
+  (straight-use-package 'forge)
+
+   #+end_src
+
 
 * Programe
 ** Language
@@ -963,7 +992,7 @@ org src 代码块中的代码进行格式化
 
   (general-define-key
       :prefix "s-e"
-      "s-f"      '(cao-emacs-counsel-ag :which-key "ag in current directory.")
+      "s-f"      '(cao-emacs-counsel-ag :which-key "grep in current directory.")
   )
 
    #+end_src
