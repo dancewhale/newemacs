@@ -626,12 +626,6 @@
 
 
 
-;; -------->>  [[file:init.org::org][org]]
-(straight-use-package '(org :type git :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git"
-    			      :local-repo "org" :depth full
-      			      :build (:not autoloads)  :branch "release_9.6.30"
-  			    :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
-;; --------<<  org ends here
 
 
 

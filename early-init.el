@@ -17,5 +17,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(straight-use-package '(org :type built-in))
+
 ;;; load package load file.
 (load-file  "~/.emacs.d/packages.el")
+

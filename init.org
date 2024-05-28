@@ -654,10 +654,6 @@
 ** setting
 #+name: org
 #+begin_src elisp  :comments link
-  (straight-use-package '(org :type git :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git"
-    				:local-repo "org" :depth full
-      			        :build (:not autoloads)  :branch "release_9.6.30"
-  			      :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
 
    #+end_src
 
