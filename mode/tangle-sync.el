@@ -47,13 +47,61 @@ Jumps from org src block to output code."
               	  (forward-char offset)))))
     (message "Cannot jump to tangled file because point is not at org src block.")))
 
+
 (defun tangle-sync-jump-to-org ()
   "The opposite of `tangle-sync-jump-to-output'.
-Jumps from output code to org src block."
+Jump from a tangled code file to the related Org mode file."
+  ;; (org-babel-tangle-jump-to-org) current window.
   (interactive)
-  (let ((org-src-window-setup 'current-window))
-    (org-babel-tangle-jump-to-org))
-  )
+  (let ((mid (point))
+	start body-start end target-buffer target-char link block-name body)
+    (save-window-excursion
+      (save-excursion
+	(while (and (re-search-backward org-link-bracket-re nil t)
+		    (not ; ever wider searches until matching block comments
+		     (and (setq start (line-beginning-position))
+			  (setq body-start (line-beginning-position 2))
+			  (setq link (match-string 0))
+			  (setq block-name (match-string 2))
+			  (save-excursion
+			    (save-match-data
+			      (re-search-forward
+			       (concat " " (regexp-quote block-name)
+				       " ends here")
+			       nil t)
+			      (setq end (line-beginning-position))))))))
+	(unless (and start (< start mid) (< mid end))
+	  (error "Not in tangled code"))
+        (setq body (buffer-substring body-start end)))
+      ;; Go to the beginning of the relative block in Org file.
+      ;; Explicitly allow fuzzy search even if user customized
+      ;; otherwise.
+      (let (org-link-search-must-match-exact-headline)
+        (org-link-open-from-string link))
+      (setq target-buffer (current-buffer))
+      (if (string-match "[^ \t\n\r]:\\([[:digit:]]+\\)" block-name)
+          (let ((n (string-to-number (match-string 1 block-name))))
+	    (if (org-before-first-heading-p) (goto-char (point-min))
+	      (org-back-to-heading t))
+	    ;; Do not skip the first block if it begins at point min.
+	    (cond ((or (org-at-heading-p)
+		       (not (eq (org-element-type (org-element-at-point))
+				'src-block)))
+		   (org-babel-next-src-block n))
+		  ((= n 1))
+		  (t (org-babel-next-src-block (1- n)))))
+        (org-babel-goto-named-src-block block-name))
+      (goto-char (org-babel-where-is-src-block-head))
+      (forward-line 1)
+      ;; Try to preserve location of point within the source code in
+      ;; tangled code file.
+      (let ((offset (- mid body-start)))
+	  (forward-char offset))
+      (setq target-char (point)))
+    (org-src-switch-to-buffer target-buffer t)
+    (goto-char target-char)
+    body))
+
 
 
 (general-define-key
@@ -63,5 +111,31 @@ Jumps from output code to org src block."
 
 
 
-(provide 'tangle-sync)
-;;; tangle-sync.el ends here
+;; edebug
+(use-package eros
+ :straight t)
+(require 'eros)
+
+(defun adviced:edebug-compute-previous-result (_ &rest r)
+  "Adviced `edebug-compute-previous-result'."
+  (let ((previous-value (nth 0 r)))
+    (if edebug-unwrap-results
+        (setq previous-value
+              (edebug-unwrap* previous-value)))
+    (setq edebug-previous-result
+          (edebug-safe-prin1-to-string previous-value))))
+
+(advice-add #'edebug-compute-previous-result
+            :around
+            #'adviced:edebug-compute-previous-result)
+
+
+(defun adviced:edebug-previous-result (_ &rest r)
+  "Adviced `edebug-previous-result'."
+  (eros--make-result-overlay edebug-previous-result
+    :where (point)
+    :duration eros-eval-result-duration))
+
+(advice-add #'edebug-previous-result
+            :around
+            #'adviced:edebug-previous-result)
