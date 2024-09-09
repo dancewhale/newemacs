@@ -20,5 +20,5 @@
 (straight-use-package '(org :type built-in))
 
 ;;; load package load file.
-(load-file  "~/.emacs.d/packages.el")
+(load-file  "~/.emacs.d/init.el")
 

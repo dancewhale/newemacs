@@ -626,6 +626,9 @@
 
 
 
+;; -------->>  [[file:init.org::org][org]]
+
+;; --------<<  org ends here
 
 
 
@@ -1023,6 +1026,19 @@
  :straight t
  :mode "//.md//'")
 ;; --------<<  markdown ends here
+
+
+
+;; -------->>  [[file:init.org::edebug][edebug]]
+(general-define-key
+:keymaps 'edebug-mode-map
+:states 'emacs
+"C-l"      '(edebug-step-throught-mode     :which-key "edebug next step.")
+)
+(defun getpoint ()
+  (interactive)
+  (prin1 (point)))
+;; --------<<  edebug ends here
 
 
 
