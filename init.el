@@ -1031,13 +1031,38 @@
 
 ;; -------->>  [[file:init.org::edebug][edebug]]
 (general-define-key
-:keymaps 'edebug-mode-map
-:states 'emacs
-"C-l"      '(edebug-step-throught-mode     :which-key "edebug next step.")
+  :keymaps 'edebug-mode-map
+  :states 'emacs
+  "C-f"      '(edebug-step-throught-mode     :which-key "edebug next step.")
 )
-(defun getpoint ()
-  (interactive)
-  (prin1 (point)))
+;; edebug
+(use-package eros
+ :straight t)
+(require 'eros)
+
+;(defun adviced:edebug-compute-previous-result (_ &rest r)
+;  "Adviced `edebug-compute-previous-result'."
+;  (let ((previous-value (nth 0 r)))
+;    (if edebug-unwrap-results
+;        (setq previous-value
+;              (edebug-unwrap* previous-value)))
+;    (setq edebug-previous-result
+;          (edebug-safe-prin1-to-string previous-value))))
+;
+;(advice-add #'edebug-compute-previous-result
+;            :around
+;            #'adviced:edebug-compute-previous-result)
+
+
+(defun adviced:edebug-previous-result (_ &rest r)
+  "Adviced `edebug-previous-result'."
+  (eros--make-result-overlay edebug-previous-result
+    :where (point)
+    :duration eros-eval-result-duration))
+
+(advice-add #'edebug-previous-result
+            :around
+            #'adviced:edebug-previous-result)
 ;; --------<<  edebug ends here
 
 
@@ -1402,20 +1427,29 @@
 
 
 ;; -------->>  [[file:init.org::curx][curx]]
-(load-file "~/.emacs.d/private.el")
+(load-file "~/.emacs.d/mode/tangle-sync.el")
 ;; --------<<  curx ends here
 
 
 
 ;; -------->>  [[file:init.org::function][function]]
 (defun cao-emacs-counsel-ag ()
+    (interactive)
+    (counsel-ag nil default-directory))
+
+  (general-define-key
+      :prefix "s-e"
+      "s-f"      '(cao-emacs-counsel-ag :which-key "grep in current directory.")
+  )
+
+
+(defun learnify-open-emacsd-dir ()
   (interactive)
-  (counsel-ag nil default-directory))
+  (dired "~/.emacs.d"))
+
 
 (general-define-key
-    :prefix "s-e"
-    "s-f"      '(cao-emacs-counsel-ag :which-key "grep in current directory.")
-)
+ "s-e h h" #'learnify-open-emacsd-dir)
 ;; --------<<  function ends here
 
 
