@@ -6,7 +6,7 @@
        (expand-file-name
         "straight/repos/straight.el/bootstrap.el"
         (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
+            (concat user-emacs-directory ".local/"))))
       (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -15,6 +15,7 @@
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
+  (setq straight-base-dir (concat user-emacs-directory ".local/"))
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package '(org :type built-in))

@@ -1,3 +1,13 @@
+;; -------->>  [[file:init.org::dir][dir]]
+(defvar emacs-local-dir (expand-file-name ".local/"))
+  (defvar emacs-data-dir (file-name-concat emacs-local-dir "etc/"))
+  (defvar emacs-cache-dir (file-name-concat emacs-local-dir "cache/"))
+  (defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
+(setq package-user-dir (concat emacs-local-dir "elpa/"))
+;; --------<<  dir ends here
+
+
+
 ;; -------->>  [[file:init.org::global][global]]
 (straight-use-package 'general)
 (require 'general)
@@ -1426,9 +1436,9 @@
 
 
 
-;; -------->>  [[file:init.org::curx][curx]]
+;; -------->>  [[file:init.org::package][package]]
 (load-file "~/.emacs.d/mode/tangle-sync.el")
-;; --------<<  curx ends here
+;; --------<<  package ends here
 
 
 
