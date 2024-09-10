@@ -566,6 +566,7 @@
 
 
 ;; -------->>  [[file:init.org::evil][evil]]
+(setq evil-want-keybinding nil)
 (straight-use-package 'evil)
 (straight-use-package 'goto-chg)
 (require 'evil)
@@ -594,7 +595,6 @@
 (straight-use-package 'evil-collection)
 
 (setq evil-want-integration t)
-(setq evil-want-keybinding nil)
 
 (when (require 'evil-collection nil t)
 (evil-collection-init))
