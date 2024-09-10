@@ -2,11 +2,12 @@
 (setq package-enable-at-startup nil)
 
 (defvar bootstrap-version)
+(setq straight-base-dir (concat user-emacs-directory ".local/"))
 (let ((bootstrap-file
        (expand-file-name
         "straight/repos/straight.el/bootstrap.el"
         (or (bound-and-true-p straight-base-dir)
-            (concat user-emacs-directory ".local/"))))
+            (concat user-emacs-directory))))
       (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -15,11 +16,6 @@
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
-  (setq straight-base-dir (concat user-emacs-directory ".local/"))
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package '(org :type built-in))
-
-;;; load package load file.
-(load-file  "~/.emacs.d/init.el")
-
