@@ -1,8 +1,12 @@
 ;; -------->>  [[file:init.org::dir][dir]]
 (defvar emacs-local-dir (expand-file-name ".local/"))
-  (defvar emacs-data-dir (file-name-concat emacs-local-dir "etc/"))
-  (defvar emacs-cache-dir (file-name-concat emacs-local-dir "cache/"))
-  (defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
+;;配置文件
+(defvar emacs-data-dir (file-name-concat emacs-local-dir "etc/"))
+
+;;临时文件
+(defvar emacs-cache-dir (file-name-concat emacs-local-dir "cache/"))
+;;
+(defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
 (setq package-user-dir (concat emacs-local-dir "elpa/"))
 ;; --------<<  dir ends here
 

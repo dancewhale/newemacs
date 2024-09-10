@@ -3,6 +3,7 @@
 
 (defvar bootstrap-version)
 (setq straight-base-dir (concat user-emacs-directory ".local/"))
+(setq user-emacs-directory (concat straight-base-dir  "cache/"))
 (let ((bootstrap-file
        (expand-file-name
         "straight/repos/straight.el/bootstrap.el"

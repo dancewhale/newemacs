@@ -1,3 +1,0 @@
-#!/bin/sh
-# Retangle init.org as it is so all changes are reflected in init.el
-emacsclient -nw -s ~/.emacs.d/cache/server/server -e "(let ((enable-local-variables :safe)) (car (org-babel-tangle-config)))"
