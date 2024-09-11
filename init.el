@@ -24,7 +24,6 @@
 (general-define-key
   :keymaps 'ivy-minibuffer-map
     "C-w"  'evil-delete-backward-word)
-
 (general-define-key
   :keymaps 'minibuffer-mode-map
     "C-w"  'evil-delete-backward-word)
@@ -567,6 +566,7 @@
 
 ;; -------->>  [[file:init.org::evil][evil]]
 (setq evil-want-keybinding nil)
+(setq evil-auto-indent nil)
 (straight-use-package 'evil)
 (straight-use-package 'goto-chg)
 (require 'evil)
@@ -641,7 +641,7 @@
 
 
 ;; -------->>  [[file:init.org::org][org]]
-
+(electric-indent-mode -1)
 ;; --------<<  org ends here
 
 
