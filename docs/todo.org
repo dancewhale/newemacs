@@ -1,0 +1,7 @@
+* Question
+** edebug
+*** TODO edebug 很好用,但是快捷键还没有设置好.
+*** TODO edebug 退出流程目前无效.
+*** TODO 如何直接跳到其他函数内部是个问题,比如hook 函数,或者其他mode 起作用的.
+比如org-newline 输入换行后,electric-indent-mode 自动空格问题.
+最后edebug 也没有跳到electric, 我是通过new函数注释发现问题的.
