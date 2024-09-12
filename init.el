@@ -8,6 +8,9 @@
 ;;
 (defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
 (setq package-user-dir (concat emacs-local-dir "elpa/"))
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load sutom-file)
 ;; --------<<  dir ends here
 
 
@@ -643,6 +646,13 @@
 ;; -------->>  [[file:init.org::org][org]]
 (electric-indent-mode -1)
 ;; --------<<  org ends here
+
+
+
+;; -------->>  [[file:init.org::tangle][tangle]]
+(straight-use-package 'org-auto-tangle)
+(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+;; --------<<  tangle ends here
 
 
 

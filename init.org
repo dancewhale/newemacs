@@ -1,21 +1,22 @@
-;; -*- mode: org-mode; eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t); -*-
 #+property: header-args  :tangle "~/.emacs.d/init.el"
+#+auto_tangle: vars:org-babel-tangle-comment-format-beg:org-babel-tangle-comment-format-end t
  
 * Global setting
 ** dir setting
 #+name: dir
 #+begin_src elisp  :comments link
+(defvar emacs-local-dir (expand-file-name ".local/"))
+;;配置文件
+(defvar emacs-data-dir (file-name-concat emacs-local-dir "etc/"))
 
-  (defvar emacs-local-dir (expand-file-name ".local/"))
-  ;;配置文件
-  (defvar emacs-data-dir (file-name-concat emacs-local-dir "etc/"))
+;;临时文件
+(defvar emacs-cache-dir (file-name-concat emacs-local-dir "cache/"))
+;;
+(defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
+(setq package-user-dir (concat emacs-local-dir "elpa/"))
 
-  ;;临时文件
-  (defvar emacs-cache-dir (file-name-concat emacs-local-dir "cache/"))
-  ;;
-  (defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
-  (setq package-user-dir (concat emacs-local-dir "elpa/"))
-
+(setq custom-file "~/.emacs.d/custom.el")
+(load sutom-file)
    #+end_src
 
 ** key map
@@ -670,6 +671,13 @@
 #+begin_src elisp  :comments link
 (electric-indent-mode -1)
    #+end_src
+** tangle
+#+name: tangle
+#+begin_src elisp  :comments link
+(straight-use-package 'org-auto-tangle)
+(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+
+    #+end_src
 
 
 ** ui
