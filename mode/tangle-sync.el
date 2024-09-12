@@ -105,5 +105,5 @@ Copy from elisp src and change some code to fix error."
 
 
 (general-define-key
- "s-e l i" #'tangle-sync-jump-to-src
+ "s-e l i" #'tangle-sync-jump-to-output
  "s-e l o" #'tangle-sync-jump-to-org)

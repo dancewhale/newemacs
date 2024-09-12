@@ -10,7 +10,7 @@
 (setq package-user-dir (concat emacs-local-dir "elpa/"))
 
 (setq custom-file "~/.emacs.d/custom.el")
-(load sutom-file)
+(load custom-file)
 ;; --------<<  dir ends here
 
 
