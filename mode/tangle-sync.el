@@ -18,6 +18,9 @@
   "The opposite of `tangle-sync-jump-to-org'.
 Jumps from org src block to output code."
   (interactive)
+  (if (not (derived-mode-p 'org-mode))
+     (error "You are not in org buffer")
+  )
   (if (org-in-src-block-p)
       (let* ((header (car (org-babel-tangle-single-block 1 'only-this-block)))
 	     (tangle (car header))
@@ -55,6 +58,7 @@ Copy from elisp src and change some code to fix error."
   ;; (org-babel-tangle-jump-to-org) current window.
   (interactive)
   (let ((mid (point))
+        (org-src-window-setup 'current-window)
 	start body-start end target-buffer target-char link block-name body)
     (save-window-excursion
       (save-excursion
