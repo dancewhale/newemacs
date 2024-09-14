@@ -1,22 +1,30 @@
-;;; straight suggest to prevent package.el loading packages prior to their init-file loading.
+;;; early-init.el --- Hamacs Early Init -*- lexical-binding: t; -*-
+;;
+;;; Commentary:
+;;
+;; This is my early Emacs configuration file.  See init.el for the real
+;; boot process.  Since we are using straight or elpaca, we just need to
+;; stop the normal package process.
+;;
+;;; Code:
+
+;; We'll be using straight. So, we don't want duplicated package loading:
 (setq package-enable-at-startup nil)
 
-(defvar bootstrap-version)
-(setq straight-base-dir (concat user-emacs-directory ".local/"))
-(setq user-emacs-directory (concat straight-base-dir  "cache/"))
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            (concat user-emacs-directory))))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; While I would rather program my configurations, sometimes the Emacs
+;; menu system is _good enough_, but I want it in its own file:
 
-(straight-use-package '(org :type built-in))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; TODO: Let's build the \`exec-path' from the _real_ shell path:
+;; (add-to-list 'exec-path "path")
+;; Local Variables:
+;; no-byte-compile: t
+;; no-native-compile: t
+;; no-update-autoloads: t
+;; End:
+
+;;; early-init.el ends here
+

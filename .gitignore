@@ -10,3 +10,7 @@ eshell
 recentf
 bookmarks
 org-journal.cache
+bootstrap.el
+tangled/*.el
+config/*.el
+\#*\#

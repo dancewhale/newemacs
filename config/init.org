@@ -1,5 +1,6 @@
-#+property: header-args  :tangle "~/.emacs.d/init.el"
+#+description: A literate programming file for bootstrapping my environment.
 #+auto_tangle: vars:org-babel-tangle-comment-format-beg:org-babel-tangle-comment-format-end t
+#+property:    header-args:emacs-lisp  :tangle yes
 
 * Global setting
 ** dir setting
@@ -11,7 +12,6 @@
 
 ;;临时文件
 (defvar emacs-cache-dir (file-name-concat emacs-local-dir "cache/"))
-;;
 (defvar emacs-data-dir (file-name-concat emacs-local-dir "state/"))
 (setq package-user-dir (concat emacs-local-dir "elpa/"))
 
@@ -548,28 +548,6 @@
 #+name: undo-fu
 #+begin_src elisp :comments link
   (straight-use-package 'undo-fu)
-
-    #+end_src
-
-* lisp Libray
-** dash
-#+name: dash
-#+begin_src elisp :comments link
-  (straight-use-package 'dash)
-
-    #+end_src
-
-** s
-#+name: s
-#+begin_src elisp :comments link
-  (straight-use-package 's)
-
-    #+end_src
-
-** f
-#+name: f
-#+begin_src elisp :comments link
-  (straight-use-package 'f)
 
     #+end_src
 
@@ -1544,15 +1522,8 @@ org src 代码块中的代码进行格式化
 #+end_src
 
 
-* Load
-用来导入自己的包和配置文件
-#+name: package
-#+begin_src elisp :comments link
-(load-file "~/.emacs.d/mode/tangle-sync.el")
-#+end_src
-
-
 * my function
+加载我自己的代码和函数文件.
 #+name: function
 #+begin_src elisp  :comments link
 
