@@ -18,7 +18,7 @@
 ;; -------->>  [[file:init.org::global][global]]
 (straight-use-package 'general)
 (require 'general)
-(general-define-key 
+(general-define-key
     "s-f s-f"    'View-scroll-half-page-forward
     "s-f s-b"    'View-scroll-half-page-backward
     "C-c l"      'org-store-link
@@ -649,6 +649,20 @@
 
 
 
+;; -------->>  [[file:init.org::gtd][gtd]]
+(straight-use-package 'org-gtd)
+(require 'org-gtd)
+
+(general-define-key
+    "C-c n n"    #'org-gtd-capture
+    "C-c n p"    #'org-gtd-process-inbox
+    "C-c n o"    #'org-gtd-organize
+    "C-c n e"    #'org-gtd-engage
+    )
+;; --------<<  gtd ends here
+
+
+
 ;; -------->>  [[file:init.org::tangle][tangle]]
 (straight-use-package 'org-auto-tangle)
 (add-hook 'org-mode-hook 'org-auto-tangle-mode)
@@ -658,14 +672,14 @@
 
 ;; -------->>  [[file:init.org::basic-style][basic-style]]
 (setq org-auto-align-tags nil
-        org-tags-column 0
-        org-ellipsis "⤵"
-        org-hide-emphasis-markers t
-        org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
-        org-habit-graph-column 50
-        ;; Agenda styling
-        org-agenda-tags-column 0
-        )
+	org-tags-column 0
+	org-ellipsis "⤵"
+	org-hide-emphasis-markers t
+	org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
+	org-habit-graph-column 50
+	;; Agenda styling
+	org-agenda-tags-column 0
+	)
 ;; --------<<  basic-style ends here
 
 
@@ -705,11 +719,11 @@
 (setq org-roam-dailies-directory "daily")
 (setq find-file-visit-truename t)
 (setq org-roam-mode-sections
-    (list #'org-roam-backlinks-section
-    	  ;; #'org-roam-reflinks-section
-    	  #'org-roam-unlinked-references-section
-    	  ))
-(general-define-key 
+	(list #'org-roam-backlinks-section
+	      ;; #'org-roam-reflinks-section
+	      #'org-roam-unlinked-references-section
+	      ))
+(general-define-key
     "s-e n l"    #'org-roam-buffer-toggle
     "s-e n f"    #'org-roam-node-find
     "s-e n i"    #'org-roam-node-insert
@@ -742,7 +756,7 @@
 
 (setq org-journal-file-header 'org-journal-file-header-func)
 
-(general-define-key 
+(general-define-key
   "s-e j n"    #'org-journal-new-entry)
 ;; --------<<  org-journal enable ends here
 
@@ -755,34 +769,34 @@
   LANGUAGE is a string referring to one of orb-babel's supported languages.
   (https://orgmode.org/manual/Languages.html#Languages)"
   (let ((src-language (org-element-property :language src))
-        (value (org-element-property :value src)))
+	(value (org-element-property :value src)))
     (when (string= src-language language)
       (let ((copy (org-element-copy src)))
-        (org-element-put-property copy :value
-                                  (funcall fn value))
-        (org-element-set-element src copy)))))
+	(org-element-put-property copy :value
+				  (funcall fn value))
+	(org-element-set-element src copy)))))
 
 (defun format-elisp-string (string)
   "Indents elisp buffer string and reformats dangling parens."
   (with-temp-buffer
     (let ((inhibit-message t))
-        (emacs-lisp-mode)
-        (insert 
-         (replace-regexp-in-string "[[:space:]]*
+	(emacs-lisp-mode)
+	(insert
+	 (replace-regexp-in-string "[[:space:]]*
   [[:space:]]*)" ")" string))
-        (indent-region (point-min) (point-max))
-        (buffer-substring (point-min) (point-max)))))
+	(indent-region (point-min) (point-max))
+	(buffer-substring (point-min) (point-max)))))
 
   (defun format-elisp-src-blocks ()
     "Format Elisp src blocks in the current org buffer"
     (interactive)
     (save-mark-and-excursion
       (let ((AST (org-element-parse-buffer)))
-        (org-element-map AST 'src-block
-          (lambda (element) 
-            (edit-src-block element #'format-elisp-string "emacs-lisp")))
-        (delete-region (point-min) (point-max))
-        (insert (org-element-interpret-data AST)))))
+	(org-element-map AST 'src-block
+	  (lambda (element)
+	    (edit-src-block element #'format-elisp-string "emacs-lisp")))
+	(delete-region (point-min) (point-max))
+	(insert (org-element-interpret-data AST)))))
 ;; --------<<  babel ends here
 
 
@@ -902,19 +916,19 @@
 (setq default-input-method "rime")
   (with-eval-after-load 'rime
   (setq rime-disable-predicates '(   rime-predicate-prog-in-code-p
-  				   rime-predicate-punctuation-line-begin-p ;;在行首要输入符号时
-  				   rime-predicate-after-alphabet-char-p ;;在英文字符串之后（必须为以字母开头的英文字符串）
-  				   rime-predicate-current-input-punctuation-p ;;当要输入的是符号时
-  				   ;; rime-predicate-after-ascii-char-p ;;任意英文字符后 ,enable this to use with <s
-  				   rime-predicate-current-uppercase-letter-p ;; 将要输入的为大写字母时
-  				   rime-predicate-space-after-cc-p ;;在中文字符且有空格之后
-  				   )
-  	 rime-show-candidate 'posframe
-  	 rime-posframe-properties (list :internal-border-width 1)
-  	 rime-user-data-dir "~/Dropbox/rimeSync/"
-  	 rime-share-data-dir "~/.local/share/rime/ice"
-  	 rime-inline-ascii-trigger 'shift-r
-  	 ))
+				   rime-predicate-punctuation-line-begin-p ;;在行首要输入符号时
+				   rime-predicate-after-alphabet-char-p ;;在英文字符串之后（必须为以字母开头的英文字符串）
+				   rime-predicate-current-input-punctuation-p ;;当要输入的是符号时
+				   ;; rime-predicate-after-ascii-char-p ;;任意英文字符后 ,enable this to use with <s
+				   rime-predicate-current-uppercase-letter-p ;; 将要输入的为大写字母时
+				   rime-predicate-space-after-cc-p ;;在中文字符且有空格之后
+				   )
+	 rime-show-candidate 'posframe
+	 rime-posframe-properties (list :internal-border-width 1)
+	 rime-user-data-dir "~/Dropbox/rimeSync/"
+	 rime-share-data-dir "~/.local/share/rime/ice"
+	 rime-inline-ascii-trigger 'shift-r
+	 ))
   (when (eq system-type 'darwin)
     (setq
      ;; rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/" ;; use build-emacs
@@ -927,8 +941,8 @@
 
 ;; -------->>  [[file:init.org::rime 扩展函数][rime 扩展函数]]
 (setq rime-translate-keybindings
-  	'("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
-  	  "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
+	'("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
+	  "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
 
 
     (defun +rime-force-enable ()
@@ -938,13 +952,13 @@
   `evil-insert-state'."
       (interactive)
       (let ((input-method "rime"))
-        (unless (string= current-input-method input-method)
-  	(activate-input-method input-method))
-        (when (rime-predicate-evil-mode-p)
-  	(if (= (1+ (point)) (line-end-position))
-  	    (evil-append 1)
-  	  (evil-insert 1)))
-        (rime-force-enable)))
+	(unless (string= current-input-method input-method)
+	(activate-input-method input-method))
+	(when (rime-predicate-evil-mode-p)
+	(if (= (1+ (point)) (line-end-position))
+	    (evil-append 1)
+	  (evil-insert 1)))
+	(rime-force-enable)))
 
     (defun +rime-convert-string-at-point ()
       "Convert the string at point to Chinese using the current input scheme.
@@ -955,38 +969,38 @@
       (interactive)
       (+rime-force-enable)
       (let ((string (if mark-active
-  		      (buffer-substring-no-properties
-  		       (region-beginning) (region-end))
-  		    (buffer-substring-no-properties
-  		     (point) (max (line-beginning-position) (- (point) 80)))))
-  	  code
-  	  length)
-        (cond ((string-match "\\([a-z]+\\|[[:punct:]]\\)[[:blank:]]*$" string)
-  	     (setq code (replace-regexp-in-string
-  			 "^[-']" ""
-  			 (match-string 0 string)))
-  	     (setq length (length code))
-  	     (setq code (replace-regexp-in-string " +" "" code))
-  	     (if mark-active
-  		 (delete-region (region-beginning) (region-end))
-  	       (when (> length 0)
-  		 (delete-char (- 0 length))))
-  	     (when (> length 0)
-  	       (setq unread-command-events
-  		     (append (listify-key-sequence code)
-  			     unread-command-events))))
-  	    (t (message "`+rime-convert-string-at-point' did nothing.")))))
+		      (buffer-substring-no-properties
+		       (region-beginning) (region-end))
+		    (buffer-substring-no-properties
+		     (point) (max (line-beginning-position) (- (point) 80)))))
+	  code
+	  length)
+	(cond ((string-match "\\([a-z]+\\|[[:punct:]]\\)[[:blank:]]*$" string)
+	     (setq code (replace-regexp-in-string
+			 "^[-']" ""
+			 (match-string 0 string)))
+	     (setq length (length code))
+	     (setq code (replace-regexp-in-string " +" "" code))
+	     (if mark-active
+		 (delete-region (region-beginning) (region-end))
+	       (when (> length 0)
+		 (delete-char (- 0 length))))
+	     (when (> length 0)
+	       (setq unread-command-events
+		     (append (listify-key-sequence code)
+			     unread-command-events))))
+	    (t (message "`+rime-convert-string-at-point' did nothing.")))))
 
     (define-advice rime--posframe-display-content (:filter-args (args) resolve-posframe-issue-a)
       "给 `rime--posframe-display-content' 传入的字符串加一个全角空
   格，以解决 `posframe' 偶尔吃字的问题。"
       (cl-destructuring-bind (content) args
-        (let ((newresult (if (string-blank-p content)
-  			   content
-  			 (concat content "　"))))
-  	(list newresult))))
+	(let ((newresult (if (string-blank-p content)
+			   content
+			 (concat content "　"))))
+	(list newresult))))
 
-(general-define-key 
+(general-define-key
       "s-j"    #'+rime-convert-string-at-point)
 ;; --------<<  rime 扩展函数 ends here
 
@@ -1085,8 +1099,8 @@
     :duration eros-eval-result-duration))
 
 (advice-add #'edebug-previous-result
-            :around
-            #'adviced:edebug-previous-result)
+	    :around
+	    #'adviced:edebug-previous-result)
 ;; --------<<  edebug ends here
 
 
@@ -1164,8 +1178,8 @@
 ;; -------->>  [[file:init.org::lsp-bridge][lsp-bridge]]
 (use-package lsp-bridge
 :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-          :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-          :build (:not compile))
+	  :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+	  :build (:not compile))
 :init
 (global-lsp-bridge-mode))
 (setq acm-enable-copilot t)
@@ -1189,15 +1203,15 @@
  (add-hook 'go-mode-hook 'copilot-mode)
 
 (general-define-key  :prefix "s-l"
-         "c"      '(:ignore t  :which-key "copilot prefix")
-         "c c"    '(copilot-complete :which-key "complete")
-         "c C"    '(copilot-panel-complete :which-key "panel complete")
-         "c p"    '(copilot-previous-completion :which-key "select previous")
-         "c n"    '(copilot-next-completion :which-key "select next")
-         "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
-         "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
-         "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
-         "c a"    '(copilot-accept-completion :which-key "accept complete"))
+	 "c"      '(:ignore t  :which-key "copilot prefix")
+	 "c c"    '(copilot-complete :which-key "complete")
+	 "c C"    '(copilot-panel-complete :which-key "panel complete")
+	 "c p"    '(copilot-previous-completion :which-key "select previous")
+	 "c n"    '(copilot-next-completion :which-key "select next")
+	 "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
+	 "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
+	 "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
+	 "c a"    '(copilot-accept-completion :which-key "accept complete"))
 ;; --------<<  copilot ends here
 
 
@@ -1260,16 +1274,16 @@
       "vterm ctrl-g"
       (interactive)
       (if (save-excursion (goto-char (point-at-bol))(search-forward-regexp "filter>" nil t))
-          (if (equal last-command 'vterm-ctrl-g)
-      	(evil-normal-state)
+	  (if (equal last-command 'vterm-ctrl-g)
+	(evil-normal-state)
       (call-interactively 'vmacs-vterm-self-insert))
-        (if (equal last-command 'vterm-copy-mode)
+	(if (equal last-command 'vterm-copy-mode)
       (call-interactively 'vmacs-vterm-self-insert)
-          (if (equal last-command 'evil-normal-state)
-      	(progn
-      	  (vterm-copy-mode 1)
-      	  (setq this-command 'vterm-copy-mode)
-      	  )
+	  (if (equal last-command 'evil-normal-state)
+	(progn
+	  (vterm-copy-mode 1)
+	  (setq this-command 'vterm-copy-mode)
+	  )
       (setq this-command 'evil-normal-state)
       (evil-normal-state)))))
 
@@ -1279,31 +1293,31 @@
       (let ((succ (vterm-goto-char (point)))
       (beg (point))
       (end (vterm--get-end-of-line)))
-        (save-excursion
-          (goto-char end)
-          (when (looking-back "[ \t\n]+" beg t)
+	(save-excursion
+	  (goto-char end)
+	  (when (looking-back "[ \t\n]+" beg t)
       (setq end (match-beginning 0)))
-          (when (> end beg) (kill-ring-save beg end)))
-        (vterm-send-key "k" nil nil :ctrl)))
+	  (when (> end beg) (kill-ring-save beg end)))
+	(vterm-send-key "k" nil nil :ctrl)))
 
     (defun vmacs-vterm-self-insert()
       (interactive)
       (unless (evil-insert-state-p)
-        (evil-insert-state))
+	(evil-insert-state))
       (call-interactively 'vterm--self-insert))
 
     (defun vmacs-vterm-enable-output()
       (when (member major-mode '(vterm-mode))
-        (vterm-copy-mode -1)))
+	(vterm-copy-mode -1)))
 
     (defun vmacs-vterm-copy-mode-hook()
       (if vterm-copy-mode
-          (progn
+	  (progn
       (message "vterm-copy-mode enabled")
       (unless (evil-normal-state-p)
-      	(evil-normal-state)))
-        (unless (evil-insert-state-p)
-          (evil-insert-state))))
+	(evil-normal-state)))
+	(unless (evil-insert-state-p)
+	  (evil-insert-state))))
 
     (add-hook 'vterm-copy-mode-hook #'vmacs-vterm-copy-mode-hook)
     (add-hook 'evil-insert-state-entry-hook 'vmacs-vterm-enable-output)
@@ -1323,7 +1337,7 @@
     (defun vmacs-vterm-hook()
       (evil-define-key 'insert 'local   (kbd "<escape>") 'vterm--self-insert)
       (let ((p (get-buffer-process (current-buffer))))
-        (when p (set-process-query-on-exit-flag p nil))))
+	(when p (set-process-query-on-exit-flag p nil))))
 
     (add-hook 'vterm-mode-hook 'vmacs-vterm-hook)
 
@@ -1331,13 +1345,13 @@
 
     (defun vterm-toggle-after-ssh-login (method user host port localdir)
       (when (string-equal "docker" method)
-        (vterm-send-string "bash")
-        (vterm-send-return))
+	(vterm-send-string "bash")
+	(vterm-send-return))
       (when (member host '("BJ-DEV-GO" "dev.com"))
-        (vterm-send-string "zsh")
-        (vterm-send-return)
-        (vterm-send-string "j;clear" )
-        (vterm-send-return)))
+	(vterm-send-string "zsh")
+	(vterm-send-return)
+	(vterm-send-string "j;clear" )
+	(vterm-send-return)))
 
     (add-hook 'vterm-toggle-after-remote-login-function 'vterm-toggle-after-ssh-login)
 
@@ -1350,47 +1364,47 @@
        (n (length (filter-buffer-substring begin (point))))
        foreground
        (content (filter-buffer-substring
-      		 begin (point-max))))
-        (with-current-buffer buffer
-          (setq vterm-edit-vterm-buffer vtermbuf)
-          (erase-buffer)
-          (insert content)
-          (delete-trailing-whitespace)
-          (goto-char (1+ n))
-          ;; delete zsh auto-suggest candidates
-          (setq foreground (plist-get (get-text-property (point) 'font-lock-face) :foreground ))
-          (when (equal foreground  (face-background 'vterm-color-black nil 'default))
+		 begin (point-max))))
+	(with-current-buffer buffer
+	  (setq vterm-edit-vterm-buffer vtermbuf)
+	  (erase-buffer)
+	  (insert content)
+	  (delete-trailing-whitespace)
+	  (goto-char (1+ n))
+	  ;; delete zsh auto-suggest candidates
+	  (setq foreground (plist-get (get-text-property (point) 'font-lock-face) :foreground ))
+	  (when (equal foreground  (face-background 'vterm-color-black nil 'default))
       (delete-region (point) (point-max)))
-          (sh-mode)
-          (vterm-edit-command-mode)
-          (evil-insert-state)
-          (setq-local header-line-format
-      		(substitute-command-keys
-      		 (concat "Edit, then "
-      			 (mapconcat
-      			  'identity
-      			  (list "\\[vterm-edit-command-commit]: Finish"
-      				"\\[vterm-edit-command-abort]: Abort"
-      				)
-      			  ", "))))
-          (split-window-sensibly)
-          (switch-to-buffer-other-window buffer)))
+	  (sh-mode)
+	  (vterm-edit-command-mode)
+	  (evil-insert-state)
+	  (setq-local header-line-format
+		(substitute-command-keys
+		 (concat "Edit, then "
+			 (mapconcat
+			  'identity
+			  (list "\\[vterm-edit-command-commit]: Finish"
+				"\\[vterm-edit-command-abort]: Abort"
+				)
+			  ", "))))
+	  (split-window-sensibly)
+	  (switch-to-buffer-other-window buffer)))
       )
 
     (defun vterm-edit-command-commit ()
       (interactive)
       (let ((delete-trailing-lines t)
       content)
-        (delete-trailing-whitespace)
-        (goto-char (point-max))
-        (when (looking-back "\n") (backward-delete-char 1))
-        (setq content (buffer-string))
-        (with-current-buffer vterm-edit-vterm-buffer
-          (vterm-send-key "a" nil nil t)
-          (vterm-send-key "k" nil nil t t)
-          (unless (vterm--at-prompt-p)
+	(delete-trailing-whitespace)
+	(goto-char (point-max))
+	(when (looking-back "\n") (backward-delete-char 1))
+	(setq content (buffer-string))
+	(with-current-buffer vterm-edit-vterm-buffer
+	  (vterm-send-key "a" nil nil t)
+	  (vterm-send-key "k" nil nil t t)
+	  (unless (vterm--at-prompt-p)
       (vterm-send-key "c" nil nil t))
-          (vterm-send-string content)))
+	  (vterm-send-string content)))
       (vterm-edit-command-abort))
 
     (defun vterm-edit-command-abort ()
@@ -1399,9 +1413,9 @@
 
     (defvar vterm-edit-command-mode-map
       (let ((keymap (make-sparse-keymap)))
-        (define-key keymap (kbd "C-c C-c") #'vterm-edit-command-commit)
-        (define-key keymap (kbd "C-c C-k") #'vterm-edit-command-abort)
-        keymap))
+	(define-key keymap (kbd "C-c C-c") #'vterm-edit-command-commit)
+	(define-key keymap (kbd "C-c C-k") #'vterm-edit-command-abort)
+	keymap))
 
     (define-minor-mode vterm-edit-command-mode
       "Vterm Edit Command Mode")
