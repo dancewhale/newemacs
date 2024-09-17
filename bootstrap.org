@@ -31,6 +31,11 @@ A literate programming file for bootstraping my Emacs Configuration.
 这个文件包含了初始化代码,用于引导load 其他的文学编程文件,初始化公共变量和函数.
 
 * 初始化配置
+** 载入其他代码保存路径
+#+begin_src emacs-lisp :comments link
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
+#+end_src
+
 ** OS Path and Native Compilation
 Helper functions to allow code for specific operating systems:
 #+begin_src emacs-lisp :comments link
@@ -147,6 +152,7 @@ The following /defines/ the rest of my org-mode literate files, that I load late
 #+begin_src emacs-lisp :comments link
 (defvar cyz-emacs-files (flatten-list
                          `("config/init.org"
+                           "config/display.org"
                           ;; ,(if (cyz-emacs-for-work?)
                           ;;      '("cyz-org-sprint.org"
                           ;;        "cyz-work.org")

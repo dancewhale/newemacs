@@ -633,16 +633,6 @@
   (require 'hydra)
 #+end_src
 
-* UI
-** Theme
-*** ef-themes
-#+name: ef-themes
-#+begin_src elisp :comments link
-  (straight-use-package 'ef-themes)
-  (require 'ef-themes)
-  (load-theme 'ef-light t)
-#+end_src
-
 * Org Mode
 ** setting
 #+name: org
@@ -672,35 +662,6 @@
 
     #+end_src
 
-
-** ui
-*** org mode basic style
-#+name: basic-style
-#+begin_src elisp :comments link
-(setq org-auto-align-tags nil
-	org-tags-column 0
-	org-ellipsis "⤵"
-	org-hide-emphasis-markers t
-	org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
-	org-habit-graph-column 50
-	;; Agenda styling
-	org-agenda-tags-column 0
-	)
-#+end_src
-
-*** org-appear
-#+name: org-appear
-#+begin_src elisp :comments link
-(straight-use-package '(org-appear :type git :host github :repo "awth13/org-appear"))
-(add-hook 'org-mode-hook 'org-appear-mode)
-#+end_src
-
-*** org-modern
-#+name: org-modern
-#+begin_src elisp :comments link
-  (straight-use-package 'org-modern)
-  (with-eval-after-load 'org (global-org-modern-mode))
-#+end_src
 
 ** library
 #+name: org-ml
@@ -1526,15 +1487,16 @@ org src 代码块中的代码进行格式化
 加载我自己的代码和函数文件.
 #+name: function
 #+begin_src elisp  :comments link
+(use-package tangle-sync :straight nil)
 
-  (defun cao-emacs-counsel-ag ()
-    (interactive)
-    (counsel-ag nil default-directory))
+(defun cao-emacs-counsel-ag ()
+  (interactive)
+  (counsel-ag nil default-directory))
 
-  (general-define-key
-      :prefix "s-e"
-      "s-f"      '(cao-emacs-counsel-ag :which-key "grep in current directory.")
-  )
+(general-define-key
+    :prefix "s-e"
+    "s-f"      '(cao-emacs-counsel-ag :which-key "grep in current directory.")
+)
 
 
 (defun learnify-open-emacsd-dir ()
