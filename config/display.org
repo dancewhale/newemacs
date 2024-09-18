@@ -172,21 +172,17 @@ And if I can’t find the cursor, and don’t want to move it to see it, I can h
   :bind ("<f8>" . pulsar-pulse-line))
 #+end_src
 * Themes
-One does get used to a particular collection of colors. After happily using Steve Purcell’s port of the Tomorrow theme for many years, I decided I needed a change. First, I want Emacs to be less garish:
-
-#+begin_src emacs-lisp :comments link
-(use-package doom-themes
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-wilmersdorf t))
-#+end_src
-
-install ef-themes
+加载我喜欢的theme, install ef-themes
+设置org-mode 的head 字体大小.
 #+name: ef-themes
 #+begin_src emacs-lisp :comments link
-(use-package ef-themes)
+(use-package ef-themes
+  :config
+  (setq ef-themes-mixed-fonts t
+        ef-themes-variable-pitch-ui t)
+  (mapc  #'disable-theme custom-enabled-themes)
+  (load-theme 'ef-melissa-light :no-confirm)
+ )
 #+end_src
 
 
@@ -197,7 +193,8 @@ Most of the time, Emacs is on my desk is a darkened room, so I choose the dark t
 (defun laptop-inside ()
   "Customize the theme for inside programming."
   (interactive)
-  (load-theme 'doom-wilmersdorf t))
+  (mapc  #'disable-theme custom-enabled-themes)
+  (load-theme 'ef-maris-dark t))
 ;  (cyz-word-processor-fonts))
 #+end_src
 
@@ -207,7 +204,8 @@ But, when feeling adventurous, I /sometimes/ take my laptop outside:
 (defun laptop-in-the-sun ()
   "Customize the theme for outside programming."
   (interactive)
-  (load-theme 'doom-ayu-light t)
+  (mapc  #'disable-theme custom-enabled-themes)
+  (load-theme 'ef-melissa-light t)
   (set-face-attribute 'default nil :foreground "#0c0906")
   (set-face-attribute 'region nil :background "orange")
   (set-face-attribute 'org-block nil :background "#f2f1ef")
