@@ -629,8 +629,71 @@
 
 ** hydra
 #+begin_src elisp :comments link
-  (straight-use-package 'hydra)
-  (require 'hydra)
+(use-package hydra
+  :config
+  (defhydra hydra-window-resize (:color blue :hint nil) "
+_w_: select _m_: move/swap _u_: undo  _^_: taller (t)  _+_: text larger
+_j_: go up  _d_: delete    _U_: undo+ _v_: shorter (T) _-_: text smaller
+_k_: down   _e_: balance   _r_: redo  _>_: wider       _F_: font larger
+_h_: left   _n_: v-split   _R_: redo+ _<_: narrower    _f_: font smaller
+_l_: right  _s_: split   _o_: only this window     _c_: choose (also 1-9)"
+    ("w" ace-window)
+    ("c" other-window                 :color pink) ; change window
+    ("o" delete-other-windows)          ; “Only” this window
+    ("d" delete-window)     ("x" delete-window)
+
+    ;; Ace Windows ... select the window to affect:
+    ("m" ace-swap-window)
+    ("D" ace-delete-window)
+    ("O" ace-delete-other-windows)
+
+    ("u" winner-undo)
+    ("U" winner-undo                 :color pink)
+    ("C-r" winner-redo)
+    ("r" winner-redo)
+    ("R" winner-redo                 :color pink)
+
+    ("J" evil-window-down            :color pink)
+    ("K" evil-window-up              :color pink)
+    ("H" evil-window-left            :color pink)
+    ("L" evil-window-right           :color pink)
+
+    ("j" evil-window-down)
+    ("k" evil-window-up)
+    ("h" evil-window-left)
+    ("l" evil-window-right)
+
+    ("x" transpose-frame)
+    ("s" hydra-window-split/body)
+    ("n" hydra-window-split/body)
+
+    ("F" font-size-increase          :color pink)
+    ("f" font-size-decrease          :color pink)
+    ("+" text-scale-increase         :color pink)
+    ("=" text-scale-increase         :color pink)
+    ("-" text-scale-decrease         :color pink)
+    ("^" evil-window-increase-height :color pink)
+    ("v" evil-window-decrease-height :color pink)
+    ("t" evil-window-increase-height :color pink)
+    ("T" evil-window-decrease-height :color pink)
+    (">" evil-window-increase-width  :color pink)
+    ("<" evil-window-decrease-width  :color pink)
+    ("." evil-window-increase-width  :color pink)
+    ("," evil-window-decrease-width  :color pink)
+    ("e" balance-windows)
+
+    ("1" winum-select-window-1)
+    ("2" winum-select-window-2)
+    ("3" winum-select-window-3)
+    ("4" winum-select-window-4)
+    ("5" winum-select-window-5)
+    ("6" winum-select-window-6)
+    ("7" winum-select-window-7)
+    ("8" winum-select-window-8)
+    ("9" winum-select-window-9)
+
+    ;; Extra bindings:
+    ("q" nil :color blue)))
 #+end_src
 
 * Org Mode
@@ -1014,31 +1077,6 @@ org src 代码块中的代码进行格式化
 
 * Programe
 ** Language
-*** elisp
-**** helpful
-#+name: helpful
-#+begin_src elisp :comments link
-  (straight-use-package 'helpful)
-  ;; Note that the built-in `describe-function' includes both functions
-  ;; and macros. `helpful-function' is functions only, so we provide
-  ;; `helpful-callable' as a drop-in replacement.
-  ;; Lookup the current symbol at point. C-c C-d is a common keybinding
-  ;; for this in lisp modes.
-  ;; Look up *F*unctions (excludes macros).
-  ;;
-  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
-  ;; already links to the manual, if a function is referenced there.
-  (general-define-key
-   "C-h f"  #'helpful-callable
-   "C-h v"  #'helpful-variable
-   "C-h F"  #'helpful-function
-   "C-h s"  #'helpful-symbol
-   "C-h k"  #'helpful-key
-   "C-h x"  #'helpful-command
-   "C-h C-d"  #'helpful-at-point
-   )
-#+end_src
-
 *** golang
 **** go-mode
 #+name: go-mode
