@@ -51,7 +51,7 @@
   )
 
 ;; Let's rock:
-(org-babel-load-file "bootstrap.org")
+(org-babel-load-file "~/.emacs.d/bootstrap.org")
 
 (provide 'init)
 ;;; init.el ends here
