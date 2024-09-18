@@ -154,6 +154,7 @@ The following /defines/ the rest of my org-mode literate files, that I load late
                          `("config/init.org"
                            "config/display.org"
                            "config/programming-elisp.org"
+                           "config/programming.org"
                           ;; ,(if (cyz-emacs-for-work?)
                           ;;      '("cyz-org-sprint.org"
                           ;;        "cyz-work.org")
