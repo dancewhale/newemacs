@@ -99,6 +99,14 @@ Let's install and load some of packages from the [[https://github.com/hlissner/d
   (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
 
+** org-tidy
+#+name: org-tidy
+#+begin_src emacs-lisp :comments link
+(straight-use-package 'org-tidy)
+(require 'org-tidy)
+#+end_src
+
+
 * Window Dimmer
 To make the active window /more noticeable/, we /dim/ the in-active windows with the [[https://github.com/gonewest818/dimmer.el][dimmer project]].
 
