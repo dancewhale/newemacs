@@ -272,29 +272,31 @@ brew install --cask font-hack-nerd-font
        (warn "Cannot find a Chinese Font.  Install 等宽字体."))))
   #+end_src
 
-设置我的字体
+设置我的中文和英文字体，为了对齐特地找的等宽英文和中文字体。
 #+begin_src emacs-lisp
 (defun ha-better-font()
   (interactive)
   (if (display-graphic-p)
       (progn
-        ;; English font
         (set-face-attribute 'default nil :font ha-english-font)
         ;; Unicode font
         ;(set-fontset-font t 'unicode (font-spec :family "Monaco Nerd Font Mono") nil 'prepend)
+        ;; Solve the org bullet problem
+        ;;(dolist (charset '(?\x25cb))
+        ;;  (set-fontset-font nil charset (font-spec :family "MonacoB" :size 13))) ;; 14 16 20 22 28
         ;; Chinese font
         (dolist (charset '(kana han cjk-misc bopomofo))
           (set-fontset-font (frame-parameter nil 'font)
                             charset
                             (font-spec :family ha-chinese-font)))
-        ;; Solve the org bullet problem
-        (dolist (charset '(?\x25cb))
-          (set-fontset-font nil charset (font-spec :family "MonacoB" :size 13))) ;; 14 16 20 22 28
         (set-fontset-font t 'symbol  "Sarasa Term Sc Nerd")
 )))
 
+;; 支持字体大小修改
+(require 'textsize)
 
 #+end_src
+
 
 * Themes
 加载我喜欢的theme, install ef-themes
