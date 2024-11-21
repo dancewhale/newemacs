@@ -184,13 +184,116 @@ And if I can’t find the cursor, and don’t want to move it to see it, I can h
 #+end_src
 
 * Font Configuration
-** Mixed Pitch
-[[https://github.com/emacsmirror/mixed-pitch][Mixed pitch]] is a minor mode that enables mixing fixed-pitch (also known as fixed-width or monospace) and variable-pitch (AKA “proportional”) fonts. It tries to be smart about which fonts get which face.
+[[http://blogs.adobe.com/typblography/2012/09/source-code-pro.html][Source Code Pro]]  编程字体
+[[https://github.com/i-tu/Hasklig][Hasklig]]     [[https://github.com/tonsky/FiraCode][Fira]]  [[https://typeof.net/Iosevka/][Iosevka]] 
+Microsoft 字体 [[https://docs.microsoft.com/en-us/windows/terminal/cascadia-code][Cascadia]] 
+[[https://github.com/ryanoasis/nerd-fonts][Nerd Font project]] 
+** cnfont
+#+name: cnfont
+#+begin_src emacs-elisp  :comments link
+(straight-use-package 'cnfonts)
+(require 'cnfonts)
+#+end_src
 
+** Choosing a Font
+I stole the following idea from [[https://protesilaos.com/dotemacs/#h:9035a1ed-e988-4731-89a5-0d9e302c3dea][Protesilaos Stavrou's dotfile configuration]], and the following should minimally be /readable/:
+#+begin_example
+  | Similarities | Regular                    |
+  |--------------+----------------------------|
+  | ()[]{}<>«»‹› | ABCDEFGHIJKLMNOPQRSTUVWXYZ |
+  | 6bB8&        | abcdefghijklmnopqrstuvwxyz |
+  | 0ODdoaoOQGC  | 0123456789                 |
+  | I1tilIJL     | ~!@#$%^&*+                 |
+  | !¡ij         | `'"‘’“”.,;:…              |
+  | 5$§SsS5      | ()[]{}—-_=<>/\            |
+  | 17ZzZ2       | ΑΒΓΔΛΜΝΞΟΠΡΣΤΥΦΧΨΩ         |
+  | 9gqpG6       | αβγδεζηθικλμνξοπρστυφχψω   |
+  | hnmMN        |                            |
+  | uvvwWuuwvy   |                            |
+  | x×X          |                            |
+  | .,·°%        |                            |
+  | ¡!¿?         |                            |
+  | :;           |                            |
+  | `''"‘’“”     |                            |
+  | —-~≈=≠+*_   |                            |
+  | …⋯         |                            |
+  | ...          |                            |
+
+#+end_example
+
+The following is from [[https://source-foundry.github.io/Hack/font-specimen.html][Hack's website]]:
+#+begin_src c
+//  The four boxing wizards jump
+#include <stdio.h> // <= quickly.
+int main(int argc, char **argv) {
+  long il1[]={1-2/3.4,5+6==7/8};
+  int OxFaced=0xBAD||"[{(CQUINE";
+  unsigned O0,l1,Z2,S5,G6,B8__XY;
+  printf("@$Hamburgefo%c`",'\n');
+  return ~7&8^9?0:l1|!"j->k+=*w";
+}
+#+end_src
+
+To install a font, I use the following command on my Mac:
+#+begin_src sh
+brew tap homebrew/cask-fonts
+brew install --cask font-hack-nerd-font
+#+end_src
+** Specifying a Font
+选择已安装的等宽英文字体
 #+begin_src emacs-lisp
-  (use-package mixed-pitch
-    :straight (:host github :repo "jabranham/mixed-pitch")
-    :hook (text-mode . mixed-pitch-mode))
+(defvar ha-english-font
+  (when window-system
+    (or
+     (seq-first
+      (seq-filter (lambda (font) (when (x-list-fonts font) font))
+    	      '("Iosevka"
+                "CaskaydiaCove Nerd Font"
+    		"FiraCode Nerd Font"
+    		"mononoki"
+    		"JetBrains Mono"
+                "PragmataPro"
+    		"Iosevka Nerd Font"
+    		"Fantasque Sans Mono")))
+     "monospaced"))
+      "My fixed width font based on what I have installed.")
+#+end_src
+选择已安装的等宽中文字体
+#+begin_src emacs-lisp
+  (defvar ha-chinese-font
+    (when window-system
+      (or
+       (seq-first
+        (seq-filter (lambda (font) (when (x-list-fonts font) font))
+                    '("LXGW WenKai"
+                      "LXGW WenKai Mono"
+                      "Sarasa Term Sc Nerd"
+                      "harmonyOS sans")))
+       (warn "Cannot find a Chinese Font.  Install 等宽字体."))))
+  #+end_src
+
+设置我的字体
+#+begin_src emacs-lisp
+(defun ha-better-font()
+  (interactive)
+  (if (display-graphic-p)
+      (progn
+        ;; English font
+        (set-face-attribute 'default nil :font ha-english-font)
+        ;; Unicode font
+        ;(set-fontset-font t 'unicode (font-spec :family "Monaco Nerd Font Mono") nil 'prepend)
+        ;; Chinese font
+        (dolist (charset '(kana han cjk-misc bopomofo))
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset
+                            (font-spec :family ha-chinese-font)))
+        ;; Solve the org bullet problem
+        (dolist (charset '(?\x25cb))
+          (set-fontset-font nil charset (font-spec :family "MonacoB" :size 13))) ;; 14 16 20 22 28
+        (set-fontset-font t 'symbol  "Sarasa Term Sc Nerd")
+)))
+
+
 #+end_src
 
 * Themes
@@ -200,8 +303,8 @@ And if I can’t find the cursor, and don’t want to move it to see it, I can h
 #+begin_src emacs-lisp :comments link
 (use-package ef-themes
   :config
-  (setq ef-themes-mixed-fonts t
-        ef-themes-variable-pitch-ui t)
+  (setq ef-themes-mixed-fonts nil
+        ef-themes-variable-pitch-ui nil)
   (mapc  #'disable-theme custom-enabled-themes)
   (load-theme 'ef-melissa-light :no-confirm)
  )
@@ -327,16 +430,6 @@ And turn the prettifier on:
 
 In Emacs 28.1, we have better Unicode 14 support. Which means, we need to install [[https://github.com/googlefonts/noto-emoji][Noto Color Emoji]]. My systems, seems to work fine, but I’m leaving this code here in case I have issues, as I might use what Apple supplies when on a Mac (thanks [[http://xahlee.info/emacs/emacs/emacs_list_and_set_font.html][Xah Lee]]):
 #+begin_src emacs-lisp :comments link
-;; set font for symbols
-(set-fontset-font t 'symbol
- (cond
-  ((cyz-running-on-macos?)
-   (cond
-    ((member "Apple Symbols" (font-family-list)) "Apple Symbols")))
-  ((cyz-running-on-linux?)
-   (cond
-    ((member "Symbola" (font-family-list)) "Symbola")))))
-
 ;; set font for emoji (should come after setting symbols)
 (set-fontset-font t 'emoji
  (cond
