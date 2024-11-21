@@ -31,6 +31,24 @@ A literate programming file for configuring Emacs for Lisp programming.
 
 * Introduction
 用来配置elisp 的相关配置.
+* Major Mode Hydra
+All the above loveliness can be easily accessible with a [[https://github.com/jerrypnz/major-mode-hydra.el][major-mode-hydra]] defined for =emacs-lisp-mode=:
+
+#+begin_src emacs-lisp :comments link
+(use-package major-mode-hydra
+  :config
+  (major-mode-hydra-define emacs-lisp-mode nil
+    ("Evaluating"
+     (("e" czy-eval-current-expression "Current")
+      ("d" lispy-debug/body "Debugging")
+      ("f" eval-defun "Function")
+      ("b" eval-buffer "Buffer"))
+     "Editing"
+     (("r" lisp-refactor/body "Refactoring"))
+     "Documentation"
+     (("a" elisp-demos-add-demo "Add Demo")
+      ("H" suggest "Suggestions")))))
+#+end_src
 * Syntax Display
 ** Dim those Parenthesis
 The [[https://github.com/tarsius/paren-face][paren-face]] project lowers the color level of parenthesis which I find better.
@@ -343,24 +361,6 @@ finds at that point."
       (if (fboundp 'eros-eval-last-sexp)
           (call-interactively 'eros-eval-last-sexp)
         (call-interactively 'eval-last-sexp)))))
-#+end_src
-* Major Mode Hydra
-All the above loveliness can be easily accessible with a [[https://github.com/jerrypnz/major-mode-hydra.el][major-mode-hydra]] defined for =emacs-lisp-mode=:
-
-#+begin_src emacs-lisp :comments link
-(use-package major-mode-hydra
-  :config
-  (major-mode-hydra-define emacs-lisp-mode nil
-    ("Evaluating"
-     (("e" czy-eval-current-expression "Current")
-      ("d" lispy-debug/body "Debugging")
-      ("f" eval-defun "Function")
-      ("b" eval-buffer "Buffer"))
-     "Editing"
-     (("r" lisp-refactor/body "Refactoring"))
-     "Documentation"
-     (("a" elisp-demos-add-demo "Add Demo")
-      ("H" suggest "Suggestions")))))
 #+end_src
 * Technical Artifacts                                :noexport:
 Let's =provide= a name so we can =require= this file:
