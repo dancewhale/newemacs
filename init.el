@@ -35,6 +35,7 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;; While that enables the :straight t extension to use-package, let's just have that be the default:
 (use-package straight

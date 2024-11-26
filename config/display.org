@@ -28,6 +28,7 @@ Let's turn off the menu and other settings:
 (when (display-graphic-p)
   (context-menu-mode 1)
   (tool-bar-mode -1)
+  (tool-bar-mode 'toggle)
   (scroll-bar-mode -1)
   (horizontal-scroll-bar-mode -1)
   (setq visible-bell 1
@@ -105,7 +106,6 @@ Let's install and load some of packages from the [[https://github.com/hlissner/d
 (straight-use-package 'org-tidy)
 (require 'org-tidy)
 #+end_src
-
 
 * Window Dimmer
 To make the active window /more noticeable/, we /dim/ the in-active windows with the [[https://github.com/gonewest818/dimmer.el][dimmer project]].
@@ -296,7 +296,6 @@ brew install --cask font-hack-nerd-font
 (require 'textsize)
 
 #+end_src
-
 
 * Themes
 加载我喜欢的theme, install ef-themes
