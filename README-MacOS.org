@@ -35,6 +35,14 @@ echo '#!/bin/sh
 
 open -na "GoLand.app" --args "$@"' > /usr/local/bin/goland
 chmod +x /usr/local/bin/goland
+
+# 配置从goland 跳转 emacs 的脚本openwithemacs
+#!/bin/bash
+emacsclient $@
+osascript -e 'tell application "Keyboard Maestro Engine" to do script "341100AC-ADF0-4586-899B-9C3670792DC1"'
+
+#goland 中配置的external tool
+openwithemacs  -n -a -c  \+$LineNumber$  $FilePath$
 #+end_src
 
 

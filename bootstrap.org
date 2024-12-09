@@ -35,6 +35,13 @@ A literate programming file for bootstraping my Emacs Configuration.
 #+begin_src emacs-lisp :comments link
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
 #+end_src
+** 启动emacs后端服务
+#+begin_src emacs-lisp :comments link
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+#+end_src
+
 
 *** OS Path and Native Compilation
 Helper functions to allow code for specific operating systems:
