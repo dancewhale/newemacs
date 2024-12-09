@@ -36,7 +36,7 @@ A literate programming file for bootstraping my Emacs Configuration.
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
 #+end_src
 
-** OS Path and Native Compilation
+*** OS Path and Native Compilation
 Helper functions to allow code for specific operating systems:
 #+begin_src emacs-lisp :comments link
 (defun cyz-running-on-macos? ()
@@ -95,7 +95,21 @@ Clear up a Mac-specific issue that sometimes arises since I'm switching to [[htt
     (add-to-list 'exec-path "/opt/homebrew/bin")
     (add-to-list 'exec-path (concat invocation-directory "bin") t)
     (global-unset-all-super-key)
-    )
+
+    ;; Keybonds
+    (global-set-key [(super a)] 'mark-whole-buffer)
+    (global-set-key [(super v)] 'yank)
+    (global-set-key [(super c)] 'kill-ring-save)
+    (global-set-key [(super s)] 'save-buffer)
+    (global-set-key [(super l)] 'goto-line)
+    (global-set-key [(super w)]
+                    (lambda () (interactive) (delete-window)))
+    (global-set-key [(super z)] 'undo)
+    
+    ;; mac switch meta key
+    (setq mac-option-modifier 'meta)
+    (setq mac-command-modifier 'super)
+)
 #+end_src
 
 Getting tired off all the packages that I load spewing a bunch of warnings that I can't do anything about:

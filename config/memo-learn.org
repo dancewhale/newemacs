@@ -9,6 +9,7 @@
 
 A literate programming file for configuring Emacs for Lisp programming.
 
+#+name: head
 #+begin_src emacs-lisp :comments link :exports none
 ;;; memo-learn --- configuring Emacs for Fsrs learning. -*- lexical-binding: t; -*-
 ;;
@@ -30,14 +31,97 @@ A literate programming file for configuring Emacs for Lisp programming.
 * Introduction
 用来配置间隔学习的相关配置.
 安装memo 包.
+#+name: memo
 #+begin_src emacs-lisp :comments link
 (straight-use-package '(memo :type git :host github
                              :repo "dancewhale/memo" :files (:defaults "golib")))
+
+(setq memo-org-directory "/Users/whale/Seafile/Dropbox/memo")
+
 #+end_src
+
+* org-remark
+安装org-remark 的包,用于渐进阅读做笔记和卡片.
+#+name: org-remark
+#+begin_src emacs-lisp  :comments link
+
+(straight-use-package '(org-remark :type git :host github  :repo "nobiot/org-remark" ))
+(org-remark-global-tracking-mode +1)
+
+(defun org-remark-notes-name-function ()
+  (concat "~/Seafile/Dropbox/memo/card"
+          (file-name-base (org-remark-notes-file-name-function))
+          ".org"))
+
+(setq org-remark-notes-file-name
+      #'org-remark-notes-name-function)
+
+;; Optional if you would like to highlight websites via eww-mode
+(with-eval-after-load 'eww
+  (org-remark-eww-mode +1))
+
+;; Optional if you would like to highlight EPUB books via nov.el
+(with-eval-after-load 'nov
+  (org-remark-nov-mode +1))
+
+;; Optional if you would like to highlight Info documentation via Info-mode
+(with-eval-after-load 'info
+  (org-remark-info-mode +1))
+
+(use-package org-remark
+  :bind (;; :bind keyword also implicitly defers org-remark itself.
+         ;; Keybindings before :map is set for global-map.
+         ("C-c n m" . org-remark-mark)
+         ("C-c n l" . org-remark-mark-line)
+         :map org-remark-mode-map
+         ("C-c n o" . org-remark-open)
+         ("C-c n ]" . org-remark-view-next)
+         ("C-c n [" . org-remark-view-prev)
+         ("C-c n r" . org-remark-remove)
+         ("C-c n d" . org-remark-delete))
+  ;; Alternative way to enable `org-remark-global-tracking-mode' in
+  ;; `after-init-hook'.
+  ;; :hook (after-init . org-remark-global-tracking-mode)
+  :init
+  ;; It is recommended that `org-remark-global-tracking-mode' be
+  ;; enabled when Emacs initializes. Alternatively, you can put it to
+  ;; `after-init-hook' as in the comment above
+  (org-remark-global-tracking-mode +1)
+  :config
+  (use-package org-remark-info :after info :config (org-remark-info-mode +1))
+  (use-package org-remark-eww  :after eww  :config (org-remark-eww-mode +1))
+  (use-package org-remark-nov  :after nov  :config (org-remark-nov-mode +1)))
+
+    #+end_src
+
+* treemacs
+设置相关的package
+#+name: evil-treemacs
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'treemacs-evil)
+    #+end_src
+
+
+
+设置相关的快捷键
+#+name: treemacs
+#+begin_src emacs-lisp :comments link :exports none
+(use-package treemacs
+  :bind (;; :bind keyword also implicitly defers treemacs itself.
+         ;; Keybindings before :map is set for global-map.
+         ("s-e o" . treemacs-select-window)
+         ("s-e t f" . treemacs-select-directory)))
+
+    #+end_src
+
+
+
+
 
 * Technical Artifacts                                :noexport:
 Let's =provide= a name so we can =require= this file:
 
+#+name: end
 #+begin_src emacs-lisp :comments link :exports none
 (provide 'memo-learn)
 ;;; memo-learn.el ends here
