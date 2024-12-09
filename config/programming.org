@@ -49,8 +49,7 @@ For all programming languages, I would like to now default to absolute line numb
     :config
     (defun cyz-prog-mode-config ()
       "Configure the `prog-mode'"
-      (setq display-line-numbers t)
-      (mixed-pitch-mode 0))
+      (setq display-line-numbers t))  
     :hook
     (prog-mode . cyz-prog-mode-config))
 #+end_src
@@ -212,7 +211,10 @@ The [[https://www.emacswiki.org/emacs/FlySpell#h5o-2][flyspell-prog-mode]] check
 #+end_src
 
 ** Linting with Flycheck
-Why use [[https://www.flycheck.org/][flycheck]] over the built-in =flymake=? Speed used to be the advantage, but I’m now pushing much of this to LSP, so speed is less of an issue.  What about when I am not using LSP? Also, since I’ve hooked grammar checkers, I need this with global keybindings.
+Why use [[https://www.flycheck.org/][flycheck]] over the built-in =flymake=? Speed used to be the advantage, 
+but I’m now pushing much of this to LSP, so speed is less of an issue.  
+What about when I am not using LSP? Also, since I’ve hooked grammar checkers, 
+I need this with global keybindings.
 
 #+begin_src emacs-lisp :comments link
   (use-package flycheck
@@ -638,7 +640,8 @@ While I’m at it, let’s connect various ~g~ sequence keys to =xref-= interfac
              "g b" '("def go back"    . xref-go-back)))
 #+end_src
 
-I have two different /jumping/ systems, the [[info:emacs#Xref][Xref interface]] and Evil’s. While comparable goals, they are behave different. Let’s compare evil keybindings:
+I have two different /jumping/ systems, the [[info:emacs#Xref][Xref interface]] and Evil’s. 
+While comparable goals, they are behave different. Let’s compare evil keybindings:
   | ~M-.~   | ~g .~ | [[help:xref-find-definitions][xref-find-definitions]] (also ~g d~ for [[help:evil-goto-definition][evil-goto-definition]])†          |
   |       | ~g >~ | =xref-find-definitions-other-window=                                  |
   | ~M-,~   | ~g ,~ | [[help:xref-go-back][xref-go-back]] (see [[help:xref-pop-marker-stack][xref-pop-marker-stack]])                            |
@@ -651,9 +654,12 @@ I have two different /jumping/ systems, the [[info:emacs#Xref][Xref interface]] 
 † Prefix to prompt for the term \
 ‡ If it finds more than one definition, Emacs displays the [[info:emacs#Xref Commands][*xref* buffer]], allowing you to select the definition.
 ** Language Server Protocol (LSP) Integration
-The [[https://microsoft.github.io/language-server-protocol/][LSP]] is a way to connect /editors/ (like Emacs) to /languages/ (like Lisp)… wait, no. While originally designed for VS Code and probably Python, we can abstract away [[https://github.com/davidhalter/jedi][Jedi]] and the [[http://tkf.github.io/emacs-jedi/latest/][Emacs integration to Jedi]] (and duplicate everything for Ruby, and Clojure, and…).
+The [[https://microsoft.github.io/language-server-protocol/][LSP]] is a way to connect /editors/ (like Emacs) to /languages/ (like Lisp)… wait, no. 
+While originally designed for VS Code and probably Python, we can abstract away [[https://github.com/davidhalter/jedi][Jedi]] 
+and the [[http://tkf.github.io/emacs-jedi/latest/][Emacs integration to Jedi]] (and duplicate everything for Ruby, and Clojure, and…).
 
-Emacs has two LSP projects, and while I have used [[LSP Mode]], but since I don’t have heavy IDE requirements, I am finding that [[eglot]] to be simpler.
+Emacs has two LSP projects, and while I have used [[LSP Mode]],
+but since I don’t have heavy IDE requirements, I am finding that [[eglot]] to be simpler.
 *** LSP
 #+begin_src emacs-lisp :comments link
 (use-package lsp-mode
@@ -692,6 +698,7 @@ Emacs has two LSP projects, and while I have used [[LSP Mode]], but since I don�
  ((go-mode . lsp)
   (python-mode . lsp)
   (js-mode . lsp)
+  (go-mode . lsp)
   (json-mode . lsp)
   (json-mode . lsp)
   (yaml-mode . lsp)
@@ -1210,7 +1217,9 @@ I can type, ~, j~ and then type =.data.timeout.seconds= and end up with:
 #+end_src
 
 ** Markdown
-Most project =README= files and other documentation use [[https://jblevins.org/projects/markdown-mode/][markdown-mode]]. Note that the /preview/ is based on =multimarkdown=, when needs to be /pre-installed/, for instance:
+Most project =README= files and other documentation use [[https://jblevins.org/projects/markdown-mode/][markdown-mode]].
+
+Note that the /preview/ is based on =multimarkdown=, when needs to be /pre-installed/, for instance:
 #+begin_src sh
   brew install multimarkdown
 #+end_src
@@ -1219,7 +1228,7 @@ Also, I like Markdown is look like a word processor, similarly to my org files:
 #+begin_src emacs-lisp :comments link
   (use-package markdown-mode
     :mode ((rx ".md" string-end) . gfm-mode)
-    :init (setq markdown-command (expand-file-name "markdown" "~/bin")
+    :init (setq markdown-command (expand-file-name "markdown" "/opt/homebrew/bin")
                 markdown-open-command (expand-file-name "markdown-open" "~/bin")
                 markdown-header-scaling t)
     :general
@@ -1246,7 +1255,8 @@ Let’s make sure that [[https://www.flycheck.org/en/latest/languages.html#markd
   pip install pymarkdown
 #+end_src
 
-And then we can use it. For some reason, the =pymarkdown= (which I need to use from work) doesn’t seem to be part of the version of Flycheck available on Melpa, so…
+And then we can use it. For some reason, the =pymarkdown= (which I need to use from work) 
+doesn’t seem to be part of the version of Flycheck available on Melpa, so…
 
 #+begin_src emacs-lisp :comments link
   (use-package markdown-mode
@@ -1258,7 +1268,9 @@ And then we can use it. For some reason, the =pymarkdown= (which I need to use f
   ;;  defcustom flycheck-markdown-pymarkdown-config
 #+end_src
 
-Both the =markdown-command= and the =markdown-open-command= variables are called to render (and preview) a Markdown file (~C-c C-c o~), and calls the following scripts (which in turn, call =pandoc= as I depend on this for other org-related features):
+Both the =markdown-command= and the =markdown-open-command= variables are called to render (and preview) 
+a Markdown file (~C-c C-c o~), and calls the following scripts (which in turn, call =pandoc= as I depend 
+on this for other org-related features):
 
 #+begin_src sh :tangle ~/bin/markdown :shebang "#!/usr/bin/env bash" :tangle-mode u+x
   pandoc --to=html --from=gfm $*
@@ -1276,6 +1288,8 @@ Both the =markdown-command= and the =markdown-open-command= variables are called
     firefox -new-tab $OUTPUT_FILE
   fi
 #+end_src
+
+#+RESULTS:
 
 Using [[https://polymode.github.io/][polymode]], let’s add syntax coloring to Markdown code blocks similar to what we do with Org:
 
@@ -1295,6 +1309,7 @@ Using [[https://polymode.github.io/][polymode]], let’s add syntax coloring to 
 
     :mode ((rx ".md" string-end) . poly-markdown-mode))
 #+end_src
+
 ** ReStructured Text
 Support for [[https://docutils.sourceforge.io/rst.html][reStructuredText]] is [[https://www.emacswiki.org/emacs/reStructuredText][well supported]] in Emacs.
 #+begin_src emacs-lisp :comments link
@@ -1344,7 +1359,9 @@ Unclear whether I want to Tramp into a running container:
 ** Shell Scripts
 While I don't like writing them, I can't get away from them. Check out the goodies in [[https://www.youtube.com/watch?v=LTC6SP7R1hA&t=5s][this video]].
 
-While filename extensions work fine most of the time, I don't like to pre-pend =.sh= to the shell scripts I write, and instead, would like to associate =shell-mode= with all files in a =bin= directory:
+While filename extensions work fine most of the time, 
+I don't like to pre-pend =.sh= to the shell scripts I write, and instead, would like to 
+associate =shell-mode= with all files in a =bin= directory:
 #+begin_src emacs-lisp :comments link
   (use-package sh-mode
     :straight (:type built-in)

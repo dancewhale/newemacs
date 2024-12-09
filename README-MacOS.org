@@ -6,6 +6,9 @@
 
 我自己的mac 上的emacs配置所需。
 * 安装
+** 准备工作
+需要创建目录~/bin
+移植的配置原作者使用的这个目录.
 ** Emacs Mac
 #+begin_src sh
 brew install pkg-config automake texinfo jpeg giflib\
@@ -49,10 +52,13 @@ openwithemacs  -n -a -c  \+$LineNumber$  $FilePath$
 
 * Afterwards
 ** 安装相关字体
-#+begin_example
-M-x all-the-icons-install-fonts
-M-x nerd-icons-install-fonts
-#+end_example
+#+name: 
+#+begin_src emacs-lisp  :comments link
+(all-the-icons-install-fonts)
+(nerd-icons-install-fonts)
+#+end_src
+
+
 
 ** 安装rime 相关
 #+begin_src sh

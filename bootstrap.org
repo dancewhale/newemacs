@@ -108,9 +108,6 @@ Clear up a Mac-specific issue that sometimes arises since I'm switching to [[htt
     (global-set-key [(super v)] 'yank)
     (global-set-key [(super c)] 'kill-ring-save)
     (global-set-key [(super s)] 'save-buffer)
-    (global-set-key [(super l)] 'goto-line)
-    (global-set-key [(super w)]
-                    (lambda () (interactive) (delete-window)))
     (global-set-key [(super z)] 'undo)
     
     ;; mac switch meta key
@@ -193,9 +190,11 @@ The following /defines/ the rest of my org-mode literate files, that I load late
 #+begin_src emacs-lisp :comments link
 (defvar cyz-emacs-files (flatten-list
                          `("config/init.org"
+                           "config/general.org"
                            "config/display.org"
-                           "config/programming-elisp.org"
                            "config/programming.org"
+                           "config/programming-elisp.org"
+                           "config/programming-golang.org"
                            "config/memo-learn.org"
                           ;; ,(if (cyz-emacs-for-work?)
                           ;;      '("cyz-org-sprint.org"

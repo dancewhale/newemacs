@@ -242,7 +242,7 @@ brew install --cask font-hack-nerd-font
 ** Specifying a Font
 选择已安装的等宽英文字体
 #+begin_src emacs-lisp
-(defvar ha-english-font
+(defvar cyz-english-font
   (when window-system
     (or
      (seq-first
@@ -260,7 +260,7 @@ brew install --cask font-hack-nerd-font
 #+end_src
 选择已安装的等宽中文字体
 #+begin_src emacs-lisp
-  (defvar ha-chinese-font
+  (defvar cyz-chinese-font
     (when window-system
       (or
        (seq-first
@@ -274,11 +274,11 @@ brew install --cask font-hack-nerd-font
 
 设置我的中文和英文字体，为了对齐特地找的等宽英文和中文字体。
 #+begin_src emacs-lisp
-(defun ha-better-font()
+(defun cyz-better-font()
   (interactive)
   (if (display-graphic-p)
       (progn
-        (set-face-attribute 'default nil :font ha-english-font)
+        (set-face-attribute 'default nil :font cyz-english-font)
         ;; Unicode font
         ;(set-fontset-font t 'unicode (font-spec :family "Monaco Nerd Font Mono") nil 'prepend)
         ;; Solve the org bullet problem
@@ -288,7 +288,7 @@ brew install --cask font-hack-nerd-font
         (dolist (charset '(kana han cjk-misc bopomofo))
           (set-fontset-font (frame-parameter nil 'font)
                             charset
-                            (font-spec :family ha-chinese-font)))
+                            (font-spec :family cyz-chinese-font)))
         (set-fontset-font t 'symbol  "Sarasa Term Sc Nerd")
 )))
 
