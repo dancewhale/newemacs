@@ -109,7 +109,11 @@ Copy from elisp src and change some code to fix error."
 
 
 (general-define-key
- "s-e l i" #'tangle-sync-jump-to-output
+ :keymaps 'org-mode-map
+ "s-e l i" #'tangle-sync-jump-to-output)
+
+(general-define-key
+ :keymaps 'lisp-mode-map
  "s-e l o" #'tangle-sync-jump-to-org)
 
 (provide 'tangle-sync)
