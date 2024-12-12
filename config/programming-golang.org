@@ -35,7 +35,22 @@ A literate programming file for configuring Emacs for Golang programming.
 *** go-mode
 #+name: go-mode
 #+begin_src emacs-lisp :comments link
-  (straight-use-package 'go-mode)
+(straight-use-package 'go-mode)
+
+(defun cyz-go-before-save ()
+  (interactive)
+  (when lsp-mode
+    (lsp-organize-imports)
+    (lsp-format-buffer)))
+
+(use-package go-mode
+  :defer t
+  :straight t
+  :config
+  (add-hook 'go-mode-hook 'lsp-deferred)
+  (add-hook 'go-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook  'cyz-go-before-save))))
 
   #+end_src
 ** tips

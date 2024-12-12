@@ -25,9 +25,13 @@ A literate programming file for defining leaders with general
 #+end_src
 
 * Introduction
-The one thing that both Spacemacs and Doom taught me, is how much I like the /key sequences/ that begin with a leader key. In both of those systems, the key sequences begin in the /normal state/ with a space key. This means, while typing in /insert state/, I have to escape to /normal state/ and then hit the space.
+The one thing that both Spacemacs and Doom taught me, is how much I like the /key sequences/ that begin with
+a leader key. In both of those systems, the key sequences begin in the /normal state/ with a space key.
+This means, while typing in /insert state/, I have to escape to /normal state/ and then hit the space.
 
-I'm not trying an experiment where specially-placed function keys on my fancy ergodox keyboard can kick these off using [[https://github.com/noctuid/general.el][General Leader]] project. Essentially, I want a set of leader keys for Evil's /normal state/ as well as a global leader in all modes.
+I'm not trying an experiment where specially-placed function keys on my fancy ergodox keyboard can kick these
+off using [[https://github.com/noctuid/general.el][General Leader]] project. Essentially, I want a set of leader keys for Evil's /normal state/ as well as
+a global leader in all modes.
 
 #+begin_src emacs-lisp
   (use-package general
@@ -589,7 +593,8 @@ Since I use numbers for the window, I can make the commands more mnemonic, and a
             (?w aw-execute-command-other-window "Execute Command")
             (?? aw-show-dispatch-help)))
 
-    :bind ("s-w" . ace-window))
+    :bind (("s-o" . ace-window)
+           ("C-x o" . ace-window)))
 #+end_src
 Keep in mind, these shortcuts work with more than two windows open. For instance, ~SPC w w d 3~ closes the "3" window.
 ** Transpose Windows

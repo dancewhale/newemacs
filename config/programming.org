@@ -321,7 +321,9 @@ But one of those functions doesn’t exist:
     (beginning-of-defun))
 #+end_src
 *** Tree Sitter
-I’m curious about the new [[https://emacs-tree-sitter.github.io/][Tree Sitter feature]] now [[https://lists.gnu.org/archive/html/emacs-devel/2022-11/msg01443.html][built into Emacs 29]]. After following along with Mickey Petersen’s [[https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][Getting Started with Tree Sitter]] guide, I’ve concluded I /currently/ don’t need this feature. I’m leaving the code here, but adding a =:tangle no= to all the blocks until I’m ready to re-investigate.
+I’m curious about the new [[https://emacs-tree-sitter.github.io/][Tree Sitter feature]] now [[https://lists.gnu.org/archive/html/emacs-devel/2022-11/msg01443.html][built into Emacs 29]]. After following along with 
+Mickey Petersen’s [[https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][Getting Started with Tree Sitter]] guide, I’ve concluded I /currently/ don’t need this
+feature. I’m leaving the code here, but adding a =:tangle no= to all the blocks until I’m ready to re-investigate.
 **** Operating System Part
 Install the binary for the [[https://tree-sitter.github.io/][tree-sitter project]]. For instance:
 #+begin_src sh
@@ -707,7 +709,9 @@ but since I don’t have heavy IDE requirements, I am finding that [[eglot]] to 
   (lsp-mode . lsp-enable-which-key-integration)))
 #+end_src
 
-I will want to start adding commands under my =,= mode-specific key sequence leader, but in the meantime, all LSP-related keybindings are available under ~⌘-m~.  See [[https://emacs-lsp.github.io/lsp-mode/page/keybindings/][this page]] for the default keybindings.
+I will want to start adding commands under my =,= mode-specific key sequence leader,
+but in the meantime, all LSP-related keybindings are available under ~⌘-m~.
+See [[https://emacs-lsp.github.io/lsp-mode/page/keybindings/][this page]] for the default keybindings.
 
 Using the [[https://github.com/seagle0128/doom-modeline][Doom Modeline]] to add notifications:
 #+begin_src emacs-lisp :comments link
@@ -767,7 +771,8 @@ The [[https://github.com/tigersoldier/company-lsp][company-lsp]] offers a [[http
 
 To options that might be interesting:
   - =company-lsp-async=: When set to non-nil, fetch completion candidates asynchronously.
-  - =company-lsp-enable-snippet=: Set it to non-nil if you want to enable snippet expansion on completion. Set it to nil to disable this feature.
+  - =company-lsp-enable-snippet=: Set it to non-nil if you want to enable snippet expansion on completion.
+                                Set it to nil to disable this feature.
 
 *** lsp-ivy
 #+name: lsp-ivy
@@ -802,8 +807,6 @@ To options that might be interesting:
   :init
   (global-lsp-bridge-mode))
   (setq acm-enable-copilot t)
-
-  (setq lsp-bridge-python-command "/usr/bin/python3")
 
   (general-define-key  :prefix "s-l"
        "b"      '(:ignore t  :which-key "lsp-bridge prefix")
