@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2024-12-09 一]
+#+lastmod: [2024-12-16 一]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -702,16 +702,6 @@ Limit the number of exporters to the ones that I would use:
   (setq org-export-backends '(ascii html md texinfo odt))
 #+end_src
 
-I have a special version of tweaked [[file:elisp/ox-confluence.el][Confluence exporter]] for my org files:
-#+begin_src emacs-lisp
-  (use-package ox-confluence
-    :after org
-    :straight nil   ; Located in my "elisp" directory
-    :config
-    (cyz-leader :keymaps 'org-mode-map
-      "o E" '("to confluence"     . ox-export-to-confluence)))
-#+end_src
-
 And Graphviz configuration using [[https://github.com/ppareit/graphviz-dot-mode][graphviz-dot-mode]]:
 #+begin_src emacs-lisp
   (use-package graphviz-dot-mode
@@ -773,22 +763,6 @@ Splitting out HTML snippets is often a way that I can transfer org-formatted con
                         "}")
                      hard-newline))))))
 #+end_src
-** Focused Work
-:LOGBOOK:
-CLOCK: [2022-02-11 Fri 11:05]--[2022-02-11 Fri 11:21] =>  0:16
-:END:
-I've been working on my own [[http://www.howardism.org/Technical/Emacs/focused-work.html][approach to focused work]],
-
-#+begin_src emacs-lisp
-  (use-package async)
-
-  (use-package cyz-focus
-    :straight (:type built-in)
-    :config
-    (cyz-leader
-     "o f" '("begin focus" . cyz-focus-begin)
-     "o F" '("break focus" . cyz-focus-break)))
-#+end_src
 ** Spell Checking
 Let's hook some spell-checking into org files, and actually all text files. I’m making this particularly delicious.
 
@@ -827,19 +801,19 @@ And on Linux:
 #+end_src
 
 And the Emacs interface to that:
-
+不支持中文,直接注释取消,否则会直接启动报错退出.
 #+begin_src emacs-lisp
-  (use-package jinx
-    :hook (emacs-startup . global-jinx-mode)
-    :bind (("M-$" . jinx-correct-nearest)
-           ("s-;" . jinx-correct-nearest))
-    :general
-    (:states '(normal insert) :keymaps 'text-mode-map
-             "M-s M-s" 'jinx-correct)
-    :config
-    (cyz-leader
-      "s i" '("spellcheck buffer" . jinx-correct-all)
-      "S b" '("spellcheck buffer" . jinx-correct-all)))
+; (use-package jinx
+;   :hook (emacs-startup . global-jinx-mode)
+;   :bind (("M-$" . jinx-correct-nearest)
+;          ("s-;" . jinx-correct-nearest))
+;   :general
+;   (:states '(normal insert) :keymaps 'text-mode-map
+;            "M-s M-s" 'jinx-correct)
+;   :config
+;   (cyz-leader
+;     "s i" '("spellcheck buffer" . jinx-correct-all)
+;     "S b" '("spellcheck buffer" . jinx-correct-all)))
 #+end_src
 
 Jinx works really good, as the mini-buffer allows you to use letters to filter the choice, and numbers (or Return) to select the choice. Selecting ~@~ adds the word to your personal dictionary, and ~*~ adds it to the /local words/ for the file (search for =jinx-local-words=). Also, it appears that calling =jinx-correct= goes back to the first incorrect spelling, letting you correct it, and then pops the point back. That is pretty slick.

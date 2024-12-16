@@ -189,22 +189,25 @@ And let’s see the results:
 * Load the Rest
 The following /defines/ the rest of my org-mode literate files, that I load later with the =cyz-emacs-load= function:
 #+begin_src emacs-lisp :comments link
-(defvar cyz-emacs-files (flatten-list
-                         `("config/init.org"
-                           "config/general.org"
-                           "config/display.org"
-                           "config/programming.org"
-                           "config/programming-elisp.org"
-                           "config/programming-golang.org"
-                           "config/memo-learn.org"
-                          ;; ,(if (cyz-emacs-for-work?)
-                          ;;      '("cyz-org-sprint.org"
-                          ;;        "cyz-work.org")
-                          ;;    ;; Personal Editor
-                          ;;    '("cyz-org-journaling.org"
-                          ;;      "cyz-feed-reader.org"))
-                           ))
-  "List of org files that complete the emacs project.")
+  (defvar cyz-emacs-files (flatten-list
+			   `("config/init.org"
+			     "config/general.org"
+			     "config/display.org"
+			     "config/programming.org"
+			     "config/programming-elisp.org"
+			     "config/programming-golang.org"
+			     "config/memo-learn.org"
+			     "config/org.org"
+  			     "config/cyz-evil.org"
+  			     "config/capture-note.org"
+			    ;; ,(if (cyz-emacs-for-work?)
+			    ;;      '("cyz-org-sprint.org"
+			    ;;        "cyz-work.org")
+			    ;;    ;; Personal Editor
+			    ;;    '("cyz-org-journaling.org"
+			    ;;      "cyz-feed-reader.org"))
+			     ))
+    "List of org files that complete the emacs project.")
 #+end_src
 
 The list of /emacs/ org-formatted files stored in =cyz-emacs-files= is selectively short, and doesn’t include all files, for instance, certain languages that I’m learning aren’t automatically included. The function, =cyz-emacs-files= will return the list loaded at startup, as well as with an optional parameter, return them all.

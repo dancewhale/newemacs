@@ -53,6 +53,14 @@ A literate programming file for configuring Emacs for Golang programming.
               (add-hook 'before-save-hook  'cyz-go-before-save))))
 
   #+end_src
+*** ob-go
+#+name: 
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'ob-go)
+(require 'ob-go)
+#+end_src
+
+
 ** tips
 我的一些快捷设置,方便编写代码.
 #+name: goland-tips

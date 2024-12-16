@@ -8,6 +8,12 @@
 * 安装
 ** 准备工作
 需要创建目录~/bin
+#+name: 
+#+begin_src sh
+brew install direnv ispell
+    #+end_src
+
+
 移植的配置原作者使用的这个目录.
 ** Emacs Mac
 #+begin_src sh
