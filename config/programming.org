@@ -784,7 +784,7 @@ To options that might be interesting:
 
 *** lsp-ivy
 #+name: lsp-ivy
-#+begin_src elisp :comments link
+#+begin_src emacs-lisp :comments link
   (use-package lsp-ivy :straight t :commands lsp-ivy-workspace-symbol)
 
 
@@ -792,14 +792,14 @@ To options that might be interesting:
 
 *** lsp-treemacs
 #+name: lsp-treemacs
-#+begin_src elisp :comments link
+#+begin_src emacs-lisp :comments link
   (use-package lsp-treemacs :straight t :commands lsp-treemacs-errors-list)
 
   #+end_src
 
 *** dap-mode
 #+name: dap-mode
-#+begin_src elisp :comments link
+#+begin_src emacs-lisp :comments link
   (use-package dap-mode :straight t)
 
 
@@ -807,7 +807,7 @@ To options that might be interesting:
 
 *** lsp-bridge
 #+name: lsp-bridge
-#+begin_src elisp  :comments link
+#+begin_src emacs-lisp  :comments link
   (use-package lsp-bridge
   :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 	    :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
@@ -827,7 +827,7 @@ To options that might be interesting:
 
 *** copilot
 #+name: copilot
-#+begin_src elisp  :comments link
+#+begin_src emacs-lisp  :comments link
    (use-package copilot
    :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
    :ensure t)

@@ -5,7 +5,7 @@
 # --
 
 #+name: $1
-#+begin_src golang  :comments link  :tangle /tmp/$2   :mkdirp yes
+#+begin_src go  :comments link  :tangle /tmp/$2   :mkdirp yes
 
 $0
 

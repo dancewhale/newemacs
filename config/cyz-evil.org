@@ -30,10 +30,8 @@ As a grizzled veteran of the Emacs-VI Wars, I’ve decided to take advantage of 
 
   - Most buffers begin in Evil’s /normal state/, e.g. normal mode for VIers.
   - Pressing ~i~ or ~a~ jumps into a state of total Emacs, with the exception of ~Escape~ going back to Evil. This means, that typing ~C-p~ goes up a line, and doesn’t auto-complete.
-  - I don’t use ~:~ and instead use ~M-x~ or better yet, ~SPC SPC~ (typing the space key twice) from [[file:cyz-general.org][General project]].
-  - The ~Space~ doesn’t advance a letter, but instead displays a tree of highly-customized functions, displayable at the bottom of my screen, e.g.
-
-[[file:screenshots/cyz-leader.png]]
+  - ~SPC SPC~ (typing the space key twice) from [[file:general.org][General project]] For ~m-x~.
+  - The ~Space~ doesn’t advance a letter, but instead displays a tree of highly-customized functions, displayable at the bottom of my screen.
 
 Some advice that I followed:
    - [[https://github.com/noctuid/evil-guide][Evil Guide]]
@@ -99,11 +97,6 @@ I’m not a long term VI user, and I generally like /easy keys/, e.g. ~w~, have 
       "e" 'evil-forward-WORD-end
       "E" 'evil-forward-word-end
 
-      ;; This may be an absolute heresy to most VI users,
-      ;; but I'm Evil and really, I use M-x and SPC instead.
-      ;; Besides, I don't know any : colon commands...
-      ":" 'evil-repeat-find-char-reverse)
-
     ;; The `b' key seems to need its own configuration setting:
     (evil-define-key '(normal visual motion operator) 'global
       "b" 'evil-backward-WORD-begin)
@@ -165,18 +158,18 @@ I am not a long term VI user, and don’t have much need for any of its control 
   (use-package evil
     :config
     (evil-define-key '(normal visual motion operator) 'global
-      (kbd "C-a") 'cyz-beginning-of-line
+      (kbd "C-a") 'evil-beginning-of-line
       (kbd "C-e") 'move-end-of-line
 
       ;; Since C-y scrolls the window down, Shifted Y goes up:
-      (kbd "C-y") 'evil-scroll-line-down
-      (kbd "C-b") 'evil-scroll-line-up
-      (kbd "C-S-y") 'evil-scroll-line-up
+      (kbd "C-f") 'evil-scroll-page-down
+      (kbd "C-b") 'evil-scroll-page-up
+      (kbd "C-s-f") 'evil-scroll-line-down
+      (kbd "C-s-b") 'evil-scroll-line-up
 
-      (kbd "C-d") 'scroll-down-command
-      (kbd "C-S-d") 'scroll-other-window-down
-      (kbd "C-f") 'scroll-up-command
-      (kbd "C-S-f") 'scroll-other-window
+      ;(kbd "C-d") 'scroll-down-command
+      ;(kbd "C-S-d") 'scroll-other-window-down
+      ;(kbd "C-S-f") 'scroll-other-window
 
       (kbd "C-o") 'open-line ; matches evil's o
       (kbd "C-p") 'previous-line
