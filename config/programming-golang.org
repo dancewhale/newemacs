@@ -32,6 +32,7 @@ A literate programming file for configuring Emacs for Golang programming.
 * Introduction
 我的工作语言
 ** golang
+注意: 需要配置好环境变量里面的GOROOT  GOPATH  并将对应bin 目录加入PATH, 否则会报错.
 *** go-mode
 #+name: go-mode
 #+begin_src emacs-lisp :comments link

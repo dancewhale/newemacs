@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2024-12-16 一]
+#+lastmod: [2024-12-18 三]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -87,8 +87,8 @@ Begin by initializing these org variables:
         org-export-time-stamp-file nil
         org-export-date-timestamp-format "%e %B %Y"
 
-        org-directory "~/personal"
-        org-default-notes-file "~/personal/general-notes.txt"
+        org-directory "~/Dropbox/memo"
+        org-default-notes-file "~/Dropbox/memo/notes.org"
 
         org-enforce-todo-dependencies t   ; Can't close a task without completed subtasks
         org-agenda-dim-blocked-tasks t

@@ -667,6 +667,9 @@ and the [[http://tkf.github.io/emacs-jedi/latest/][Emacs integration to Jedi]] (
 
 Emacs has two LSP projects, and while I have used [[LSP Mode]],
 but since I don’t have heavy IDE requirements, I am finding that [[eglot]] to be simpler.
+*** 注意:
+在mac 上不能采用大小写混合路径, emacs 的api 获取的路径会出现异常,底层C api 返回的路径是小写,
+而lsp 识别时又是大小写混合导致异常报错.
 *** LSP
 #+begin_src emacs-lisp :comments link
 (use-package lsp-mode
