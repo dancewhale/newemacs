@@ -92,12 +92,12 @@ A literate programming file for configuring org for capturing notes.
 #+begin_src emacs-lisp  :comments link
 (add-to-list 'org-capture-templates
              '("n" "Thought or Note"  entry
-               (file org-default-notes-file "General Notes")
-               "* %?\n\n  %i\n\n  See: %a" :empty-lines 1))
+               (file+olp org-default-notes-file "General Notes")
+               "* %?\n  %i\n  See: %a" :empty-lines 1))
 
 (add-to-list 'org-capture-templates
              '("t" "Task"  entry
-               (file+olp org-default-notes-file "Tasks")
+               (file+olp org-default-tasks-file "Tasks")
                "** TODO %?" :empty-lines 1))
 
 #+end_src

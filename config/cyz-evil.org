@@ -26,19 +26,17 @@ A literate programming file for configuring Evil mode in Emacs.
 #+end_src
 
 * Introduction
-As a grizzled veteran of the Emacs-VI Wars, I’ve decided to take advantage of both by using VI keybindings on top of Emacs. However, after thirty years of Emacs, my interface follows different goals:
-
-  - Most buffers begin in Evil’s /normal state/, e.g. normal mode for VIers.
-  - Pressing ~i~ or ~a~ jumps into a state of total Emacs, with the exception of ~Escape~ going back to Evil. This means, that typing ~C-p~ goes up a line, and doesn’t auto-complete.
-  - ~SPC SPC~ (typing the space key twice) from [[file:general.org][General project]] For ~m-x~.
-  - The ~Space~ doesn’t advance a letter, but instead displays a tree of highly-customized functions, displayable at the bottom of my screen.
+这是我借用的别人的配置文件,然后自己修改适配.
+- Most buffers begin in Evil’s /normal state/, e.g. normal mode for VIers.
+- Pressing ~i~ or ~a~ jumps into a state of total Emacs, with the exception of ~Escape~ going back to Evil. This means, that typing ~C-p~ goes up a line, and doesn’t auto-complete.
+- ~SPC SPC~ (typing the space key twice) from [[file:general.org][General project]] For ~m-x~.
+- The ~Space~ doesn’t advance a letter, but instead displays a tree of highly-customized functions, displayable at the bottom of my screen.
 
 Some advice that I followed:
    - [[https://github.com/noctuid/evil-guide][Evil Guide]]
    - [[https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html][A Vim-like Emacs Configuration from Nathan Typanski]]
    - [[https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically][Evil insert state is really Emacs?]] Real answer to that is to set [[help:evil-disable-insert-state-bindings][evil-disable-insert-state-bindings]]
 
-TODO: Rebind the ~z~ keys
 * Evil-Specific Keybindings
 I split the configuration of Evil mode into sections. First, global settings:
 #+begin_src emacs-lisp
@@ -74,7 +72,6 @@ Even with the [[Evil Collection]], some modes should start in the Emacs state:
   (use-package evil
     :config
     (dolist (mode '(custom-mode
-                    dired-mode
                     eshell-mode
                     git-rebase-mode
                     erc-mode
@@ -480,8 +477,8 @@ The [[https//github.com/gilbertw1/better-jumper][better-jumper project]] replace
     (better-jumper-mode +1)
 
     (with-eval-after-load 'evil-maps
-      (define-key evil-motion-state-map (kbd "M-[") 'better-jumper-jump-backward)
-      (define-key evil-motion-state-map (kbd "M-]") 'better-jumper-jump-forward)))
+      (define-key evil-motion-state-map (kbd "s-[") 'better-jumper-jump-backward)
+      (define-key evil-motion-state-map (kbd "s-]") 'better-jumper-jump-forward)))
 #+end_src
 
 * Technical Artifacts                                :noexport:

@@ -89,6 +89,7 @@ Begin by initializing these org variables:
 
         org-directory "~/Dropbox/memo"
         org-default-notes-file "~/Dropbox/memo/notes.org"
+        org-default-tasks-file "~/Dropbox/memo/tasks.org"
 
         org-enforce-todo-dependencies t   ; Can't close a task without completed subtasks
         org-agenda-dim-blocked-tasks t
