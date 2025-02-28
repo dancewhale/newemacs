@@ -198,8 +198,9 @@ The following /defines/ the rest of my org-mode literate files, that I load late
 			     "config/programming-golang.org"
 			     "config/memo-learn.org"
 			     "config/org.org"
-  			     "config/cyz-evil.org"
+			     "config/cyz-agenda.org"
   			     "config/capture-note.org"
+  			     "config/cyz-evil.org"
 			    ;; ,(if (cyz-emacs-for-work?)
 			    ;;      '("cyz-org-sprint.org"
 			    ;;        "cyz-work.org")

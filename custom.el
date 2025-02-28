@@ -23,6 +23,8 @@
       (magit-section-case . 0)
       (org-roam-with-file . 2))
      (elisp-lint-ignored-validators "byte-compile" "package-lint")))
+ '(lsp-go-directory-filters ["-/opt/homebrew/"])
+ '(lsp-go-library-directories '("/opt/homebrew/Cellar/go/"))
  '(org-gtd-directory "/home/whale/Dropbox/roam/gtd")
  '(rime-emacs-module-header-root "/opt/homebrew/include"))
 (custom-set-faces

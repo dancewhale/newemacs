@@ -27,14 +27,15 @@ A literate programming file for configuring org for capturing notes.
 * Introduction
 构建capture 的函数和模板,复制org-protocol-capture 函数,然后修改body 的处理逻辑,将body 改为file
 不从命令行读取,而是直接从文件file 加载,从而跳过终端上' "" 等字符的处理问题.
+org-starter 在agenda.org 文件中加载,用于管理capture 和template
 #+name: capture
 #+begin_src emacs-lisp  :comments link
 (require 'org-protocol)
 
-(add-to-list  'org-capture-templates
-           '("w" "Web Note" entry
-             (file "~/Dropbox/memo/Web.org")
-             "* %a    :website:\n%i"))
+(org-starter-def-capture "w" "Web Note" entry
+               (file "~/Dropbox/memo/Web.org")
+               "* %a    :website:\n%i")
+
 
 (add-to-list 'org-protocol-protocol-alist
              '("Capture file"
@@ -88,17 +89,18 @@ A literate programming file for configuring org for capturing notes.
 
 #+end_src
 
+使用org-starter 包来管理capture, 否则alist 直接增加和修改,每次都需要重启来生效.
 #+name: org-task-template
 #+begin_src emacs-lisp  :comments link
-(add-to-list 'org-capture-templates
-             '("n" "Thought or Note"  entry
-               (file+olp org-default-notes-file "General Notes")
-               "* %?\n  %i\n  See: %a" :empty-lines 1))
 
-(add-to-list 'org-capture-templates
-             '("t" "Task"  entry
-               (file+olp org-default-tasks-file "Tasks")
-               "** TODO %?" :empty-lines 1))
+(org-starter-def-capture "n" "Thought or Note"  entry
+                 (file+olp org-default-notes-file "General Notes")
+                   "* %?\n  %i\n  See: %a" :empty-lines 1)
+
+
+(org-starter-def-capture "t" "Task"  entry
+                 (file+olp org-default-tasks-file "Tasks")
+                 "** TODO %?" :empty-lines 1)
 
 #+end_src
 
