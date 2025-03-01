@@ -122,26 +122,6 @@ A literate programming file for configuring Emacs for Lisp programming.
 
 
 
-* org-srs
-#+name: org-srs
-#+begin_src emacs-lisp  :comments link
-(straight-use-package  '(fsrs :type git  :host github  :repo "bohonghuang/lisp-fsrs"))
-(straight-use-package  '(org-srs :type git  :host github  :repo "bohonghuang/org-srs"))
-
-(use-package fsrs)
-
-(use-package org-srs
-  :defer t
-  :hook (org-mode . org-srs-embed-overlay-mode)
-  :bind (:map org-mode-map
-         ("<f5>" . org-srs-review-rate-easy)
-         ("<f6>" . org-srs-review-rate-good)
-         ("<f7>" . org-srs-review-rate-hard)
-         ("<f8>" . org-srs-review-rate-again)))
-
-    #+end_src
-
-
 * treemacs
 设置相关的package
 #+name: evil-treemacs
