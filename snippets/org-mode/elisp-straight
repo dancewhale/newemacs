@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: elisp-straight
+# key: es
+# type: snippet
+# --
+
+#+name: $1
+#+begin_src emacs-lisp  :comments link
+(straight-use-package '$2)
+
+(general-define-key
+  "s-j"    #'+rime-convert-string-at-point)
+$0
+#+end_src
+
