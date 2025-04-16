@@ -38,7 +38,6 @@ A literate programming file for configuring Emacs for Lisp programming.
                              :repo "dancewhale/memo" :files (:defaults "golib" "libmemo.so")))
 
 (straight-use-package 'ov)
-(require 'magic-buffer)
 
 (defun memo-open-package-dir ()
   (interactive)
@@ -194,7 +193,7 @@ A literate programming file for configuring Emacs for Lisp programming.
                   :taker (gt-taker :langs '(en zh) :text 'buffer
                                    :pick 'word :pick-pred (lambda (w) (length> w 6)))
                   :engines (gt-google-engine)
-                  :render (gt-overlay-render :type 'help-echo))))
+                  :render (gt-overlay-render :type 'help-echo)))))
 #+end_src
 
 
