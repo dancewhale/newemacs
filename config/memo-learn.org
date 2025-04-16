@@ -30,14 +30,15 @@ A literate programming file for configuring Emacs for Lisp programming.
 
 * Introduction
 用来配置间隔学习的相关配置.
+* memo
 安装memo 包.
 #+name: memo
 #+begin_src emacs-lisp :comments link
-(straight-use-package '(epc :type git :host github
-                             :repo "dancewhale/emacs-epc"))
-
 (straight-use-package '(memo :type git :host github
                              :repo "dancewhale/memo" :files (:defaults "golib" "libmemo.so")))
+
+(straight-use-package 'ov)
+(require 'magic-buffer)
 
 (defun memo-open-package-dir ()
   (interactive)
@@ -46,12 +47,12 @@ A literate programming file for configuring Emacs for Lisp programming.
 ;; setting config for memo.
 (general-define-key
     "s-e l RET"    'memo-create-head
-    "s-e l n"      'memo-create-subhead
+    "s-e l n"      'memo-create-virt-head
     "s-e l p"      'memo-sync-file
     "s-e l P"      'memo-sync-db
     "s-e l b"      'memo-goto-org
     "s-e l s"      'memo-goto-source-direct
-    "s-e l S"      'memo-update-current-note-content
+    "s-e l S"      'memo-suspend-current-note
     "s-e l r"      'memo-review-note
     "s-e l f"      'memo-flip-note
     "s-e l 1"      'memo-review-easy
@@ -68,7 +69,7 @@ A literate programming file for configuring Emacs for Lisp programming.
 (setq memo-org-directory "/Users/whale/Seafile/Dropbox/memo")
 (setq memo-db-path "/Users/whale/")
 (setq memo-bridge-server-port 23456)
-
+(setq memo-treemacs-virtual-head-expand-depth 2)
 
 (setq memo-log-level "0")
 ;; 保存文件后自动更新memo 记录
@@ -77,6 +78,31 @@ A literate programming file for configuring Emacs for Lisp programming.
 
 
 #+end_src
+
+* activities
+#+name: activities
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'activities)
+
+(use-package activities
+  :init
+  (activities-mode)
+  (activities-tabs-mode)
+  ;; Prevent `edebug' default bindings from interfering.
+  (setq edebug-inhibit-emacs-lisp-mode-bindings t)
+
+  :bind
+  (("C-x C-a C-n" . activities-new)
+   ("C-x C-a C-d" . activities-define)
+   ("C-x C-a C-a" . activities-resume)
+   ("C-x C-a C-s" . activities-suspend)
+   ("C-x C-a C-k" . activities-kill)
+   ("C-x C-a RET" . activities-switch)
+   ("C-x C-a b" . activities-switch-buffer)
+   ("C-x C-a g" . activities-revert)
+   ("C-x C-a l" . activities-list)))
+#+end_src
+
 
 * org-remark
 安装org-remark 的包,用于渐进阅读做笔记和卡片.
@@ -121,13 +147,12 @@ A literate programming file for configuring Emacs for Lisp programming.
 #+end_src
 
 
-
 * treemacs
 设置相关的package
 #+name: evil-treemacs
 #+begin_src emacs-lisp  :comments link
   (straight-use-package 'treemacs-evil)
-    #+end_src
+#+end_src
 
 
 
@@ -142,7 +167,35 @@ A literate programming file for configuring Emacs for Lisp programming.
 
     #+end_src
 
+* go-translate
+#+name: go-translate
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'go-translate)
+(straight-use-package 'plz)
 
+(require 'go-translate)
+(require 'plz)
+
+(setq gt-langs '(en zh))
+
+;;(setq gt-chatgpt-host "https://api.deepseek.com")
+;;(setq gt-chatgpt-model "deepseek-chat")
+;;(setq gt-default-translator (gt-translator :engines (gt-chatgpt-engine :key "sk-03532a4530844ea780410490e04782d5")))
+(setq gt-preset-translators
+      `((ts-1 . ,(gt-translator
+                  :taker (gt-taker :langs '(en zh) :text 'word)
+                  :engines (gt-bing-engine)
+                  :render (gt-overlay-render)))
+        (ts-2 . ,(gt-translator
+                  :taker (gt-taker :langs '(en zh) :text 'sentence)
+                  :engines (gt-google-engine)
+                  :render (gt-insert-render)))
+        (ts-3 . ,(gt-translator
+                  :taker (gt-taker :langs '(en zh) :text 'buffer
+                                   :pick 'word :pick-pred (lambda (w) (length> w 6)))
+                  :engines (gt-google-engine)
+                  :render (gt-overlay-render :type 'help-echo))))
+#+end_src
 
 
 
