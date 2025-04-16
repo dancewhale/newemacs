@@ -33,7 +33,7 @@ org-starter 在agenda.org 文件中加载,用于管理capture 和template
 (require 'org-protocol)
 
 (org-starter-def-capture "w" "Web Note" entry
-               (file "~/Dropbox/memo/Web.org")
+               (file "~/Dropbox/roam/gtd/Web.org")
                "* %a    :website:\n%i")
 
 

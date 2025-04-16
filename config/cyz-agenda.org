@@ -34,7 +34,7 @@ A literate programming file for configuring org agenda view.
 
   (use-package org-starter
     :config
-    (org-starter-def "~/Dropbox/memo/"
+    (org-starter-def "~/Dropbox/roam/gtd/"
       :files
       ("tasks.org"              :agenda t  :key "t" :refile (:maxlevel . 1))
       ("notes.org"              :agenda t  :key "n" :refile (:maxlevel . 1))

@@ -25,8 +25,11 @@
      (elisp-lint-ignored-validators "byte-compile" "package-lint")))
  '(lsp-go-directory-filters ["-/opt/homebrew/"])
  '(lsp-go-library-directories '("/opt/homebrew/Cellar/go/"))
+ '(org-agenda-files
+   '("/Users/whale/Dropbox/roam/gtd/tasks.org" "/Users/whale/Dropbox/roam/gtd/notes.org"))
  '(org-gtd-directory "/home/whale/Dropbox/roam/gtd")
- '(rime-emacs-module-header-root "/opt/homebrew/include"))
+ '(rime-emacs-module-header-root "/opt/homebrew/include")
+ '(straight-disable-compile t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
