@@ -28,6 +28,8 @@ A literate programming file for configuring Emacs for Lisp programming.
 ;;; Code:
   #+end_src
 
+  #+RESULTS: head
+
 * Introduction
 用来配置间隔学习的相关配置.
 * memo
@@ -75,7 +77,49 @@ A literate programming file for configuring Emacs for Lisp programming.
 (add-hook 'after-save-hook 'memo-sync-file)
 
 
+;; setting keybind for memo-annotation-region-mode
+(evil-define-minor-mode-key 'normal 'memo-annotation-region-mode
+  (kbd "<right>") 'memo-annotation-region-expand-right
+  (kbd "<left>") 'memo-annotation-region-expand-left
+  (kbd "S-<right>") 'memo-annotation-region-shrink-right
+  (kbd "S-<left>") 'memo-annotation-region-shrink-left
+  (kbd "<up>") 'memo-annotation-region-expand-up
+  (kbd "<down>") 'memo-annotation-region-expand-down
+  (kbd "S-<up>") 'memo-annotation-region-shrink-up
+  (kbd "S-<down>") 'memo-annotation-region-shrink-down
 
+  (kbd "RET") 'memo-annotation-region-confirm
+  (kbd "<escape>") 'memo-annotation-region-cancel
+
+
+  (kbd "h") 'memo-annotation-region-expand-left
+  (kbd "l") 'memo-annotation-region-expand-right
+  (kbd "H") 'memo-annotation-region-shrink-right
+  (kbd "L") 'memo-annotation-region-shrink-left
+  (kbd "k") 'memo-annotation-region-expand-up
+  (kbd "j") 'memo-annotation-region-expand-down
+  (kbd "K") 'memo-annotation-region-shrink-up
+  (kbd "J") 'memo-annotation-region-shrink-down
+)
+
+
+#+end_src
+
+* ai
+** aidermacs
+#+name: aidermacs
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'aidermacs)
+
+(use-package aidermacs
+  :bind (("C-c a" . aidermacs-transient-menu))
+  ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+  ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
+  :custom
+  ; See the Configuration section below
+  (aidermacs-use-architect-mode t)
+  (aidermacs-default-model "deepseek/deepseek-chat")
+  (aidermacs-editor-model "deepseek/deepseek-chat"))
 #+end_src
 
 * activities
@@ -102,48 +146,6 @@ A literate programming file for configuring Emacs for Lisp programming.
    ("C-x C-a l" . activities-list)))
 #+end_src
 
-
-* org-remark
-安装org-remark 的包,用于渐进阅读做笔记和卡片.
-#+name: org-remark
-#+begin_src emacs-lisp  :comments link
-
-(straight-use-package '(org-remark :type git :host github  :repo "nobiot/org-remark" ))
-(org-remark-global-tracking-mode +1)
-
-(defun org-remark-notes-name-function ()
-  (concat "~/Seafile/Dropbox/memo/card"
-          (file-name-base (org-remark-notes-file-name-function))
-          ".org"))
-
-(setq org-remark-notes-file-name
-      #'org-remark-notes-name-function)
-
-(org-remark-global-tracking-mode +1)
-
-;; Optional if you would like to highlight websites via eww-mode
-(with-eval-after-load 'eww
-  (org-remark-eww-mode +1))
-
-;; Optional if you would like to highlight EPUB books via nov.el
-(with-eval-after-load 'nov
-  (org-remark-nov-mode +1))
-
-;; Optional if you would like to highlight Info documentation via Info-mode
-(with-eval-after-load 'info
-  (org-remark-info-mode +1))
-#+end_src
-
-参照作者建议设置快捷键.
-#+name: org-mark-keybind
-#+begin_src emacs-lisp  :comments link
-(with-eval-after-load 'org-remark
-  (define-key org-remark-mode-map (kbd "C-c n o") #'org-remark-open)
-  (define-key org-remark-mode-map (kbd "C-c n ]") #'org-remark-view-next)
-  (define-key org-remark-mode-map (kbd "C-c n [") #'org-remark-view-prev)
-  (define-key org-remark-mode-map (kbd "C-c n r") #'org-remark-remove)
-  (define-key org-remark-mode-map (kbd "C-c n d") #'org-remark-delete)) 
-#+end_src
 
 
 * treemacs
@@ -184,7 +186,7 @@ A literate programming file for configuring Emacs for Lisp programming.
       `((ts-1 . ,(gt-translator
                   :taker (gt-taker :langs '(en zh) :text 'word)
                   :engines (gt-bing-engine)
-                  :render (gt-overlay-render)))
+                  :render (gt-insert-render)))
         (ts-2 . ,(gt-translator
                   :taker (gt-taker :langs '(en zh) :text 'sentence)
                   :engines (gt-google-engine)
