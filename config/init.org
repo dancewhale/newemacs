@@ -580,7 +580,7 @@
   (kbd "C-p") 'previous-line
 )
 
-       #+end_src
+#+end_src
 
 *** evil-collection
 #+name: evil-collection
@@ -778,9 +778,9 @@ _l_: right  _s_: split   _o_: only this window     _c_: choose (also 1-9)"
       (setq org-journal-enable-cache t)
 
       ;; change org-level-2 color.
-      (add-hook 'org-journal-mode-hook
+(add-hook 'org-journal-mode-hook
 	(lambda ()
-	  (face-remap-add-relative 'org-level-2 '(:foreground "white" :weight 'normal))))
+	  (face-remap-add-relative 'org-level-2 '(:foreground "white"))))
 
       (setq org-journal-file-header 'org-journal-file-header-func)
 
