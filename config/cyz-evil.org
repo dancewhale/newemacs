@@ -40,6 +40,9 @@ Some advice that I followed:
 * Evil-Specific Keybindings
 I split the configuration of Evil mode into sections. First, global settings:
 #+begin_src emacs-lisp
+  (straight-use-package 'evil-escape)
+  (evil-escape-mode)
+
   (use-package evil
     :init
     (setq evil-undo-system 'undo-fu
