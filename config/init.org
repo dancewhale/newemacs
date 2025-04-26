@@ -720,17 +720,6 @@ _l_: right  _s_: split   _o_: only this window     _c_: choose (also 1-9)"
     #+end_src
 
 
-** library
-#+name: org-ml
-#+begin_src emacs-lisp  :comments link
-  (straight-use-package 'org-ml)
-
-  (require 'org-ml)
-
-
-   #+end_src
-
-
 ** Note
 *** Roam
 #+name: roam enable
@@ -879,14 +868,6 @@ org src 代码块中的代码进行格式化
   (straight-use-package 'yasnippet)
   (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
   (yas-global-mode)
-#+end_src
-
-* Input
-** posframe
-#+name: posframe
-#+begin_src emacs-lisp :comments link
-  (straight-use-package 'posframe)
-    (require 'posframe)
 #+end_src
 
 * git
@@ -1166,8 +1147,13 @@ org src 代码块中的代码进行格式化
 #+begin_src emacs-lisp  :comments link
 (straight-use-package 'f)
 (require 'f)
+#+end_src
 
-    #+end_src
+** ht-table
+#+name: ht-table
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'ht)
+#+end_src
 
 
 

@@ -170,6 +170,13 @@ A literate programming file for configuring org agenda view.
 #+end_src
 
 
+* posframe
+#+name: posframe
+#+begin_src emacs-lisp :comments link
+(straight-use-package 'posframe)
+(require 'posframe)
+#+end_src
+
 
 * Technical Artifacts                                :noexport:
 Let's provide a name so we can =require= this file.
