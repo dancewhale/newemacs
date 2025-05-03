@@ -26,6 +26,7 @@ A literate programming file for configuring org agenda view.
 #+end_src
 * Introduction
 这个配置文件用来配置我的chinese 相关包和配置.
+
 * rime
 ** rime 安装和基础配置 
 #+name: rime 配置
@@ -50,7 +51,7 @@ A literate programming file for configuring org agenda view.
     (when (eq system-type 'darwin)
       (setq
        ;; rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/" ;; use build-emacs
-       rime-emacs-module-header-root "/opt/homebrew/opt/emacs-plus@30/include" ;;use emacs-plus
+       rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"
        rime-librime-root "~/Downloads/librime/dist"
        ))
 #+end_src
@@ -181,8 +182,8 @@ A literate programming file for configuring org agenda view.
 * Technical Artifacts                                :noexport:
 Let's provide a name so we can =require= this file.
 #+begin_src emacs-lisp :exports none
-  (provide 'chinese)
-  ;;; chinese.el ends here
+(provide 'chinese)
+;;; chinese.el ends here
 #+end_src
 
 Before you can build this on a new system, make sure that you put the cursor over any of these properties, 

@@ -375,6 +375,15 @@ finds at that point."
 	    #'adviced:edebug-previous-result)
 
     #+end_src
+* Profiler
+安装entrace 进行时间分析,以改进代码.
+#+name: tracer
+#+begin_src emacs-lisp  :comments link
+(straight-use-package '(etrace :type git :host github :repo "aspiers/etrace"))
+(require 'etrace)
+#+end_src
+
+
 * Technical Artifacts                                :noexport:
 Let's =provide= a name so we can =require= this file:
 
