@@ -808,20 +808,26 @@ To options that might be interesting:
 *** lsp-bridge
 #+name: lsp-bridge
 #+begin_src emacs-lisp  :comments link
-  (use-package lsp-bridge
+(use-package lsp-bridge
   :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
 	    :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
 	    :build (:not compile))
   :init
-  (global-lsp-bridge-mode))
-  (setq acm-enable-copilot t)
+  (global-lsp-bridge-mode)
+  :config
+  (add-hook 'lsp-bridge-ref-mode-hook
+            (lambda ()
+              (if lsp-bridge-ref-mode
+                  (when (bound-and-true-p evil-mode)
+                    (evil-emacs-state))))))
+(setq acm-enable-copilot t)
 
-  (general-define-key  :prefix "s-l"
-       "b"      '(:ignore t  :which-key "lsp-bridge prefix")
-       "b d"    '(lsp-bridge-find-def :which-key "find define")
-       "b p"    '(lsp-bridge-peek :which-key "bridge peek")
-       "b r"    '(lsp-bridge-rename :which-key "bridge peek")
-       "b f"    '(lsp-bridge-code-format :which-key "format code"))
+(general-define-key  :prefix "s-l"
+     "b"      '(:ignore t  :which-key "lsp-bridge prefix")
+     "b d"    '(lsp-bridge-find-def :which-key "find define")
+     "b p"    '(lsp-bridge-peek :which-key "bridge peek")
+     "b r"    '(lsp-bridge-rename :which-key "bridge peek")
+     "b f"    '(lsp-bridge-code-format :which-key "format code"))
 
     #+end_src
 

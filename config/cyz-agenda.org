@@ -41,7 +41,8 @@ A literate programming file for configuring org agenda view.
       ))
 
   (general-define-key
-    "C-c a"    #'org-agenda)
+    "C-c a"    #'org-agenda
+    "s-e j i"  #'org-starter-find-file-by-key)
 #+end_src
     
 
