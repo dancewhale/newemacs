@@ -54,6 +54,7 @@
 ;; Let's rock:
 (org-babel-load-file "~/.emacs.d/bootstrap.org")
 
+(put 'dired-find-alternate-file 'disabled nil)
+
 (provide 'init)
 ;;; init.el ends here
-(put 'dired-find-alternate-file 'disabled nil)

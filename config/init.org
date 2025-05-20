@@ -905,9 +905,6 @@ org src 代码块中的代码进行格式化
 
    #+end_src
 
-
-
-
 * Tools
 用于做组合快捷操作的工具包.
 ** vterm
@@ -1140,6 +1137,12 @@ org src 代码块中的代码进行格式化
 #+begin_src emacs-lisp :comments link
 (straight-use-package 'crux)
 #+end_src
+** chezmoi
+#+name: chezmoi
+#+begin_src emacs-lisp :comments link
+(straight-use-package 'chezmoi)
+(require 'chezmoi)
+#+end_src
 
 * library
 ** file
@@ -1154,8 +1157,6 @@ org src 代码块中的代码进行格式化
 #+begin_src emacs-lisp  :comments link
 (straight-use-package 'ht)
 #+end_src
-
-
 
 * my function
 加载我自己的代码和函数文件.

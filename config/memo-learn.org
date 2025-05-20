@@ -43,7 +43,7 @@ A literate programming file for configuring Emacs for Lisp programming.
 
 (defun memo-open-package-dir ()
   (interactive)
-  (dired "/Users/whale/.emacs.d/.local/straight/repos/memo/"))
+  (dired (expand-file-name "~/.emacs.d/.local/straight/repos/memo/")))
 
 ;; setting config for memo.
 (general-define-key
@@ -67,8 +67,8 @@ A literate programming file for configuring Emacs for Lisp programming.
 )
 
 
-(setq memo-org-directory "/Users/whale/Seafile/Dropbox/memo")
-(setq memo-db-path "/Users/whale/")
+(setq memo-org-directory (expand-file-name "~/Dropbox/memo"))
+(setq memo-db-directory (expand-file-name "~/Dropbox/memo"))
 (setq memo-bridge-server-port 23456)
 (setq memo-treemacs-virtual-head-expand-depth 2)
 
