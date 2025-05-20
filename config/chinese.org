@@ -45,7 +45,6 @@ A literate programming file for configuring org agenda view.
 	   rime-show-candidate 'posframe
 	   rime-posframe-properties (list :internal-border-width 1)
 	   rime-user-data-dir "~/Dropbox/rimeSync/"
-	   rime-share-data-dir "~/.local/share/rime/ice"
 	   rime-inline-ascii-trigger 'shift-r
 	   ))
     (when (eq system-type 'darwin)
@@ -53,6 +52,7 @@ A literate programming file for configuring org agenda view.
        ;; rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/" ;; use build-emacs
        rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"
        rime-librime-root "~/Downloads/librime/dist"
+	   rime-share-data-dir "~/.local/share/rime/ice"
        ))
 #+end_src
 ** rime 字库
