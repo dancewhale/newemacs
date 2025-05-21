@@ -170,12 +170,20 @@ A literate programming file for configuring org agenda view.
 (advice-add 'rime-input-method :around #'rime-evil-escape-advice)
 #+end_src
 
-
 * posframe
 #+name: posframe
 #+begin_src emacs-lisp :comments link
 (straight-use-package 'posframe)
 (require 'posframe)
+#+end_src
+
+* kmonad
+#+name: kmonad
+#+begin_src emacs-lisp  :comments link
+(straight-use-package '(kbd-mode :type git :host github
+                             :repo "kmonad/kbd-mode"))
+(require 'kbd-mode)
+
 #+end_src
 
 
