@@ -35,7 +35,7 @@ Farm off commands into /virtual environments/:
           direnv-show-paths-in-summary t)
     (if (file-exists-p "/opt/homebrew")
         (setq direnv--executable "/opt/homebrew/bin/direnv")
-      (setq direnv--executable "/usr/local/bin/direnv"))
+      (setq direnv--executable "/usr/bin/direnv"))
     :config
     (direnv-mode))
 #+end_src
@@ -204,10 +204,10 @@ After reading [[https://lmno.lol/alvaro/its-all-up-for-grabs-and-it-compounds][t
 
 ** Spell Checking Comments
 The [[https://www.emacswiki.org/emacs/FlySpell#h5o-2][flyspell-prog-mode]] checks for misspellings in comments.
-
+没有中文字典导致卡顿,取消该模式.
 #+begin_src emacs-lisp :comments link
-  (use-package flyspell
-    :hook (prog-mode . flyspell-prog-mode))
+;  (use-package flyspell
+;    :hook (prog-mode . flyspell-prog-mode))
 #+end_src
 
 ** Linting with Flycheck

@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2025-04-07 Mon]
+#+lastmod: [2025-05-22 Thu]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -778,7 +778,7 @@ First, we turn on =abbrev-mode=. While this package comes with Emacs, check out 
 In general, /fill/ the list, by moving the point to the /end/ of some word, and type ~C-x a g~ (or, in /normal state/, type ~SPC x d~):
 
 #+begin_src emacs-lisp
-  (cyz-leader "x d" '("add abbrev" . kadd-global-abbrev))
+  (cyz-leader "x d" '("add abbrev" . add-global-abbrev))
 #+end_src
 
 The idea is that you can correct a typo /and remember/ it. Perhaps calling [[help:edit-abbrevs][edit-abbrevs]] to making any fixes to that list.
@@ -796,7 +796,7 @@ Requires the =libenchant= from the [[https://abiword.github.io/enchant/][Enchant
   brew install enchant
 #+end_src
 
-And on Linux:
+And on ubuntu/debian Linux:
 
 #+begin_src sh
   sudo apt install libenchant-2-dev
@@ -805,17 +805,31 @@ And on Linux:
 And the Emacs interface to that:
 不支持中文,直接注释取消,否则会直接启动报错退出.
 #+begin_src emacs-lisp
-; (use-package jinx
-;   :hook (emacs-startup . global-jinx-mode)
-;   :bind (("M-$" . jinx-correct-nearest)
-;          ("s-;" . jinx-correct-nearest))
-;   :general
-;   (:states '(normal insert) :keymaps 'text-mode-map
-;            "M-s M-s" 'jinx-correct)
-;   :config
-;   (cyz-leader
-;     "s i" '("spellcheck buffer" . jinx-correct-all)
-;     "S b" '("spellcheck buffer" . jinx-correct-all)))
+(use-package jinx
+  :hook (emacs-startup . global-jinx-mode)
+  :bind (("M-$" . jinx-correct-nearest)
+         ("s-;" . jinx-correct-nearest))
+  :general
+  (:states '(normal insert) :keymaps 'text-mode-map
+           "M-s M-s" 'jinx-correct)
+  :config
+  (cyz-leader
+    "s i" '("spellcheck buffer" . jinx-correct-all)
+    "S b" '("spellcheck buffer" . jinx-correct-all)))
+
+(with-eval-after-load 'jinx
+    (let ((st jinx--syntax-table))
+      (modify-syntax-entry '(#x4E00 . #x9FFF) "_" st) ; CJK Unified Ideographs
+      (modify-syntax-entry '(#x3400 . #x4DBF) "_" st) ; CJK Unified Ideographs Extension A
+      (modify-syntax-entry '(#x20000 . #x2A6DF) "_" st) ; CJK Unified Ideographs Extension B
+      (modify-syntax-entry '(#x2A700 . #x2B73F) "_" st) ; CJK Unified Ideographs Extension C
+      (modify-syntax-entry '(#x2B740 . #x2B81F) "_" st) ; CJK Unified Ideographs Extension D
+      (modify-syntax-entry '(#x2B820 . #x2CEAF) "_" st) ; CJK Unified Ideographs Extension E
+      (modify-syntax-entry '(#x2CEB0 . #x2EBEF) "_" st) ; CJK Unified Ideographs Extension F
+      (modify-syntax-entry '(#x30000 . #x3134F) "_" st) ; CJK Unified Ideographs Extension G
+      (modify-syntax-entry '(#x31350 . #x323AF) "_" st) ; CJK Unified Ideographs Extension H
+      (modify-syntax-entry '(#x2EBF0 . #x2EE5F) "_" st) ; CJK Unified Ideographs Extension I
+      ))
 #+end_src
 
 Jinx works really good, as the mini-buffer allows you to use letters to filter the choice, and numbers (or Return) to select the choice. Selecting ~@~ adds the word to your personal dictionary, and ~*~ adds it to the /local words/ for the file (search for =jinx-local-words=). Also, it appears that calling =jinx-correct= goes back to the first incorrect spelling, letting you correct it, and then pops the point back. That is pretty slick.
