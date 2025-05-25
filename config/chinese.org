@@ -3,7 +3,7 @@
 #+date:   2025-04-23
 #+tags: emacs chinese
 
-A literate programming file for configuring org agenda view.
+A literate programming file for Chinese configure..
 
 #+begin_src emacs-lisp :exports none
   ;;; chinese --- Configuring package for chinese. -*- lexical-binding: t; -*-
