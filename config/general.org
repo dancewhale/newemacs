@@ -591,7 +591,8 @@ Since I use numbers for the window, I can make the commands more mnemonic, and a
             (?o delete-other-windows "Delete Other Windows")
             (?q cyz-quit-buffer "Quit Buffer")
             (?w aw-execute-command-other-window "Execute Command")
-            (?? aw-show-dispatch-help)))
+            (?? aw-show-dispatch-help))
+           aw-scope 'frame)
 
     :bind (("s-o" . ace-window)
            ("C-x o" . ace-window)))

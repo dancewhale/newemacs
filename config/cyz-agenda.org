@@ -36,8 +36,8 @@ A literate programming file for configuring org agenda view.
     :config
     (org-starter-def "~/Dropbox/roam/gtd/"
       :files
-      ("tasks.org"              :agenda t  :key "t" :refile (:maxlevel . 1))
-      ("notes.org"              :agenda t  :key "n" :refile (:maxlevel . 1))
+      ("inbox.org"              :agenda t  :key "i" :refile (:maxlevel . 1))
+      ("org-gtd-tasks.org"              :agenda t  :key "t" :refile (:maxlevel . 1))
       ))
 
   (general-define-key
@@ -45,6 +45,23 @@ A literate programming file for configuring org agenda view.
     "s-e j i"  #'org-starter-find-file-by-key)
 #+end_src
     
+* org-gtd
+#+name: gtd
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'org-gtd)
+(require 'org-gtd)
+
+(general-define-key
+    "C-c n n"    #'org-gtd-capture
+    "C-c n p"    #'org-gtd-process-inbox
+    "C-c n o"    #'org-gtd-organize
+    "C-c n e"    #'org-gtd-engage
+    )
+
+(setq org-gtd-directory (expand-file-name "~/Dropbox/roam/gtd"))
+(setq org-gtd-update-ack "3.0.0")
+#+end_src
+
 
 * Technical Artifacts                                :noexport:
 Let's provide a name so we can =require= this file.
