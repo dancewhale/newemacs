@@ -55,25 +55,11 @@ Helper functions to allow code for specific operating systems:
   (equal system-type 'gnu/linux))
 #+end_src
 
-With the way I start Emacs, I may not have the =PATH= I /actually/ use (from the shell) available, so we'll force it (code taken [[https://www.emacswiki.org/emacs/ExecPath][from here]]):
-
+从gui 启动的,往往没有path 等参数配置,通过exec-path-from-shell 导入系统的环境变量.
 #+begin_src emacs-lisp :comments link
-(defun set-exec-path-from-shell ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match
-that used by the user's shell.
-
-The MacOS, where GUI apps are not started from a shell, requires this."
-  (interactive)
-  (let* ((path-from-shell (shell-command-to-string "echo $PATH"))
-         (trimmed-path    (replace-regexp-in-string (rx (zero-or-more space) eol)
-                                                    "" path-from-shell))
-         (in-fish?        (string-match (rx "fish" eol)
-                                        (shell-command-to-string "echo $SHELL")))
-         (separator       (if in-fish? " " ":"))
-         (env-path        (if in-fish? (replace-regexp-in-string " " ":" trimmed-path) trimmed-path)))
-    (message "PATH=%s" path-from-shell)
-    (setenv "PATH" env-path)
-    (setq exec-path (split-string trimmed-path separator))))
+  (straight-use-package 'exec-path-from-shell)
+  (require 'exec-path-from-shell)
+  (exec-path-from-shell-initialize)
 #+end_src
 
 In Mac  we should unset all super keybind, For my personal super keybind.
