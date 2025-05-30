@@ -160,8 +160,19 @@ A literate programming file for configuring org agenda view.
 #+end_src
 
 
-
 * org-clock
+** org-mru-clock
+这个包支持选择clock 的历史历史记录
+#+name: org-mru-clock
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'org-mru-clock)
+
+;; 支持clock 信息保存.
+  (setq org-clock-persist t)
+  (org-clock-persistence-insinuate)
+#+end_src
+
+
 ** Tasks auto clock when start
 [[https://janusworx.com/blog/what-i-learned-today-2023-02-10/][Mario Braganza]] had an interesting idea of starting the clock when a task changes to /in progress/:
 #+name: org-todo-clock

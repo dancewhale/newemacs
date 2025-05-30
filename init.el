@@ -51,6 +51,10 @@
   :straight (:type built-in)
   )
 
+;; setting melpa
+(add-to-list 'package-archives '("melpa". "https://melpa.org/packages/") t)
+(package-initialize)
+
 ;; Let's rock:
 (org-babel-load-file "~/.emacs.d/bootstrap.org")
 
