@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2025-05-25 Sun]
+#+lastmod: [2025-05-30 Fri]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -35,8 +35,6 @@ Org is a /large/ complex beast with a gazillion settings, so I discuss these lat
     :mode ("\\.org" . org-mode)    ; Addresses an odd warning
     :init
     <<variables>>
-    <<org-todo>>
-    <<org-todo-clock>>
     <<ob-configuration>>
     <<html-exporting>>
 
@@ -44,7 +42,6 @@ Org is a /large/ complex beast with a gazillion settings, so I discuss these lat
     <<cyz-org-leader>>
     <<visual-hook>>
     <<text-files>>
-    <<org-font-lock>>
     <<no-flycheck-in-org>>
     <<ob-languages>>
     <<ob-graphviz>>
@@ -87,9 +84,6 @@ Begin by initializing these org variables:
         org-export-date-timestamp-format "%e %B %Y"
 
         org-directory "~/Dropbox/roam/gtd/"
-        org-default-notes-file "~/Dropbox/roam/gtd/notes.org"
-        org-default-tasks-file "~/Dropbox/roam/gtd/tasks.org"
-
         org-enforce-todo-dependencies t   ; Can't close a task without completed subtasks
         org-agenda-dim-blocked-tasks t
         org-log-done 'time
@@ -202,49 +196,6 @@ The org API allows getting the context associated with the /current element/. Th
     (while (member (car context) '(verbatim code bold italic underline))
       (setq context (org-element-property :parent context)))
     context))
-#+end_src
-** Tasks
-I need to add a /blocked/ state, and wouldn’t /doing/ be better than /in progress/ (you know, without a space):
-#+name: org-todo
-#+begin_src emacs-lisp :tangle no
-(setq org-todo-keywords '((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)")
-                          (sequence "BLOCKED(b)" "|" "CANCELLED(c)")))
-#+end_src
-
-[[https://janusworx.com/blog/what-i-learned-today-2023-02-10/][Mario Braganza]] had an interesting idea of starting the clock when a task changes to /in progress/:
-#+name: org-todo-clock
-#+begin_src emacs-lisp
-  (defun cyz-org-clock-todo-change ()
-    "Called from hook `org-after-todo-state-change-hook'.
-  Clock in if a task changes to DOING (i.e. IN_PROGRESS),
-  and clocks out with any other state change."
-    (if (string= org-state "DOING")
-        (org-clock-in)
-      (org-clock-out-if-current)))
-
-  (add-hook 'org-after-todo-state-change-hook 'cyz-org-clock-todo-change)
-#+end_src
-And I would like to have cute little icons for those states:
-
-#+name: org-font-lock
-#+begin_src emacs-lisp
-  (dolist (m '(org-mode org-journal-mode))
-    (font-lock-add-keywords m                        ; A bit silly but my headers are now
-                            `(("^\\*+ \\(TODO\\) "   ; shorter, and that is nice canceled
-                               (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚑") nil)))
-                              ("^\\*+ \\(DOING\\) "
-                               (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚐") nil)))
-                              ("^\\*+ \\(CANCELED\\) "
-                               (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘") nil)))
-                              ("^\\*+ \\(BLOCKED\\) "
-                               (1 (progn (compose-region (match-beginning 1) (match-end 1) "✋") nil)))
-                              ("^\\*+ \\(DONE\\) "
-                               (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔") nil)))
-                              ;; Here is my approach for making the initial asterisks for listing items and
-                              ;; whatnot, appear as Unicode bullets ;; (without actually affecting the text
-                              ;; file or the behavior).
-                              ("^ +\\([-*]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•")))))))
 #+end_src
 ** Meetings
 I've notice that while showing a screen while taking meeting notes, I don't always like showing other windows, so I created this function to remove distractions during a meeting.
@@ -729,19 +680,20 @@ Bindings specific to org files:
 ** org-journal
 #+name: org-journal enable
 #+begin_src emacs-lisp :comments link
-      (straight-use-package 'org-journal)
-      (require 'org-journal)
-      ;; Org Journal config
-      (setq org-journal-dir worklog_path)
-      ;; (setq org-journal-file-type 'weekly)
-      (setq org-journal-file-type 'monthly)
-      (setq org-journal-file-format "%Y-%m-%d.org")
-      (setq org-journal-date-format "%A, %x")
-      (setq org-journal-date-prefix "* ")
-      (setq org-journal-encrypt-journal nil)
-      (setq org-journal-enable-cache t)
+  (straight-use-package 'org-journal)
+  (require 'org-journal)
+  ;; Org Journal config
+  (setq org-journal-dir worklog_path)
+  (setq org-journal-file-type 'monthly)
+  (setq org-journal-file-format "%Y-%m-%d.org")
+  (setq org-journal-date-format "%A, %x")
+  (setq org-journal-enable-agenda-integration t)
+  (setq org-journal-date-prefix "* ")
+  (setq org-journal-encrypt-journal nil)
+  (setq org-journal-enable-cache t)
+  (setq org-journal-time-format "<%Y-%m-%d %a %H:%M> ")
 
-      ;; change org-level-2 color.
+  ;; change org-level-2 color.
 (add-hook 'org-journal-mode-hook
 	(lambda ()
 	  (face-remap-add-relative 'org-level-2 '(:foreground "white"))))
@@ -760,6 +712,9 @@ org src 代码块中的代码进行格式化
 #+begin_src emacs-lisp :comments link
 (straight-use-package 'org-auto-tangle)
 (add-hook 'org-mode-hook 'org-auto-tangle-mode)
+
+;; 从org 跳到 output, 或者跳回来.
+(require 'tangle-sync)
 
 (electric-indent-mode -1)
 
@@ -797,110 +752,6 @@ LANGUAGE is a string referring to one of orb-babel's supported languages.
 	      (edit-src-block element #'format-elisp-string "emacs-lisp")))
     (delete-region (point-min) (point-max))
    (insert (org-element-interpret-data AST)))))
-#+end_src
-
-#+name: babel-auto-jump
-#+begin_src emacs-lisp  :comments link
-(defconst org-babel-tangle-comment-format-beg "-------->>  [[%link][%source-name]]")
-(defconst org-babel-tangle-comment-format-end "--------<<  %source-name ends here\n\n")
-
-;; 由于output 后format 导致两者字符发生变化,比如空格被消去,导致跳转位置不会绝对一致
-(defun tangle-sync-jump-to-output ()
-  "The opposite of `tangle-sync-jump-to-org'.
-Jumps from org src block to output code."
-  (interactive)
-  (if (not (derived-mode-p 'org-mode))
-     (error "You are not in org buffer")
-  )
-  (if (org-in-src-block-p)
-      (let* ((header (car (org-babel-tangle-single-block 1 'only-this-block)))
-	     (tangle (car header))
-	     (lang (caadr header))
-	     (buffer (nth 2 (cadr header)))
-	     (org-id (nth 3 (cadr header)))
-	     (source-name (nth 4 (cadr header)))
-	     (search-comment (org-fill-template
-			      org-babel-tangle-comment-format-beg
-			      `(("link" . ,org-id) ("source-name" . ,source-name))))
-	     (file (expand-file-name
-		    (org-babel-effective-tangled-filename buffer lang tangle)))
-	     (mid (point))) ;; 获取当前位置
-	;;jump to block body start point.
-	(org-babel-goto-src-block-head)
-	(forward-line)
-	(beginning-of-line) ;; 移动到block 头获取开头位置
-	(let ((body-start (point)))
-	    (if (not (file-exists-p file))
-	        (message "File does not exist. 'org-babel-tangle' first to create file.")
-	      (find-file file)
-	      (goto-char (point-min))
-	      (search-forward search-comment)
-	      (forward-line)
-	      (beginning-of-line)
-              (let ((offset (- mid body-start)))
-              	  (forward-char offset)))))
-    (message "Cannot jump to tangled file because point is not at org src block.")))
-
-
-(defun tangle-sync-jump-to-org ()
-  "The opposite of `tangle-sync-jump-to-output'.
-Jump from a tangled code file to the related Org mode file.
-Copy from elisp src and change some code to fix error."
-  ;; (org-babel-tangle-jump-to-org) current window.
-  (interactive)
-  (let ((mid (point))
-        (org-src-window-setup 'current-window)
-	start body-start end target-buffer target-char link block-name body)
-    (save-window-excursion
-      (save-excursion
-	(while (and (re-search-backward org-link-bracket-re nil t)
-		    (not ; ever wider searches until matching block comments
-		     (and (setq start (line-beginning-position))
-			  (setq body-start (line-beginning-position 2))
-			  (setq link (match-string 0))
-			  (setq block-name (match-string 2))
-			  (save-excursion
-			    (save-match-data
-			      (re-search-forward
-			       (concat " " (regexp-quote block-name)
-				       " ends here")
-			       nil t)
-			      (setq end (line-beginning-position))))))))
-	(unless (and start (< start mid) (< mid end))
-	  (error "Not in tangled code"))
-        (setq body (buffer-substring body-start end)))
-      ;; Go to the beginning of the relative block in Org file.
-      ;; Explicitly allow fuzzy search even if user customized
-      ;; otherwise.
-      (let (org-link-search-must-match-exact-headline)
-        (org-link-open-from-string link))
-      (setq target-buffer (current-buffer))
-      (if (string-match "[^ \t\n\r]:\\([[:digit:]]+\\)" block-name)
-          (let ((n (string-to-number (match-string 1 block-name))))
-	    (if (org-before-first-heading-p) (goto-char (point-min))
-	      (org-back-to-heading t))
-	    ;; Do not skip the first block if it begins at point min.
-	    (cond ((or (org-at-heading-p)
-		       (not (eq (org-element-type (org-element-at-point))
-				'src-block)))
-		   (org-babel-next-src-block n))
-		  ((= n 1))
-		  (t (org-babel-next-src-block (1- n)))))
-        (org-babel-goto-named-src-block block-name))
-      (goto-char (org-babel-where-is-src-block-head))
-      (forward-line 1)
-      ;; Try to preserve location of point within the source code in
-      ;; tangled code file.
-      (let ((offset (- mid body-start)))
-	  (forward-char offset))
-      (setq target-char (point)))
-    (org-src-switch-to-buffer target-buffer t)
-    (goto-char target-char)
-    body))
-
-(general-define-key
- "s-e l i" #'tangle-sync-jump-to-output
- "s-e l o" #'tangle-sync-jump-to-org)
 #+end_src
 
 * Supporting Packages

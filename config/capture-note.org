@@ -93,13 +93,14 @@ org-starter 在agenda.org 文件中加载,用于管理capture 和template
 #+name: org-task-template
 #+begin_src emacs-lisp  :comments link
 
+(setq org-default-inbox-file "~/Dropbox/roam/gtd/inbox.org")
+
 (org-starter-def-capture "n" "Thought or Note"  entry
-                 (file+olp org-default-notes-file "General Notes")
+                 (file org-default-inbox-file)
                    "* %?\n  %i\n  See: %a" :empty-lines 1)
 
-
 (org-starter-def-capture "t" "Task"  entry
-                 (file+olp org-default-tasks-file "Tasks")
+                 (file org-default-inbox-file)
                  "** TODO %?" :empty-lines 1)
 
 #+end_src

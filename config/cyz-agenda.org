@@ -62,6 +62,124 @@ A literate programming file for configuring org agenda view.
 (setq org-gtd-update-ack "3.0.0")
 #+end_src
 
+* org-super-agenda | org-sql
+安装对应的包
+#+name: super-agenda-package
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'org-super-agenda)
+  (straight-use-package 'org-sql)
+  (require 'org-super-agenda)
+  (require 'org-sql)
+#+end_src
+
+设置对应的keyword
+#+name: org-todo-keyword
+#+begin_src emacs-lisp  :comments link
+(setq org-todo-keywords
+        '((sequence
+           "TODO(t)"  ; A task that plan todo.
+           "PROJ(p)"  ; An ongoing project that cannot be completed in one step
+           "NEXT(n!)"  ; Something that is doing today.
+           "WAIT(w@/!)"  ; Task should wait for some condition for ready.
+           "|"
+           "DONE(d!)"  ; Task successfully completed
+           "CANCELED(c@/!)") ; Task was cancelled, aborted or is no longer applicable
+          (sequence
+           "QUESTION(q)"
+           "NOTE(N)"
+           "IDEA(i)"
+           )))
+   #+end_src
+
+
+
+#+name:  super-agenda-config
+#+begin_src emacs-lisp  :comments link
+  (use-package org-super-agenda
+    :config
+    (add-hook 'after-init-hook 'org-super-agenda-mode)
+    (require 'org-habit)
+    (setq
+     org-agenda-skip-scheduled-if-done t
+     org-agenda-skip-deadline-if-done t
+     org-agenda-include-deadlines t
+     org-agenda-include-diary t
+     org-agenda-block-separator nil
+     org-agenda-compact-blocks t
+     org-agenda-skip-additional-timestamps-same-entry t
+     org-agenda-start-with-log-mode t)
+  )
+
+(setq org-agenda-custom-commands
+      '(("z" "Super zaen view"
+         ((alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:name "Next to do"
+                                 :todo "NEXT"
+                                 :order 1)
+                          (:name "Important"
+                                 :tag "Important"
+                                 :priority "A"
+                                 :order 6)
+                          (:name "Due Today"
+                                 :deadline today
+                                 :order 2)
+                          (:name "Due Soon"
+                                 :deadline future
+                                 :order 8)
+                          (:name "Overdue"
+                                 :deadline past
+                                 :order 7)
+                          (:name "Assignments"
+                                 :tag "Assignment"
+                                 :order 10)
+                          (:name "Issues"
+                                 :tag "Issue"
+                                 :order 12)
+                          (:name "Projects"
+                                 :tag "Project"
+                                 :order 14)
+                          (:name "Work"
+                                 :tag "Work"
+                                 :order 9)
+                          (:name "Emacs"
+                                 :tag "Emacs"
+                                 :order 13)
+                          (:name "Research"
+                                 :tag "Research"
+                                 :order 15)
+                          (:name "Waiting"
+                                 :todo "WAIT"
+                                 :order 20)
+                          (:name "trivial"
+                                 :priority<= "C"
+                                 :tag ("Trivial" "Unimportant")
+                                 :todo ("SOMEDAY" )
+                                 :order 90)))))))))
+
+#+end_src
+
+
+
+* org-clock
+** Tasks auto clock when start
+[[https://janusworx.com/blog/what-i-learned-today-2023-02-10/][Mario Braganza]] had an interesting idea of starting the clock when a task changes to /in progress/:
+#+name: org-todo-clock
+#+begin_src emacs-lisp
+  (defun cyz-org-clock-todo-change ()
+    "Called from hook `org-after-todo-state-change-hook'.
+  Clock in if a task changes to DOING (i.e. IN_PROGRESS),
+  and clocks out with any other state change."
+    (if (string= org-state "DOING")
+        (org-clock-in)
+      (org-clock-out-if-current)))
+
+  (add-hook 'org-after-todo-state-change-hook 'cyz-org-clock-todo-change)
+#+end_src
+And I would like to have cute little icons for those states:
+
+
+
 
 * Technical Artifacts                                :noexport:
 Let's provide a name so we can =require= this file.
