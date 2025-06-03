@@ -68,6 +68,7 @@ While Emacs has options for viewing and moving around code, sometimes, we could 
 Note that =hide-show= doesn’t work with complex YAML files. The [[https://github.com/gregsexton/origami.el][origami]] mode works better /out-of-the-box/, as it works with Python and Lisp, but falls back to indents as the format, which works well.
 #+begin_src emacs-lisp :comments link
   (use-package origami
+    :straight (:host github :repo "elp-revive/origami.el")
     :init
     (setq origami-fold-replacement "⤵")
     :hook (prog-mode . origami-mode))
@@ -817,16 +818,16 @@ To options that might be interesting:
   :config
   (add-hook 'lsp-bridge-ref-mode-hook
             (lambda ()
-              (if lsp-bridge-ref-mode
-                  (when (bound-and-true-p evil-mode)
-                    (evil-emacs-state))))))
+               (when (bound-and-true-p evil-mode)
+                 (evil-emacs-state)))))
 (setq acm-enable-copilot t)
 
 (general-define-key  :prefix "s-l"
      "b"      '(:ignore t  :which-key "lsp-bridge prefix")
      "b d"    '(lsp-bridge-find-def :which-key "find define")
+     "b r"    '(lsp-bridge-find-references :which-key "find references")
      "b p"    '(lsp-bridge-peek :which-key "bridge peek")
-     "b r"    '(lsp-bridge-rename :which-key "bridge peek")
+     "b R"    '(lsp-bridge-rename :which-key "bridge rename")
      "b f"    '(lsp-bridge-code-format :which-key "format code"))
 
     #+end_src
