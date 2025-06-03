@@ -67,17 +67,19 @@ A literate programming file for configuring Emacs for Golang programming.
 #+name: goland-tips
 #+begin_src emacs-lisp  :comments link
 
-(defun cyz-gofile-open-with-goland ()
-  (interactive)
-  (let ((line  (number-to-string (line-number-at-pos)))
-        (file  (buffer-file-name)))
-    (call-process "goland" nil nil nil "--line" line file)
-  )
-)
+  (defun cyz-gofile-open-with-goland ()
+    (interactive)
+    (let ((line  (number-to-string (line-number-at-pos)))
+          (file  (buffer-file-name)))
+      (call-process "goland" nil nil nil "--line" line file)
+      (when (cyz-running-on-linux?)
+        (call-process "hyprctl" nil nil nil "dispatch" "workspace" "3"))
+      )
+    )
 
-(general-define-key
-  :keymaps 'go-mode-map
-  "s-e l i"    #'cyz-gofile-open-with-goland)
+  (general-define-key
+   :keymaps 'go-mode-map
+   "s-e l i"    #'cyz-gofile-open-with-goland)
     #+end_src
 
 
