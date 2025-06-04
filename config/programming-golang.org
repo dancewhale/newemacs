@@ -71,7 +71,7 @@ A literate programming file for configuring Emacs for Golang programming.
     (interactive)
     (let ((line  (number-to-string (line-number-at-pos)))
           (file  (buffer-file-name)))
-      (call-process "goland" nil nil nil "--line" line file)
+      (start-process "goland" "*goland*" "goland.sh" "--line" line file)
       (when (cyz-running-on-linux?)
         (call-process "hyprctl" nil nil nil "dispatch" "workspace" "3"))
       )
