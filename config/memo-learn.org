@@ -73,8 +73,6 @@ A literate programming file for configuring Emacs for Lisp programming.
 (setq memo-treemacs-virtual-head-expand-depth 2)
 
 (setq memo-log-level "0")
-;; 保存文件后自动更新memo 记录
-(add-hook 'after-save-hook 'memo-sync-file)
 
 
 ;; setting keybind for memo-annotation-region-mode

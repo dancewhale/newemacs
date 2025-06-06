@@ -170,6 +170,10 @@ A literate programming file for configuring org agenda view.
 ;; 支持clock 信息保存.
   (setq org-clock-persist t)
   (org-clock-persistence-insinuate)
+  ;; Change task state to STARTED when clocking in
+  (setq org-clock-in-switch-to-state "NEXT")
+  ;; Removes clocked tasks with 0:00 duration
+  (setq org-clock-out-remove-zero-time-clocks t)
 #+end_src
 
 
