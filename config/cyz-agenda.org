@@ -62,14 +62,12 @@ A literate programming file for configuring org agenda view.
 (setq org-gtd-update-ack "3.0.0")
 #+end_src
 
-* org-super-agenda | org-sql
+* org-super-agenda
 安装对应的包
 #+name: super-agenda-package
 #+begin_src emacs-lisp  :comments link
   (straight-use-package 'org-super-agenda)
-  (straight-use-package 'org-sql)
   (require 'org-super-agenda)
-  (require 'org-sql)
 #+end_src
 
 设置对应的keyword
@@ -83,10 +81,10 @@ A literate programming file for configuring org agenda view.
            "WAIT(w@/!)"  ; Task should wait for some condition for ready.
            "|"
            "DONE(d!)"  ; Task successfully completed
-           "CANCELED(c@/!)") ; Task was cancelled, aborted or is no longer applicable
+           "CANC(c@/!)") ; Task was cancelled, aborted or is no longer applicable
           (sequence
            "QUESTION(q)"
-           "NOTE(N)"
+           "LOGS(N)"
            "IDEA(i)"
            )))
    #+end_src
@@ -100,18 +98,20 @@ A literate programming file for configuring org agenda view.
     (add-hook 'after-init-hook 'org-super-agenda-mode)
     (require 'org-habit)
     (setq
-     org-agenda-skip-scheduled-if-done t
+     org-agenda-skip-timestamp-if-done t
      org-agenda-skip-deadline-if-done t
+     org-agenda-skip-scheduled-if-done t
+     org-agenda-skip-timestamp-if-dealine-is-shown t
+     org-agenda-skip-additional-timestamps-same-entry t
      org-agenda-include-deadlines t
      org-agenda-include-diary t
      org-agenda-block-separator nil
      org-agenda-compact-blocks t
-     org-agenda-skip-additional-timestamps-same-entry t
      org-agenda-start-with-log-mode t)
   )
 
-(setq org-agenda-custom-commands
-      '(("z" "Super zaen view"
+  (setq org-agenda-custom-commands
+      '(("z" "Super schema time view"
          ((alltodo "" ((org-agenda-overriding-header "")
                        (org-super-agenda-groups
                         '((:name "Next to do"
@@ -130,24 +130,6 @@ A literate programming file for configuring org agenda view.
                           (:name "Overdue"
                                  :deadline past
                                  :order 7)
-                          (:name "Assignments"
-                                 :tag "Assignment"
-                                 :order 10)
-                          (:name "Issues"
-                                 :tag "Issue"
-                                 :order 12)
-                          (:name "Projects"
-                                 :tag "Project"
-                                 :order 14)
-                          (:name "Work"
-                                 :tag "Work"
-                                 :order 9)
-                          (:name "Emacs"
-                                 :tag "Emacs"
-                                 :order 13)
-                          (:name "Research"
-                                 :tag "Research"
-                                 :order 15)
                           (:name "Waiting"
                                  :todo "WAIT"
                                  :order 20)
@@ -155,9 +137,70 @@ A literate programming file for configuring org agenda view.
                                  :priority<= "C"
                                  :tag ("Trivial" "Unimportant")
                                  :todo ("SOMEDAY" )
-                                 :order 90)))))))))
+                                 :order 90)
+                           (:discard (:anything t))))))))))
 
 #+end_src
+
+* org-sql
+#+name: org-ql
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'org-ql)
+  (require 'org-ql)
+#+end_src
+
+设置org-ql-view
+#+name: org-ql-config
+#+begin_src emacs-lisp  :comments link
+(setq org-ql-views 
+  (list (cons "Calendar: Next week"
+              (lambda ()
+                "Show items with an active timestamp during the next calendar week."
+                (interactive)
+                (let* ((ts (ts-adjust 'day 7 (ts-now)))
+                       (beg-of-week (->> ts
+                                         (ts-adjust 'day (- (ts-dow (ts-now))))
+                                         (ts-apply :hour 0 :minute 0 :second 0)))
+                       (end-of-week (->> ts
+                                         (ts-adjust 'day (- 6 (ts-dow (ts-now))))
+                                         (ts-apply :hour 23 :minute 59 :second 59))))
+                  (org-ql-search (org-agenda-files)
+                    `(ts-active :from ,beg-of-week
+                                :to ,end-of-week)
+                    :title "Next week"
+                    :super-groups 'org-super-agenda-groups
+                    :sort '(priority)))))
+        (cons "Review: Recently timestamped" #'org-ql-view-recent-items)
+        (cons (propertize "Review: Dangling tasks"
+                          'help-echo "Tasks whose ancestor is done")
+              (list :buffers-files #'org-agenda-files
+                    :query '(and (todo)
+                                 (ancestors (done)))
+                    :title (propertize "Review: Dangling tasks"
+                                       'help-echo "Tasks whose ancestor is done")
+                    :sort '(todo priority date)
+                    :super-groups '((:auto-parent t))))
+        (cons (propertize "Review: Stale tasks"
+                          'help-echo "Tasks without a timestamp in the past 2 weeks")
+              (list :buffers-files #'org-agenda-files
+                    :query '(and (todo)
+                                 (not (ts :from -14)))
+                    :title (propertize "Review: Stale tasks"
+                                       'help-echo "Tasks without a timestamp in the past 2 weeks")
+                    :sort '(todo priority date)
+                    :super-groups '((:auto-parent t))))
+        (cons (propertize "Review: Stuck projects"
+                          'help-echo "Tasks with sub-tasks but no NEXT sub-tasks")
+              (list :buffers-files #'org-agenda-files
+                    :query '(and (todo)
+                                 (descendants (todo "TODO" "DONE" "PROJ" "CANC"))
+                                 (not (descendants (todo "NEXT"))))
+                    :title (propertize "Review: Stuck projects"
+                                       'help-echo "Tasks with sub-tasks but no NEXT sub-tasks")
+                    :sort '(date priority)
+                    :super-groups '((:auto-tags))))))
+   #+end_src
+
 
 
 * org-clock
@@ -194,6 +237,35 @@ A literate programming file for configuring org agenda view.
 And I would like to have cute little icons for those states:
 
 
+
+* beautiful
+agenda 的时候启动olivetti-mode
+#+name:
+#+begin_src emacs-lisp  :comments link
+  (defun org-agenda-open-hook ()
+    "Hook to be run when org-agenda is opend."
+    (olivetti-mode))
+
+  (add-hook 'org-agenda-mode-hook 'org-agenda-open-hook)
+
+  (setq org-agenda-time-grid '((daily) (600 1200 1800) " -----"  "-----"))
+  (setq org-agenda-category-icon-alist
+      `(("Teaching.p" ,(list (all-the-icons-faicon "graduation-cap" :height 0.8)) nil nil :ascent center)
+        ("Family.s" ,(list (all-the-icons-faicon "home" :v-adjust 0.005)) nil nil :ascent center)
+        ("Producer.p" ,(list (all-the-icons-faicon "youtube-play" :height 0.9)) nil nil :ascent center)
+        ("Bard.p" ,(list (all-the-icons-faicon "music" :height 0.9)) nil nil :ascent center)
+        ("Stories.s" ,(list (all-the-icons-faicon "book" :height 0.9)) nil nil :ascent center)
+        ("Author.p" ,(list (all-the-icons-faicon "pencil" :height 0.9)) nil nil :ascent center)
+        ("Gamedev.s" ,(list (all-the-icons-faicon "gamepad" :height 0.9)) nil nil :ascent center)
+        ("Knowledge.p" ,(list (all-the-icons-faicon "database" :height 0.8)) nil nil :ascent center)
+        ("Personal.p" ,(list (all-the-icons-material "person" :height 0.9)) nil nil :ascent center)))
+
+  (setq org-agenda-prefix-format '(
+    (agenda . "  %?-2i %t ")
+     (todo . " %i %-12:c")
+     (tags . " %i %-12:c")
+     (search . " %i %-12:c")))
+   #+end_src
 
 
 * Technical Artifacts                                :noexport:
