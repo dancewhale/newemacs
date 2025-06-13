@@ -152,8 +152,8 @@ A literate programming file for configuring org agenda view.
 设置org-ql-view
 #+name: org-ql-config
 #+begin_src emacs-lisp  :comments link
-(setq org-ql-views 
-  (list (cons "Calendar: Next week"
+  (setq org-ql-views
+    (list (cons "Calendar: Next week"
               (lambda ()
                 "Show items with an active timestamp during the next calendar week."
                 (interactive)
@@ -199,6 +199,11 @@ A literate programming file for configuring org agenda view.
                                        'help-echo "Tasks with sub-tasks but no NEXT sub-tasks")
                     :sort '(date priority)
                     :super-groups '((:auto-tags))))))
+
+  (general-define-key  :prefix "s-e"
+	"a"      '(:ignore t  :which-key "cyz agenda prefix")
+	"a a"    #'org-ql-view
+	"a s"    #'org-ql-view-sidebar)
    #+end_src
 
 

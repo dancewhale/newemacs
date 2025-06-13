@@ -44,14 +44,13 @@ a global leader in all modes.
       :states '(normal visual motion)
       :keymaps 'override
       :prefix "SPC"
-      :non-normal-prefix "M-SPC"
+      :non-normal-prefix "s-SPC"
       :global-prefix "<f13>")
 
     (general-create-definer cyz-local-leader
       :states '(normal visual motion)
-      :prefix "<f17>")
+      :prefix "<f17>"))
 
-    (general-nmap "SPC m" (general-simulate-key "," :which-key "major mode")))
 #+end_src
 * Relabel the G Keys
 Can’t remember all the shortcuts on the ~g~ key, and =which-key= displays the entire function, so let’s /re-add/ those keybindings, but with labels. The ~g~ is extemely convenient, yet I realize that I will never use some of the default keybindings (like ~g m~ to go to the middle of the line? Too imprecise). So I am also going to delete some of them.
