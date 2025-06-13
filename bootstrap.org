@@ -33,7 +33,8 @@ A literate programming file for bootstraping my Emacs Configuration.
 * 初始化配置
 ** 载入其他代码保存路径
 #+begin_src emacs-lisp :comments link
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
+(add-to-list 'load-path (file-truename "~/.emacs.d/elisp"))
+(add-to-list 'load-path (file-truename "~/.emacs.d/doom-lisp"))
 #+end_src
 ** 启动emacs后端服务
 #+begin_src emacs-lisp :comments link
@@ -177,6 +178,7 @@ The following /defines/ the rest of my org-mode literate files, that I load late
 #+begin_src emacs-lisp :comments link
   (defvar cyz-emacs-files (flatten-list
 			   `("config/init.org"
+                           "config/doom-lib.org"
 			     "config/general.org"
 			     "config/display.org"
 			     "config/programming.org"
