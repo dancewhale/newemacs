@@ -178,7 +178,6 @@ The following /defines/ the rest of my org-mode literate files, that I load late
 #+begin_src emacs-lisp :comments link
   (defvar cyz-emacs-files (flatten-list
 			   `("config/init.org"
-                           "config/doom-lib.org"
 			     "config/general.org"
 			     "config/display.org"
 			     "config/programming.org"
