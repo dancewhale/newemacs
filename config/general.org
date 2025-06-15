@@ -977,6 +977,57 @@ An under-appreciated version of Consult is the /changing your mind/ aspect. Type
     - ~m~ :: Bookmarks
     - ~p~ :: Project
 
+* Completion
+** Vertico
+#+name: vertico
+#+begin_src emacs-lisp :comments link
+;  (straight-use-package 'vertico)
+;  (setq vertico-cycle t)
+;  (vertico-mode)
+#+end_src
+
+** ivy
+#+name: pacakge install
+#+begin_src emacs-lisp :comments link
+   (straight-use-package 'ivy)
+   (straight-use-package 'swiper)
+   (straight-use-package 'ivy-hydra)
+   (straight-use-package 'ivy-avy)
+   (straight-use-package 'counsel)
+   (straight-use-package 'ivy-rich)
+   (straight-use-package 'ivy-prescient)
+   (straight-use-package 'wgrep)
+   (straight-use-package 'ivy-posframe)
+   (straight-use-package 'nerd-icons-ivy-rich)
+
+  (ivy-mode)
+  (ivy-prescient-mode)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (general-define-key
+  "M-x"     'counsel-M-x
+  "s-x"     'counsel-M-x
+  "C-x C-f" 'counsel-find-file
+  "C-c C-o" 'ivy-occur
+  "C-s"     'swiper
+  "C-c C-r" 'ivy-resume
+  "C-c g"   'counsel-git
+  "C-c j"   'counsel-git-grep
+  "C-c k"   'counsel-ag
+  "C-x l"   'counsel-locate
+  "C-S-o"   'counsel-rhythmbox
+  )
+
+#+end_src
+
+** Yasnippet
+#+name: yasnippet
+#+begin_src emacs-lisp :comments link
+  (straight-use-package 'yasnippet)
+  (setq yas-snippet-dirs (list "~/.emacs.d/snippets"))
+  (yas-global-mode)
+#+end_src
+
 * Embark
 The [[https://github.com/oantolin/embark/][embark]] project offers /actions/ on /targets/. I'm primarily thinking of acting on selected items in the minibuffer, but these commands act anywhere.  I need an easy-to-use keybinding that doesn't conflict. Hey, that is what the Super key is for, right?
 

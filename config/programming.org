@@ -1139,6 +1139,49 @@ Let’s just grab the environments to run:
              (shell-command-to-list "tox -a"))))
 #+end_src
 
+** Copilot chat
+#+name: copilot
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'copilot-chat)
+
+   #+end_src
+
+
+* magit
+** magit
+#+name: magit
+#+begin_src emacs-lisp :comments link
+  (straight-use-package 'magit)
+  (require 'magit)
+
+  (defun cyz-emacs-magit ()
+    (interactive)
+    (magit-status-setup-buffer "~/.emacs.d"))
+
+
+  (general-define-key  :prefix "s-e"
+	"g"      '(:ignore t  :which-key "magit prefix")
+	"g l"    #'magit
+	"g g"    #'cyz-emacs-magit)
+
+#+end_src
+
+** magit-forge
+#+name: magit-forge
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'forge)
+
+   #+end_src
+
+** magit-todos
+#+name: magit-todos
+#+begin_src emacs-lisp  :comments link
+(use-package magit-todos
+  :after magit
+  :config (magit-todos-mode 1 ))
+
+   #+end_src
+
 * Languages
 Simple to configure languages go here. More advanced languages go into their own files… eventually.
 ** Configuration Files
