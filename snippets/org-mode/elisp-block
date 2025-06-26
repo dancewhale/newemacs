@@ -6,10 +6,8 @@
 
 #+name: $1
 #+begin_src emacs-lisp  :comments link
-(straight-use-package '$2)
+(straight-use-package '($2 :type git :host github :repo "$3"))
 
-(general-define-key
-  "s-j"    #'+rime-convert-string-at-point)
 $0
 #+end_src
 
