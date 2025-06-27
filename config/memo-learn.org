@@ -36,69 +36,76 @@ A literate programming file for configuring Emacs for Lisp programming.
 安装memo 包.
 #+name: memo
 #+begin_src emacs-lisp :comments link
-(straight-use-package '(memo :type git :host github
-                             :repo "dancewhale/memo" :files (:defaults "golib" "libmemo.so")))
+  (straight-use-package '(memo :type git :host github
+                               :repo "dancewhale/memo" :files (:defaults "golib" "libmemo.so")))
 
-(straight-use-package 'ov)
+  (straight-use-package 'ov)
 
-(defun memo-open-package-dir ()
-  (interactive)
-  (dired (expand-file-name "~/.emacs.d/.local/straight/repos/memo/")))
+  (defun memo-open-package-dir ()
+    (interactive)
+    (dired (expand-file-name "~/.emacs.d/.local/straight/repos/memo/")))
 
-;; setting config for memo.
-(general-define-key
-    "s-e l RET"    'memo-create-head
-    "s-e l n"      'memo-create-virt-head
-    "s-e l p"      'memo-sync-file
-    "s-e l P"      'memo-sync-db
-    "s-e l b"      'memo-goto-org
-    "s-e l s"      'memo-goto-source-direct
-    "s-e l S"      'memo-suspend-current-note
-    "s-e l r"      'memo-review-note
-    "s-e l f"      'memo-flip-note
-    "s-e l 1"      'memo-review-easy
-    "s-e l 2"      'memo-review-good
-    "s-e l 3"      'memo-review-hard
-    "s-e l 4"      'memo-review-again
-    "s-e l k"      'memo-skip-current-review-note
-    "s-e l h"      'memo-open-package-dir
-    "s-e l c"      'memo-cloze-dwim
-    "s-e l C"      'memo-uncloze-dwim
-)
+  (defvar cyz-memo-note-prefix-map (make-sparse-keymap)
+    "Keymap for memo note operator.")
 
-
-(setq memo-org-directory (expand-file-name "~/Dropbox/memo"))
-(setq memo-db-directory (expand-file-name "~/Dropbox/memo"))
-(setq memo-bridge-server-port 23456)
-(setq memo-treemacs-virtual-head-expand-depth 2)
-
-(setq memo-log-level "0")
-
-
-;; setting keybind for memo-annotation-region-mode
-(evil-define-minor-mode-key 'normal 'memo-annotation-region-mode
-  (kbd "<right>") 'memo-annotation-region-expand-right
-  (kbd "<left>") 'memo-annotation-region-expand-left
-  (kbd "S-<right>") 'memo-annotation-region-shrink-right
-  (kbd "S-<left>") 'memo-annotation-region-shrink-left
-  (kbd "<up>") 'memo-annotation-region-expand-up
-  (kbd "<down>") 'memo-annotation-region-expand-down
-  (kbd "S-<up>") 'memo-annotation-region-shrink-up
-  (kbd "S-<down>") 'memo-annotation-region-shrink-down
-
-  (kbd "RET") 'memo-annotation-region-confirm
-  (kbd "<escape>") 'memo-annotation-region-cancel
+  ;; setting config for memo.
+  (general-define-key
+      "s-e l RET"    'memo-create-head
+      "s-e l p"      'memo-sync-file
+      "s-e l P"      'memo-sync-db
+      "s-e l b"      'memo-buffer-goto-org
+      "s-e l s"      'memo-buffer-goto-source-direct
+      "s-e l r"      'memo-review-note
+      "s-e l f"      'memo-flip-note
+      "s-e l S"      'memo-note-suspend-current-note
+      "s-e l 1"      'memo-note-review-easy
+      "s-e l 2"      'memo-note-review-good
+      "s-e l 3"      'memo-note-review-hard
+      "s-e l 4"      'memo-note-review-again
+      "s-e l h"      'memo-open-package-dir
+      "s-e l c"      'memo-cloze-dwim
+      "s-e l C"      'memo-uncloze-dwim
+      "s-e l n"      cyz-memo-note-prefix-map
+      "s-e l n n"    'memo-read-next-note
+      "s-e l n p"    'memo-read-previous-note
+      "s-e l n N"    'memo-read-next-file
+      "s-e l n P"    'memo-read-previous-file
+      "s-e l n c"    'memo-create-virt-head
+  )
 
 
-  (kbd "h") 'memo-annotation-region-expand-left
-  (kbd "l") 'memo-annotation-region-expand-right
-  (kbd "H") 'memo-annotation-region-shrink-right
-  (kbd "L") 'memo-annotation-region-shrink-left
-  (kbd "k") 'memo-annotation-region-expand-up
-  (kbd "j") 'memo-annotation-region-expand-down
-  (kbd "K") 'memo-annotation-region-shrink-up
-  (kbd "J") 'memo-annotation-region-shrink-down
-)
+  (setq memo-org-directory (expand-file-name "~/Dropbox/memo"))
+  (setq memo-db-directory (expand-file-name "~/Dropbox/memo"))
+  (setq memo-bridge-server-port 23456)
+  (setq memo-treemacs-virtual-head-expand-depth 2)
+
+  (setq memo-log-level "0")
+
+
+  ;; setting keybind for memo-annotation-region-mode
+  (evil-define-minor-mode-key 'normal 'memo-annotation-region-mode
+    (kbd "<right>") 'memo-annotation-region-expand-right
+    (kbd "<left>") 'memo-annotation-region-expand-left
+    (kbd "S-<right>") 'memo-annotation-region-shrink-right
+    (kbd "S-<left>") 'memo-annotation-region-shrink-left
+    (kbd "<up>") 'memo-annotation-region-expand-up
+    (kbd "<down>") 'memo-annotation-region-expand-down
+    (kbd "S-<up>") 'memo-annotation-region-shrink-up
+    (kbd "S-<down>") 'memo-annotation-region-shrink-down
+
+    (kbd "RET") 'memo-annotation-region-confirm
+    (kbd "<escape>") 'memo-annotation-region-cancel
+
+
+    (kbd "h") 'memo-annotation-region-expand-left
+    (kbd "l") 'memo-annotation-region-expand-right
+    (kbd "H") 'memo-annotation-region-shrink-right
+    (kbd "L") 'memo-annotation-region-shrink-left
+    (kbd "k") 'memo-annotation-region-expand-up
+    (kbd "j") 'memo-annotation-region-expand-down
+    (kbd "K") 'memo-annotation-region-shrink-up
+    (kbd "J") 'memo-annotation-region-shrink-down
+  )
 
 
 #+end_src
@@ -186,6 +193,47 @@ A literate programming file for configuring Emacs for Lisp programming.
 
    #+end_src
 
+You can also use ~paw-view-note-under-mouse~ to query the word under mouse, it is bound to ~`~ by default. Move the mouse and hover on the word to be queried, and press ~`~. I called it as ~One-Key~ to query.
+
+
+
+** Icons/Buttons
+Paw support all major emacs icons packages, you can choose one of them.
+- svg-icon
+- nerd-icons (recommended if you use nerd fonts)
+- all-the-icons
+- pbm (image icons, recommended on android)
+- text (if all options are nil, fallback to pure text as icons)
+
+The current checking sequence is svg -> pbm -> all-the-icons -> nerd-icons -> text. The first ~t~ option will be used first.
+
+To enable pbm on android while use nerd-icon on non-android, we can configure like so:
+#+name: paw-icon
+#+begin_src emacs-lisp  :comments link
+;; svg icons
+(setq paw-svg-enable nil)
+;; Use pbm icons/buttons on android
+(setq paw-pbm-enable (if (eq system-type 'android) t))
+;; all the icons icon
+(setq paw-all-the-icons-icon-enable nil)
+;; all the icons button
+(setq paw-all-the-icons-button-enable nil)
+;; nerd icon/buttons
+(setq paw-nerd-icons-icon-enable t)
+;; fix org-download-image-dir not exist error.
+(setq org-download-image-dir "")
+#+end_src
+
+** keybind
+#+name: keybind-paw
+#+begin_src emacs-lisp  :comments link
+  (general-define-key
+    "C-c v"      'paw-view-note)
+
+
+#+end_src
+
+
 
 * go-translate
 #+name: go-translate
@@ -202,19 +250,28 @@ A literate programming file for configuring Emacs for Lisp programming.
 ;;(setq gt-chatgpt-model "deepseek-chat")
 ;;(setq gt-default-translator (gt-translator :engines (gt-chatgpt-engine :key "sk-03532a4530844ea780410490e04782d5")))
 (setq gt-preset-translators
-      `((ts-1 . ,(gt-translator
+      `((bing-insert . ,(gt-translator
                   :taker (gt-taker :langs '(en zh) :text 'word)
                   :engines (gt-bing-engine)
                   :render (gt-insert-render)))
-        (ts-2 . ,(gt-translator
+        (google-insert . ,(gt-translator
                   :taker (gt-taker :langs '(en zh) :text 'sentence)
                   :engines (gt-google-engine)
                   :render (gt-insert-render)))
-        (ts-3 . ,(gt-translator
-                  :taker (gt-taker :langs '(en zh) :text 'buffer
-                                   :pick 'word :pick-pred (lambda (w) (length> w 6)))
-                  :engines (gt-google-engine)
-                  :render (gt-overlay-render :type 'help-echo)))))
+        (bing-posframe . ,(gt-translator
+                  :taker (gt-taker :langs '(en zh) :text 'sentence)
+                  :engines (gt-bing-engine)
+                  :render (gt-posframe-pop-render)))))
+#+end_src
+
+** keybind
+#+name: keybind-translate
+#+begin_src emacs-lisp  :comments link
+  (general-define-key
+    "C-c c"      'gt-do-translate
+    "C-c s"      'gt-switch-translator)
+
+
 #+end_src
 
 
