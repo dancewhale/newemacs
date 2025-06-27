@@ -313,8 +313,11 @@ Most of the time, Emacs is on my desk is a darkened room, so I choose the dark t
   "Customize the theme for inside programming."
   (interactive)
   (mapc  #'disable-theme custom-enabled-themes)
-  (load-theme 'ef-maris-dark t))
-;  (cyz-word-processor-fonts))
+  (disable-theme 'ef-melissa-light)
+  (load-theme 'ef-maris-dark t)
+  ;; turn on the line highlighting:
+  (global-hl-line-mode 1)
+)
 #+end_src
 
 But, when feeling adventurous, I /sometimes/ take my laptop outside:
@@ -324,12 +327,13 @@ But, when feeling adventurous, I /sometimes/ take my laptop outside:
   "Customize the theme for outside programming."
   (interactive)
   (mapc  #'disable-theme custom-enabled-themes)
+  (disable-theme 'ef-melissa-dark)
   (load-theme 'ef-melissa-light t)
+  (global-hl-line-mode -1)
   (set-face-attribute 'default nil :foreground "#0c0906")
   (set-face-attribute 'region nil :background "orange")
   (set-face-attribute 'org-block nil :background "#f2f1ef")
   (set-face-attribute 'org-block-begin-line nil :foreground "#999491" :background "#e5e4e3"))
-;  (cyz-word-processor-fonts))
 #+end_src
 
 I’ve been playing around with making the current window more pronounced.
@@ -338,20 +342,6 @@ This isn’t needed as much with the [[*Window Dimmer][Window Dimmer]] feature, 
 #+begin_src emacs-lisp :comments link :tangle no
 (set-face-attribute 'mode-line nil :background "#cccccc")
 (set-face-attribute 'mode-line-inactive nil :background "#888888")
-#+end_src
-
-Oh, and turn off the line highlighting:
-
-#+begin_src emacs-lisp :comments link
-(global-hl-line-mode -1)
-#+end_src
-
-And of course, the default is /inside/ where it is dark and safe. Let’s also wait til the world settles down before calling this.
-
-#+begin_src emacs-lisp :comments link
-(progn
-  (sit-for 2)
-  (laptop-inside))
 #+end_src
 
 ** Highlight Task Labels
