@@ -178,7 +178,7 @@ Microsoft 字体 [[https://docs.microsoft.com/en-us/windows/terminal/cascadia-co
 [[https://github.com/ryanoasis/nerd-fonts][Nerd Font project]] 
 ** cnfont
 #+name: cnfont
-#+begin_src emacs-elisp  :comments link
+#+begin_src emacs-lisp  :comments link
 (straight-use-package 'cnfonts)
 (require 'cnfonts)
 #+end_src
@@ -230,21 +230,23 @@ brew install --cask font-hack-nerd-font
 ** Specifying a Font
 选择已安装的等宽英文字体
 #+begin_src emacs-lisp
-(defvar cyz-english-font
-  (when window-system
-    (or
-     (seq-first
-      (seq-filter (lambda (font) (when (x-list-fonts font) font))
-    	      '("Iosevka"
-                "CaskaydiaCove Nerd Font"
-    		"FiraCode Nerd Font"
-    		"mononoki"
-    		"JetBrains Mono"
-                "PragmataPro"
-    		"Iosevka Nerd Font"
-    		"Fantasque Sans Mono")))
-     "monospaced"))
-      "My fixed width font based on what I have installed.")
+  (defvar cyz-english-font
+    (when window-system
+      (or
+       (seq-first
+        (seq-filter (lambda (font) (when (x-list-fonts font) font))
+      	      '("LXGW Bright code"
+                   "Iosevka"
+    	        "Iosevka Nerd Font Mono"
+                   "CaskaydiaCove Nerd Font"
+      		"FiraCode Nerd Font"
+      		"mononoki"
+      		"JetBrains Mono"
+                   "PragmataPro"
+      		"Iosevka Nerd Font"
+      		"Fantasque Sans Mono")))
+       "monospaced"))
+        "My fixed width font based on what I have installed.")
 #+end_src
 选择已安装的等宽中文字体
 #+begin_src emacs-lisp
@@ -253,10 +255,13 @@ brew install --cask font-hack-nerd-font
       (or
        (seq-first
         (seq-filter (lambda (font) (when (x-list-fonts font) font))
-                    '("LXGW WenKai"
+                    '("LXGW Bright Code"
+                      "LXGW WenKai"
                       "LXGW WenKai Mono"
+  		    "LXGW WenKai Mono Screen"
                       "Sarasa Term Sc Nerd"
-                      "harmonyOS sans")))
+  		    "HarmonyOS"
+                      "harmonyOS Sans")))
        (warn "Cannot find a Chinese Font.  Install 等宽字体."))))
   #+end_src
 
