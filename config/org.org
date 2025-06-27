@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2025-06-13 Fri]
+#+lastmod: [2025-06-27 Fri]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -874,7 +874,8 @@ And the Emacs interface to that:
   :config
   (cyz-leader
     "s i" '("spellcheck buffer" . jinx-correct-all)
-    "S b" '("spellcheck buffer" . jinx-correct-all)))
+    "S b" '("spellcheck buffer" . jinx-correct-all))
+    (setq jinx-languages "en_US"))
 
 (with-eval-after-load 'jinx
     (let ((st jinx--syntax-table))
