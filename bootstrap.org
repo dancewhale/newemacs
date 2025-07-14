@@ -177,26 +177,28 @@ And let’s see the results:
 The following /defines/ the rest of my org-mode literate files, that I load later with the =cyz-emacs-load= function:
 #+begin_src emacs-lisp :comments link
   (defvar cyz-emacs-files (flatten-list
-			   `("config/init.org"
-			     "config/general.org"
-			     "config/display.org"
-			     "config/programming.org"
-			     "config/programming-elisp.org"
-			     "config/programming-golang.org"
-			     "config/memo-learn.org"
-			     "config/chinese.org"
-			     "config/org.org"
-			     "config/cyz-agenda.org"
-			     "config/capture-note.org"
- 			     "config/cyz-evil.org"
-                           "config/term.org"
-			    ;; ,(if (cyz-emacs-for-work?)
-			    ;;      '("cyz-org-sprint.org"
-			    ;;        "cyz-work.org")
-			    ;;    ;; Personal Editor
-			    ;;    '("cyz-org-journaling.org"
-			    ;;      "cyz-feed-reader.org"))
-			     ))
+  			   `("config/init.org"
+  			     "config/general.org"
+  			     "config/display.org"
+  			     "config/programming.org"
+  			     "config/programming-elisp.org"
+  			     "config/programming-golang.org"
+  			     "config/programming-python.org"
+  			     "config/memo-learn.org"
+  			     "config/chinese.org"
+  			     "config/org.org"
+  			     "config/emacs-application-framework.org"
+  			     "config/cyz-agenda.org"
+  			     "config/capture-note.org"
+  			     "config/cyz-evil.org"
+                               "config/term.org"
+  			    ;; ,(if (cyz-emacs-for-work?)
+  			    ;;      '("cyz-org-sprint.org"
+  			    ;;        "cyz-work.org")
+  			    ;;    ;; Personal Editor
+  			    ;;    '("cyz-org-journaling.org"
+  			    ;;      "cyz-feed-reader.org"))
+  			     ))
     "List of org files that complete the emacs project.")
 #+end_src
 

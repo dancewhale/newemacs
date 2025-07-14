@@ -123,8 +123,12 @@ A literate programming file for configuring Emacs for Lisp programming.
   :custom
   ; See the Configuration section below
   (aidermacs-use-architect-mode t)
-  (aidermacs-default-model "deepseek/deepseek-chat")
-  (aidermacs-editor-model "deepseek/deepseek-chat"))
+  (setenv "OPENAI_API_BASE" "https://api.githubcopilot.com")
+  (setenv "OPENAI_API_KEY" "")
+  ;;(aidermacs-default-model "deepseek/deepseek-chat")
+  ;;(aidermacs-editor-model "deepseek/deepseek-chat"))
+  (aidermacs-default-model "gpt-4.1-2025-04-14")
+  (aidermacs-editor-model "gemini-2.5-pro-preview-06-05"))
 #+end_src
 
 * activities
