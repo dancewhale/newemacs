@@ -187,7 +187,6 @@ The following /defines/ the rest of my org-mode literate files, that I load late
   			     "config/memo-learn.org"
   			     "config/chinese.org"
   			     "config/org.org"
-  			     "config/emacs-application-framework.org"
   			     "config/cyz-agenda.org"
   			     "config/capture-note.org"
   			     "config/cyz-evil.org"

@@ -66,6 +66,7 @@ A literate programming file for configuring Emacs for Lisp programming.
       "s-e l c"      'memo-cloze-dwim
       "s-e l C"      'memo-uncloze-dwim
       "s-e l n"      cyz-memo-note-prefix-map
+      "s-e l n r"    'memo-review-next-note
       "s-e l n n"    'memo-read-next-note
       "s-e l n p"    'memo-read-previous-note
       "s-e l n N"    'memo-read-next-file
@@ -280,6 +281,8 @@ To enable pbm on android while use nerd-icon on non-android, we can configure li
 
 
 #+end_src
+
+* 
 
 
 

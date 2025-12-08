@@ -479,7 +479,7 @@ I work with a lot of projects with my team where I need to /configure/ the proje
       (default-config (json-read-file (expand-file-name "straight/repos/lsp-bridge/langserver/pyright.json" straight-base-dir)))
       (settings (plist-get default-config :settings)))
 
-    (plist-put settings :pythonPath (executable-find "/homne/whale/work/kylin_ai_assistant/.venv/bin/python"))
+    (plist-put settings :pythonPath (executable-find "/homne/whale/work/learn/.venv/bin/python"))
 
     (make-directory (file-name-directory custom-config) t)
 
@@ -497,6 +497,25 @@ I work with a lot of projects with my team where I need to /configure/ the proje
               (lsp-bridge-restart-process)))
 
 #+end_src
+
+* tips
+我的一些快捷设置,方便编写代码.
+#+name: pycharm-tips
+#+begin_src emacs-lisp  :comments link
+
+  (defun cyz-open-with-pycharm ()
+    (interactive)
+    (let ((line  (number-to-string (line-number-at-pos)))
+  	(column-pos (number-to-string (current-column)))
+          (file  (buffer-file-name)))
+      (start-process "pycharm" "*pycharm*" "pycharm.sh" "--line" line "--column" column-pos file)))
+
+  (general-define-key
+   :keymaps 'go-mode-map
+   "s-e l i"    cyz-tool-prefix-map
+   "s-e l i g"  #'cyz-open-with-pycharm)
+      #+end_src
+
 
 
 * Technical Artifacts                                :noexport:

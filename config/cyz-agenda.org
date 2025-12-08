@@ -45,23 +45,6 @@ A literate programming file for configuring org agenda view.
     "s-e j i"  #'org-starter-find-file-by-key)
 #+end_src
     
-* org-gtd
-#+name: gtd
-#+begin_src emacs-lisp  :comments link
-(straight-use-package 'org-gtd)
-(require 'org-gtd)
-
-(general-define-key
-    "C-c n n"    #'org-gtd-capture
-    "C-c n p"    #'org-gtd-process-inbox
-    "C-c n o"    #'org-gtd-organize
-    "C-c n e"    #'org-gtd-engage
-    )
-
-(setq org-gtd-directory (expand-file-name "~/Dropbox/roam/gtd"))
-(setq org-gtd-update-ack "3.0.0")
-#+end_src
-
 * org-super-agenda
 安装对应的包
 #+name: super-agenda-package
