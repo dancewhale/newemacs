@@ -33,7 +33,7 @@ Farm off commands into /virtual environments/:
     :init
     (setq direnv-always-show-summary t
           direnv-show-paths-in-summary t)
-    (if (file-exists-p "/opt/homebrew")
+    (if (cyz-running-on-macos?)
         (setq direnv--executable "/opt/homebrew/bin/direnv")
       (setq direnv--executable "/usr/bin/direnv"))
     :config

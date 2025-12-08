@@ -1,4 +1,3 @@
-* 
 #+title:  Installing Emacs on MacOS
 #+author: Dancewhale
 #+date:   2024-11-18

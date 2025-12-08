@@ -290,6 +290,189 @@ brew install --cask font-hack-nerd-font
 
 #+end_src
 
+** Ligatures
+Seems like getting ligatures to work in Emacs has been a Holy Grail. On Mac, I've used special builds that have hacks, but now with Emacs 27 and Harfbuzz, I should be able to get --> to look like it should.
+
+#+begin_src emacs-lisp :tangle no
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
+
+  (global-prettify-symbols-mode +1)
+  (prettify-symbols-mode +1)
+#+end_src
+
+We'll start using that instead, but setting this [[file:ha-programming.org::*Ligatures][over here]] in the programming section.
+
+Also note that adding a /little/ extra space between lines makes text files easier to read.
+#+begin_src emacs-lisp
+  (add-hook 'text-mode-hook (lambda () (setq-local line-spacing 0.1)))
+#+end_src
+
+I have two versions of ligatures, one from [[*Specifying a Font][both styles of fonts]]: monospace and variable-width, so testing the variable (in org files):
+  * I like arrows, like: <- -> and <->
+  * Long arrows? –-> and <--
+
+And fixed-width are in code blocks:
+
+#+begin_example
+  * I like arrows, like: <- -> and <->
+  * Long arrows? --> and <--
+
+#+end_example
+** Font Icons
+
+The [[https://github.com/rainstormstudio/nerd-icons.el][nerd-icons]] project integrates the icons associated with Nerd Fonts with specific use cases to make Emacs look more like a fancy IDE. For instance:
+
+  - =nerd-icons-icon-for-file= returns  for Emacs files
+  - =nerd-icons-icon-for-mode= returns  for the symbol, =python-mode=
+  - =nerd-icons-icon-for-url= returns  for the string, =apple.com= (a globe is the default)
+
+This project replaces [[https://github.com/domtronn/all-the-icons.el][all-the-icons]], which isn’t needed anymore.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nerd-icons
+    :straight (nerd-icons :type git :host github :repo "rainstormstudio/nerd-icons.el")
+    :custom
+    ;; The Nerd Font you want to use in GUI defaults to fixed-font:
+    (nerd-icons-font-family cyz-english-font))
+#+END_SRC
+
+The way we access the /font icons/ has always been … odd; needing to specify the collection, etc. I would like to come up with a better mechanism, so the following function abstracts that as I figure out a better solution.
+
+#+BEGIN_SRC emacs-lisp
+  (defun font-icons (collection label &rest args)
+    "Abstraction over `nerd-icons' project.
+  LABEL is a short icon description merged with COLLECTION to
+  identify an icon to use. For instance, 'faicon or 'octicon.
+
+  ARGS, a plist, contain the title, sizing and other information.
+
+  For instance:
+    (font-icons 'faicon \"file\" :title \"File Management\")
+
+  The goal is to take:
+    (all-the-icons-octicon \"git-branch\")
+  And reformat to:
+    (font-icons 'octicon \"git-branch\")"
+    (let* ((func (intern (format "nerd-icons-%s" collection)))
+           (short (cl-case collection
+                    (octicon "oct")
+                    (faicon "fa")
+                    (mdicon "md")
+                    (codicon "cod")
+                    (sucicon "custom")
+                    (devicon "dev")
+                    (t collection)))
+           (title (plist-get args :title))
+           (space (plist-get args :space))
+           (icon (format "nf-%s-%s" short
+                         (string-replace "-" "_" label))))
+
+      ;; With the appropriate nerd-icons function name,
+      ;; an expanded icon name, we get the icon string:
+      (concat (apply func (cons icon args))
+              (cond
+               ((and title space) (concat (s-repeat space " ") title))
+               (title             (concat " " title))))))
+#+END_SRC
+
+So:
+
+#+BEGIN_SRC emacs-lisp
+  (font-icons 'faicon "apple" :title "MacOS Specific")
+  ;; -> #(" MacOS Specific" 0 1 (rear-nonsticky t display (raise 0.0)
+  ;;    font-lock-face (:family "CaskaydiaCove Nerd Font" :height 1.0)
+  ;;    face (:family "CaskaydiaCove Nerd Font" :height 1.0)))
+#+END_SRC
+
+This replaces the /title generator/ for [[file:ha-config.org::*Leader Sequences][major-mode-hydra]] project to include a nice looking icon:
+
+#+BEGIN_SRC emacs-lisp
+  (setq major-mode-hydra-title-generator
+        '(lambda (&optional mode)
+           (let ((title (major-mode-hydra-title mode)))
+             (s-concat                  ; (s-repeat 5 " ")
+              (nerd-icons-icon-for-mode (or mode major-mode) :v-adjust 0.05)
+              " " title " Commands"))))
+#+END_SRC
+
+Transition:
+
+#+BEGIN_SRC emacs-lisp
+  (defun with-faicon (icon str &optional height v-adjust)
+    "Return an ICON from the Nerd Fonts along with a STR for a label.
+  HEIGHT defaults to 1, and V-ADJUST defaults to 0."
+    (font-icons 'faicon icon :v-adjust (or v-adjust 0) :height (or height 1) :title str))
+
+  (defun with-fileicon (icon str &optional height v-adjust)
+    (font-icons 'fileicon icon :v-adjust (or v-adjust 0) :height (or height 1) :title str))
+
+  (defun with-octicon (icon str &optional height v-adjust)
+    (font-icons 'octicon icon :v-adjust (or v-adjust 0) :height (or height 1) :title str))
+
+  (defun with-material (icon str &optional height v-adjust)
+    (font-icons 'material icon :v-adjust (or v-adjust 0) :height (or height 1)) :title str)
+#+END_SRC
+
+This also expands the [[file:ha-config.org::*Leader Sequences][Major Mode Hydra]] title sequence with a pretty icon.
+
+Let’s do some tests?
+
+#+BEGIN_SRC emacs-lisp :tangle no
+    (ert-deftest font-icons-test ()
+      (should (equal (font-icons 'octicon "git-branch") ""))
+
+  (font-icons-title 'faicon "file" "File Management" :height 1 :v-adjust -0.05)
+  )))
+    #+END_SRC
+
+
+*NB:* Does Doom [[Modeline]] still require the [[https://github.com/domtronn/all-the-icons.el][all-the-icons]] package?
+
+Why is converting to Nerd Fonts a good idea? Let me steal a great summary by *spudlyo* on the [[https://www.reddit.com/r/emacs/comments/12tqwxi/comment/jh5nlmy/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button][r/emacs subreddit]]:
+
+#+begin_quote
+Ultimately we're talking about Unicode characters here. Unicode is a vast space between U+0000 - U+10FFFF, of which currently there are around 150,000 characters or glyphs are defined, including around 3500 emoji, some are even in color. Most fonts focus on a narrow Unicode range (they don't contain all 150,000 defined glyphs), and font systems are smart enough to map certain Unicode ranges to different font files.
+
+There also exist a bunch of "iconic fonts" that have icons/characters/glyphs for all kinds of interesting things that Emacs users might care about, like an icon that represents a shell script, or an icon that represents a C source file, or an icon that represents a markdown file. You can imagine how having such icons in dired might look cool. A popular icon font is "material design" which has over 6500+ icons. Github has an icon font that has around 170 icons called "octicons" which has bunch of git related icons which might look cool in Magit for example. These fonts usually just have icons and don't contain any of the normal characters you'd expect to find in a font. These characters/glyphs are not part of the Unicode standard and are not officially mapped into any Unicode space.
+
+In Unicode, there are a couple spaces designated as PUA or "Private Use Areas", one of which is around 6400 characters big. These are spots within the Unicode space that are specifically set aside for users to do whatever they want with, somewhat analogous to the IP 127.0.0.0/8 network space.
+
+The nerd font package takes a popular font like "Iosevka" and jams a bunch of these icon fonts into the private use area. Ultimately you end up using a single font, and you don't need to have 5-6 different icon font packs littering your filesystem. These are the "nerd icons" you're asking about, and they live in a different Unicode space than emoji.
+#+end_quote
+
+** Zooming or Increasing Font Size
+Do we want to increase the size of font in a single window (using =text-scale-increase=), or globally (using my new =font-size-increase=)?
+
+Increase or decrease the set size of the face:
+#+begin_src emacs-lisp
+  (defun font-size-adjust (delta)
+    "Adjust the current frame's font size.
+  DELTA would be something like 1 or -1."
+    (interactive "nFont size difference: ")
+    (when (null delta) (setq delta 1))
+
+    (let* ((font-family (face-attribute 'default :font))
+           (font-size   (font-get font-family :size))
+           (new-size    (+ delta font-size)))
+      (cyz-set-favorite-font-size new-size)))
+
+  (defun font-size-increase ()
+     "Increase the `default' font size of all frames."
+     (interactive)
+     (font-size-adjust 1))
+
+  (defun font-size-decrease ()
+     "Decrease the `default' font size of all frames."
+     (interactive)
+     (font-size-adjust -1))
+#+end_src
+
+And some keybindings to call them:
+#+begin_src emacs-lisp
+  (global-set-key (kbd "s-+") 'font-size-increase)
+  (global-set-key (kbd "s-=") 'font-size-increase)
+  (global-set-key (kbd "s--") 'font-size-decrease)
+#+end_src
 * Themes
 加载我喜欢的theme, install ef-themes
 设置org-mode 的head 字体大小.
