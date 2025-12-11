@@ -1163,8 +1163,28 @@ Let’s just grab the environments to run:
     (insert (concat "LinkID: " (org-id-uuid))))
 #+end_src
 
+* AI program
+** aidermacs
+#+name: aidermacs
+#+begin_src emacs-lisp  :comments link
+(straight-use-package 'aidermacs)
 
-* magit
+(use-package aidermacs
+  :bind (("C-c a" . aidermacs-transient-menu))
+  ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+  ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
+  :custom
+  ; See the Configuration section below
+  (aidermacs-use-architect-mode t)
+  (setenv "OPENAI_API_BASE" "https://api.githubcopilot.com")
+  (setenv "OPENAI_API_KEY" "")
+  ;;(aidermacs-default-model "deepseek/deepseek-chat")
+  ;;(aidermacs-editor-model "deepseek/deepseek-chat"))
+  (aidermacs-default-model "gpt-4.1-2025-04-14")
+  (aidermacs-editor-model "gemini-2.5-pro-preview-06-05"))
+#+end_src
+
+* Magit
 ** magit
 #+name: magit
 #+begin_src emacs-lisp :comments link
@@ -1198,6 +1218,18 @@ Let’s just grab the environments to run:
   :config (magit-todos-mode 0 ))
 
    #+end_src
+
+* Project
+#+name: projectile
+#+begin_src emacs-lisp :comments link
+  (use-package projectile
+    :ensure t
+    :config
+    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (projectile-mode +1))
+#+end_src
+
 
 * Languages
 Simple to configure languages go here. More advanced languages go into their own files… eventually.

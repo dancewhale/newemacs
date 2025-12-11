@@ -111,27 +111,6 @@ A literate programming file for configuring Emacs for Lisp programming.
 
 #+end_src
 
-* ai
-** aidermacs
-#+name: aidermacs
-#+begin_src emacs-lisp  :comments link
-(straight-use-package 'aidermacs)
-
-(use-package aidermacs
-  :bind (("C-c a" . aidermacs-transient-menu))
-  ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
-  ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
-  :custom
-  ; See the Configuration section below
-  (aidermacs-use-architect-mode t)
-  (setenv "OPENAI_API_BASE" "https://api.githubcopilot.com")
-  (setenv "OPENAI_API_KEY" "")
-  ;;(aidermacs-default-model "deepseek/deepseek-chat")
-  ;;(aidermacs-editor-model "deepseek/deepseek-chat"))
-  (aidermacs-default-model "gpt-4.1-2025-04-14")
-  (aidermacs-editor-model "gemini-2.5-pro-preview-06-05"))
-#+end_src
-
 * activities
 #+name: activities
 #+begin_src emacs-lisp  :comments link
@@ -144,19 +123,21 @@ A literate programming file for configuring Emacs for Lisp programming.
     (activities-mode)
     (activities-tabs-mode)
     ;; Prevent `edebug' default bindings from interfering.
-    (setq edebug-inhibit-emacs-lisp-mode-bindings t)
+    (setq edebug-inhibit-emacs-lisp-mode-bindings t))
 
-    :bind
-    (("s-e s-a n" . activities-new)
-     ("s-e s-a d" . activities-define)
-     ("s-e s-a D" . activities-discard)
-     ("s-e s-a r" . activities-resume)
-     ("s-e s-a s" . activities-suspend)
-     ("s-e s-a k" . activities-kill)
-     ("s-e s-a RET" . activities-switch)
-     ("s-e s-a b" . activities-switch-buffer)
-     ("s-e s-a g" . activities-revert)
-     ("s-e s-a l" . activities-list)))
+    (general-define-key
+     "s-e s-a n"   '("create new actvities"   . activities-new)
+     "s-e s-a d"   '("define actvities"   . activities-define)
+     "s-e s-a D"   '("discard actvities"   . activities-discard)
+     "s-e s-a r"   '("resume actvities"   . activities-resume)
+     "s-e s-a s"   '("suspend actvities"   . activities-suspend)
+     "s-e s-a k"   '("kill actvities"   . activities-kill)
+     "s-e s-a RET" '("switch actvities" . activities-switch)
+     "s-e s-a b"   '("switch actvities buffer"   . activities-switch-buffer)
+     "s-e s-a g"   '("revert actvities"   . activities-revert)
+     "s-e s-a l"   '("list actvities"   . activities-list))
+
+  (which-key-add-key-based-replacements "s-e s-a" "Activities prefix")
 #+end_src
 
 
