@@ -140,6 +140,32 @@ A literate programming file for configuring Emacs for Lisp programming.
   (which-key-add-key-based-replacements "s-e s-a" "Activities prefix")
 #+end_src
 
+对于特定mode增加 bookmark 的支持
+#+name: bookmark-support
+#+begin_src emacs-lisp  :comments link
+  (defun python-mode-bookmark-handler (bookmark)
+    "Restore python-mode bookmark: file, function, and point."
+    (let* ((file (bookmark-prop-get  bookmark 'filename))
+  	 (buffer-name (bookmark-prop-get bookmark 'buffer-name))
+           (pos (bookmark-prop-get bookmark 'position)))
+      (if (get-buffer buffer-name)
+  	(switch-to-buffer buffer-name)
+        (progn (find-file file)
+  	     (goto-char pos)))))
+
+  (defun python-mode-bookmark-make-record (&optional no-file no-context posn)
+    "Create a bookmark for python-mode with file, buffer and position."
+    (apply #'bookmark-make-record-default no-file no-context posn))
+
+  (add-hook
+    'python-mode-hook
+    (lambda ()
+      (setq-local bookmark-make-record-function
+                 #'python-mode-bookmark-make-record)))
+#+end_src
+
+
+
 
 
 * treemacs
