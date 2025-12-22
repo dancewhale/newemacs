@@ -1,11 +1,11 @@
 # -*- mode: snippet -*-
-# name: golang-block
-# key: :gb
+# name: python-block
+# key: :py
 # type: snippet
 # --
 
 #+name: $1
-#+begin_src go  :comments link  :tangle /tmp/$2   :mkdirp yes
+#+begin_src python
 
 $0
 

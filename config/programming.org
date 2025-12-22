@@ -428,7 +428,7 @@ At this point, we can now parse stuff using: =tree-sitter parse <source-code-fil
               ;; From my private cloned repository:
               ;; (dockerfile "file:///opt/src/github/tree-sitter-dockerfile" "main" "src")
               ;; The Emacs Lisp Tree Sitter doesn't work with Emacs (go figure):
-              ;; (elisp      "https://github.com/Wilfred/tree-sitter-elisp")
+              (elisp      "https://github.com/Wilfred/tree-sitter-elisp")
               ;; (elixir     "https://github.com/elixir-lang/tree-sitter-elixir" "main" "src")
               ;; (erlang     "https://github.com/WhatsApp/tree-sitter-erlang" "main" "src")
               (go         "https://github.com/tree-sitter/tree-sitter-go")
@@ -485,6 +485,12 @@ And enable the languages:
       :after treesit
       :config
       (global-tree-sitter-mode)))
+  ))
+  (require 'tree-sitter-hl)
+  (require 'tree-sitter-langs)
+  (require 'tree-sitter-debug)
+  (require 'tree-sitter-query)
+
 #+end_src
 *** Combobulate
 I like [[file:cyz-programming-elisp.org::*Clever Parenthesis][Clever Parenthesis]], but can we extend that to other languages generally? 
@@ -1152,7 +1158,7 @@ Let’s just grab the environments to run:
 
    #+end_src
 
-* note
+* Note
 :PROPERTIES:
 :ID:       8b540a26-c1c5-42fe-8cd6-ebe92729bae0
 :END:
