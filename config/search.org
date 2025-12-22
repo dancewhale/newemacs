@@ -95,6 +95,27 @@ The [[https://github.com/mhayashi1120/Emacs-wgrep][wgrep package]] integrates wi
       "s w" '("wgrep-mode" . wgrep-change-to-wgrep-mode)
       "t w" '("wgrep-mode" . wgrep-change-to-wgrep-mode)))
 #+end_src
+** blink-search
+#+name: blink-search
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package
+    '(blink-search
+      :host github
+      :repo "manateelazycat/blink-search"
+      :files ("./*.el" "./*.py" ("core" . "core") ("backend" . "backend") 
+                                   ("icons" . "icons"))))
+
+  (use-package blink-search
+    :commands (blink-search)
+    :init
+    (setq blink-search-browser-function
+          (if (display-graphic-p)
+              #'xwidget-webkit-browse-url
+            #'eww)
+          blink-search-enable-posframe t))
+#+end_src
+
+
 * Consult
 The [[https://github.com/minad/consult][consult project]] aims to use libraries like [[*Vertico][Vertico]] to enhance specific, built-in, Emacs functions. I appreciate this project that when selecting an element in the minibuffer, it displays what you are looking at… for instance, it previews a buffer before choosing it. Unlike /Vertico/ and /Orderless/, you need to bind keys to its special functions (or rebind existing keys that do something similar).
 
