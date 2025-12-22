@@ -179,6 +179,7 @@ The following /defines/ the rest of my org-mode literate files, that I load late
   (defvar cyz-emacs-files (flatten-list
   			   `("config/init.org"
   			     "config/general.org"
+  			     "config/search.org"
   			     "config/display.org"
   			     "config/programming.org"
   			     "config/programming-elisp.org"
