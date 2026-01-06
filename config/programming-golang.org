@@ -83,8 +83,8 @@ A literate programming file for configuring Emacs for Golang programming.
   	(column-pos (number-to-string (current-column)))
           (file  (concat (buffer-file-name) ":" line ":" column-pos)))
       (start-process "cursor" "*cursor*" "cursor" "--goto" file)
-      (when (cyz-running-on-linux?)
-        (call-process "hyprctl" nil nil nil "dispatch" "workspace" "1"))
+      ;(when (cyz-running-on-linux?)
+        ;(call-process "hyprctl" nil nil nil "dispatch" "workspace" "1"))
       )
     )
 
