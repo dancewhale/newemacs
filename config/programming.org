@@ -26,6 +26,58 @@ A literate programming file for helping me program.
 Configuration for programming interfaces and workflows that behave similarly.
 * General
 The following work for all programming languages.
+** Key setting
+#+begin_src emacs-lisp :comments link
+  (defvar cyz-tool-prefix-map (make-sparse-keymap)
+    "Keymap for other tool.")
+
+  (defvar cyz-super-e-prefix-map (make-sparse-keymap)
+    "Keymap for s-e keymap")
+
+#+end_src
+
+#+name: open with tool
+#+begin_src emacs-lisp  :comments link
+  (defun cyz-open-with-goland ()
+    (interactive)
+    (let ((line  (number-to-string (line-number-at-pos)))
+          (file  (buffer-file-name)))
+      (start-process "goland" "*goland*" "goland.sh" "--line" line file)
+      (when (cyz-running-on-linux?)
+        (call-process "hyprctl" nil nil nil "dispatch" "workspace" "3"))
+      )
+    )
+
+  (defun cyz-open-with-cursor ()
+    (interactive)
+    (let* ((line  (number-to-string (line-number-at-pos)))
+          (column-pos (number-to-string (current-column)))
+          (file  (concat (buffer-file-name) ":" line ":" column-pos)))
+      (start-process "cursor" "*cursor*" "cursor" "--goto" file)
+      ;(when (cyz-running-on-linux?)
+        ;(call-process "hyprctl" nil nil nil "dispatch" "workspace" "1"))
+      )
+    )
+
+  (defun cyz-open-with-vscode ()
+    (interactive)
+    (let* ((line  (number-to-string (line-number-at-pos)))
+          (column-pos (number-to-string (current-column)))
+          (file  (concat (buffer-file-name) ":" line ":" column-pos)))
+      (start-process "vscode" "*vscode*" "code" "--goto" file))
+    )
+
+  (general-define-key
+   :keymaps 'go-mode-map
+   "s-e l i"    cyz-tool-prefix-map
+   "s-e l i c"  #'cyz-open-with-cursor
+   "s-e l i d"  #'cyz-open-with-vscode
+   "s-e l i g"  #'cyz-open-with-goland)
+
+  #+end_src
+
+
+
 ** Virtual Environments with direnv
 Farm off commands into /virtual environments/:
 #+begin_src emacs-lisp :comments link
@@ -49,7 +101,7 @@ For all programming languages, I would like to now default to absolute line numb
     :config
     (defun cyz-prog-mode-config ()
       "Configure the `prog-mode'"
-      (setq display-line-numbers t))  
+      (setq display-line-numbers t))
     :hook
     (prog-mode . cyz-prog-mode-config))
 #+end_src
@@ -212,9 +264,9 @@ The [[https://www.emacswiki.org/emacs/FlySpell#h5o-2][flyspell-prog-mode]] check
 #+end_src
 
 ** Linting with Flycheck
-Why use [[https://www.flycheck.org/][flycheck]] over the built-in =flymake=? Speed used to be the advantage, 
-but I’m now pushing much of this to LSP, so speed is less of an issue.  
-What about when I am not using LSP? Also, since I’ve hooked grammar checkers, 
+Why use [[https://www.flycheck.org/][flycheck]] over the built-in =flymake=? Speed used to be the advantage,
+but I’m now pushing much of this to LSP, so speed is less of an issue.
+What about when I am not using LSP? Also, since I’ve hooked grammar checkers,
 I need this with global keybindings.
 
 #+begin_src emacs-lisp :comments link
@@ -322,7 +374,7 @@ But one of those functions doesn’t exist:
     (beginning-of-defun))
 #+end_src
 *** Tree Sitter
-I’m curious about the new [[https://emacs-tree-sitter.github.io/][Tree Sitter feature]] now [[https://lists.gnu.org/archive/html/emacs-devel/2022-11/msg01443.html][built into Emacs 29]]. After following along with 
+I’m curious about the new [[https://emacs-tree-sitter.github.io/][Tree Sitter feature]] now [[https://lists.gnu.org/archive/html/emacs-devel/2022-11/msg01443.html][built into Emacs 29]]. After following along with
 Mickey Petersen’s [[https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][Getting Started with Tree Sitter]] guide, I’ve concluded I /currently/ don’t need this
 feature. I’m leaving the code here, but adding a =:tangle no= to all the blocks until I’m ready to re-investigate.
 **** Operating System Part
@@ -493,8 +545,8 @@ And enable the languages:
 
 #+end_src
 *** Combobulate
-I like [[file:cyz-programming-elisp.org::*Clever Parenthesis][Clever Parenthesis]], but can we extend that to other languages generally? 
-After reading Mickey Petersen’s essay, [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate project]], I decided to try out his [[https://github.com/mickeynp/combobulate][combobulate package]]. 
+I like [[file:cyz-programming-elisp.org::*Clever Parenthesis][Clever Parenthesis]], but can we extend that to other languages generally?
+After reading Mickey Petersen’s essay, [[https://www.masteringemacs.org/article/combobulate-structured-movement-editing-treesitter][Combobulate project]], I decided to try out his [[https://github.com/mickeynp/combobulate][combobulate package]].
 Of course, this can only work with the underlying tooling supplied by the [[https://emacs-tree-sitter.github.io/][Tree Sitter]] →
 #+begin_src emacs-lisp :comments link
   (when (treesit-available-p)
@@ -660,7 +712,7 @@ While I’m at it, let’s connect various ~g~ sequence keys to =xref-= interfac
              "g b" '("def go back"    . xref-go-back)))
 #+end_src
 
-I have two different /jumping/ systems, the [[info:emacs#Xref][Xref interface]] and Evil’s. 
+I have two different /jumping/ systems, the [[info:emacs#Xref][Xref interface]] and Evil’s.
 While comparable goals, they are behave different. Let’s compare evil keybindings:
   | ~M-.~   | ~g .~ | [[help:xref-find-definitions][xref-find-definitions]] (also ~g d~ for [[help:evil-goto-definition][evil-goto-definition]])†          |
   |       | ~g >~ | =xref-find-definitions-other-window=                                  |
@@ -674,8 +726,8 @@ While comparable goals, they are behave different. Let’s compare evil keybindi
 † Prefix to prompt for the term \
 ‡ If it finds more than one definition, Emacs displays the [[info:emacs#Xref Commands][*xref* buffer]], allowing you to select the definition.
 ** Language Server Protocol (LSP) Integration
-The [[https://microsoft.github.io/language-server-protocol/][LSP]] is a way to connect /editors/ (like Emacs) to /languages/ (like Lisp)… wait, no. 
-While originally designed for VS Code and probably Python, we can abstract away [[https://github.com/davidhalter/jedi][Jedi]] 
+The [[https://microsoft.github.io/language-server-protocol/][LSP]] is a way to connect /editors/ (like Emacs) to /languages/ (like Lisp)… wait, no.
+While originally designed for VS Code and probably Python, we can abstract away [[https://github.com/davidhalter/jedi][Jedi]]
 and the [[http://tkf.github.io/emacs-jedi/latest/][Emacs integration to Jedi]] (and duplicate everything for Ruby, and Clojure, and…).
 
 Emacs has two LSP projects, and while I have used [[LSP Mode]],
@@ -717,7 +769,7 @@ but since I don’t have heavy IDE requirements, I am finding that [[eglot]] to 
            ", l i" '("imports"  . lsp-code-action-organize-imports)
            ", l d" '("doc"      . lsp-lookup-documentation))
 
- :hook 
+ :hook
  ((go-mode . lsp)
   (python-mode . lsp)
   (js-mode . lsp)
@@ -742,6 +794,26 @@ Using the [[https://github.com/seagle0128/doom-modeline][Doom Modeline]] to add 
           doom-modeline-env-version t))
 #+end_src
 
+#+name: ignore-file
+#+begin_src emacs-lisp  :comments link
+  ;; 更全面的LSP忽略配置
+  (with-eval-after-load 'lsp-mode
+    (setq lsp-file-watch-ignored
+        `(
+          "[/\\\\]\\.minio\\.sys/tmp[/\\\\]?"    ; MinIO临时目录
+          "[/\\\\]data[/\\\\]?"          ; node依赖
+          "[/\\\\]node_modules[/\\\\]?"          ; node依赖
+          "[/\\\\]\\.git[/\\\\]?"                ; git目录
+          "[/\\\\]__pycache__[/\\\\]?"           ; Python字节码
+          "flycheck_.+"                          ; flycheck临时文件
+          "\\.#.*"                               ; 锁文件
+          ".*~"                                  ; 备份文件
+          ,@lsp-file-watch-ignored)))            ; 保留默认值
+
+  #+end_src
+
+
+
 **** UI
 The [[https://github.com/emacs-lsp/lsp-ui][lsp-ui]] project offers much of the display and interface to LSP. Seems to make the screen cluttered.
 #+begin_src emacs-lisp :comments link
@@ -749,18 +821,18 @@ The [[https://github.com/emacs-lsp/lsp-ui][lsp-ui]] project offers much of the d
     :commands lsp-ui-mode
     :config
     (setq lsp-ui-doc-enable                t
-	  lsp-ui-doc-include-signature     t
-	  lsp-ui-peek-always-show          t
-	  lsp-ui-peek-enable               nil
-	  lsp-ui-doc-position              'at-point
-	  lsp-ui-doc-header                nil
-	  lsp-ui-doc-border                "white"
-	  lsp-ui-doc-include-signature     t
-	  lsp-ui-flycheck-enable           nil
-	  lsp-enable-snippet               nil
-	  lsp-ui-sideline-enable           nil
-	  lsp-ui-sideline-update-mode      'point
-	  lsp-ui-sideline-delay            1
+          lsp-ui-doc-include-signature     t
+          lsp-ui-peek-always-show          t
+          lsp-ui-peek-enable               nil
+          lsp-ui-doc-position              'at-point
+          lsp-ui-doc-header                nil
+          lsp-ui-doc-border                "white"
+          lsp-ui-doc-include-signature     t
+          lsp-ui-flycheck-enable           nil
+          lsp-enable-snippet               nil
+          lsp-ui-sideline-enable           nil
+          lsp-ui-sideline-update-mode      'point
+          lsp-ui-sideline-delay            1
           lsp-ui-sideline-ignore-duplicate t
           lsp-ui-sideline-show-hover       t
           lsp-ui-sideline-show-diagnostics t)
@@ -823,8 +895,8 @@ To options that might be interesting:
 #+begin_src emacs-lisp  :comments link
 (use-package lsp-bridge
   :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-	    :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-	    :build (:not compile))
+            :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+            :build (:not compile))
   :init
   (global-lsp-bridge-mode)
   :config
@@ -853,15 +925,15 @@ To options that might be interesting:
    (add-hook 'go-mode-hook 'copilot-mode)
 
   (general-define-key  :prefix "s-l"
-	   "c"      '(:ignore t  :which-key "copilot prefix")
-	   "c c"    '(copilot-complete :which-key "complete")
-	   "c C"    '(copilot-panel-complete :which-key "panel complete")
-	   "c p"    '(copilot-previous-completion :which-key "select previous")
-	   "c n"    '(copilot-next-completion :which-key "select next")
-	   "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
-	   "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
-	   "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
-	   "c a"    '(copilot-accept-completion :which-key "accept complete"))
+           "c"      '(:ignore t  :which-key "copilot prefix")
+           "c c"    '(copilot-complete :which-key "complete")
+           "c C"    '(copilot-panel-complete :which-key "panel complete")
+           "c p"    '(copilot-previous-completion :which-key "select previous")
+           "c n"    '(copilot-next-completion :which-key "select next")
+           "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
+           "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
+           "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
+           "c a"    '(copilot-accept-completion :which-key "accept complete"))
     #+end_src
 
 ** General Code Editing
@@ -1184,6 +1256,7 @@ Let’s just grab the environments to run:
   (aidermacs-use-architect-mode t)
   (setenv "OPENAI_API_BASE" "https://api.githubcopilot.com")
   (setenv "OPENAI_API_KEY" "")
+  (setenv "OPENAI_API_KEY" "")
   ;;(aidermacs-default-model "deepseek/deepseek-chat")
   ;;(aidermacs-editor-model "deepseek/deepseek-chat"))
   (aidermacs-default-model "gpt-4.1-2025-04-14")
@@ -1201,11 +1274,12 @@ Let’s just grab the environments to run:
     (interactive)
     (magit-status-setup-buffer "~/.emacs.d"))
 
+  (general-define-key "s-e" cyz-super-e-prefix-map)
 
   (general-define-key  :prefix "s-e"
-	"g"      '(:ignore t  :which-key "magit prefix")
-	"g l"    #'magit
-	"g g"    #'cyz-emacs-magit)
+        "g"      '(:ignore t  :which-key "magit prefix")
+        "g l"    #'magit
+        "g g"    #'cyz-emacs-magit)
 
 #+end_src
 
@@ -1371,7 +1445,7 @@ Let’s make sure that [[https://www.flycheck.org/en/latest/languages.html#markd
   pip install pymarkdown
 #+end_src
 
-And then we can use it. For some reason, the =pymarkdown= (which I need to use from work) 
+And then we can use it. For some reason, the =pymarkdown= (which I need to use from work)
 doesn’t seem to be part of the version of Flycheck available on Melpa, so…
 
 #+begin_src emacs-lisp :comments link
@@ -1384,8 +1458,8 @@ doesn’t seem to be part of the version of Flycheck available on Melpa, so…
   ;;  defcustom flycheck-markdown-pymarkdown-config
 #+end_src
 
-Both the =markdown-command= and the =markdown-open-command= variables are called to render (and preview) 
-a Markdown file (~C-c C-c o~), and calls the following scripts (which in turn, call =pandoc= as I depend 
+Both the =markdown-command= and the =markdown-open-command= variables are called to render (and preview)
+a Markdown file (~C-c C-c o~), and calls the following scripts (which in turn, call =pandoc= as I depend
 on this for other org-related features):
 
 #+begin_src sh :tangle ~/bin/markdown :shebang "#!/usr/bin/env bash" :tangle-mode u+x
@@ -1475,8 +1549,8 @@ Unclear whether I want to Tramp into a running container:
 ** Shell Scripts
 While I don't like writing them, I can't get away from them. Check out the goodies in [[https://www.youtube.com/watch?v=LTC6SP7R1hA&t=5s][this video]].
 
-While filename extensions work fine most of the time, 
-I don't like to pre-pend =.sh= to the shell scripts I write, and instead, would like to 
+While filename extensions work fine most of the time,
+I don't like to pre-pend =.sh= to the shell scripts I write, and instead, would like to
 associate =shell-mode= with all files in a =bin= directory:
 #+begin_src emacs-lisp :comments link
   (use-package sh-mode

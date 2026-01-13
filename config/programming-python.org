@@ -10,7 +10,7 @@
 A literate programming file for configuring Emacs for python programming.
 
 #+begin_src emacs-lisp :comments link :exports none
-;;; czy-python --- configuring Emacs for Lisp programming. -*- lexical-binding: t; -*-
+;;; python --- configuring Emacs for Lisp programming. -*- lexical-binding: t; -*-
 ;;
 ;; © 2022-2023 Dancewhale
 ;;   Licensed under a Creative Commons Attribution 4.0 International License.
@@ -52,7 +52,7 @@ A literate programming file for configuring Emacs for python programming.
 
   #+end_src
 *** ob-go
-#+name: 
+#+name:
 #+begin_src emacs-lisp  :comments link
 (require 'ob-python)
 #+end_src
@@ -471,7 +471,7 @@ I work with a lot of projects with my team where I need to /configure/ the proje
 #+begin_src emacs-lisp  :comments link
   (straight-use-package 'pyvenv)
   (require 'pyvenv)
-  
+
   (defun local/lsp-bridge-get-single-lang-server-by-project (project-path filepath)
     (let* ((json-object-type 'plist)
       (custom-dir (expand-file-name "lsp-bridge/pyright" user-emacs-directory))
@@ -488,8 +488,8 @@ I work with a lot of projects with my team where I need to /configure/ the proje
 
     custom-config))
 
-  (add-hook 'python-mode-hook 
-            (lambda () 
+  (add-hook 'python-mode-hook
+            (lambda ()
                (setq-local lsp-bridge-get-single-lang-server-by-project 'local/lsp-bridge-get-single-lang-server-by-project)))
 
   (add-hook 'pyvenv-post-activate-hooks
@@ -506,7 +506,7 @@ I work with a lot of projects with my team where I need to /configure/ the proje
   (defun cyz-open-with-pycharm ()
     (interactive)
     (let ((line  (number-to-string (line-number-at-pos)))
-  	(column-pos (number-to-string (current-column)))
+          (column-pos (number-to-string (current-column)))
           (file  (buffer-file-name)))
       (start-process "pycharm" "*pycharm*" "pycharm.sh" "--line" line "--column" column-pos file)))
 
@@ -522,6 +522,6 @@ I work with a lot of projects with my team where I need to /configure/ the proje
 Let's =provide= a name so we can =require= this file:
 
 #+begin_src emacs-lisp :comments link :exports none
-(provide 'czy-programming-python)
+(provide 'programming-python)
 ;;; czy-programming-python.el ends here
 #+end_src

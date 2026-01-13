@@ -97,7 +97,7 @@ Clear up a Mac-specific issue that sometimes arises since I'm switching to [[htt
     (global-set-key [(super c)] 'kill-ring-save)
     (global-set-key [(super s)] 'save-buffer)
     (global-set-key [(super z)] 'undo)
-    
+
     ;; mac switch meta key
     (setq mac-option-modifier 'meta)
     (setq mac-command-modifier 'super)
@@ -172,33 +172,34 @@ And let’s see the results:
 #+end_src
 
 
- 
+
 * Load the Rest
 The following /defines/ the rest of my org-mode literate files, that I load later with the =cyz-emacs-load= function:
 #+begin_src emacs-lisp :comments link
   (defvar cyz-emacs-files (flatten-list
-  			   `("config/init.org"
-  			     "config/general.org"
-  			     "config/search.org"
-  			     "config/display.org"
-  			     "config/programming.org"
-  			     "config/programming-elisp.org"
-  			     "config/programming-golang.org"
-  			     "config/programming-python.org"
-  			     "config/memo-learn.org"
-  			     "config/chinese.org"
-  			     "config/org.org"
-  			     "config/cyz-agenda.org"
-  			     "config/capture-note.org"
-  			     "config/cyz-evil.org"
+                             `("config/init.org"
+                               "config/general.org"
+                               "config/cyz-config.org"
+                               "config/search.org"
+                               "config/display.org"
+                               "config/programming.org"
+                               "config/programming-elisp.org"
+                               "config/programming-golang.org"
+                               "config/programming-python.org"
+                               "config/memo-learn.org"
+                               "config/chinese.org"
+                               "config/org.org"
+                               "config/cyz-agenda.org"
+                               "config/capture-note.org"
+                               "config/cyz-evil.org"
                                "config/term.org"
-  			    ;; ,(if (cyz-emacs-for-work?)
-  			    ;;      '("cyz-org-sprint.org"
-  			    ;;        "cyz-work.org")
-  			    ;;    ;; Personal Editor
-  			    ;;    '("cyz-org-journaling.org"
-  			    ;;      "cyz-feed-reader.org"))
-  			     ))
+                              ;; ,(if (cyz-emacs-for-work?)
+                              ;;      '("cyz-org-sprint.org"
+                              ;;        "cyz-work.org")
+                              ;;    ;; Personal Editor
+                              ;;    '("cyz-org-journaling.org"
+                              ;;      "cyz-feed-reader.org"))
+                               ))
     "List of org files that complete the emacs project.")
 #+end_src
 
@@ -227,9 +228,7 @@ Emacs configuration code."
   (let ((full-file (expand-file-name file emacs-source-dir)))
     (when (file-exists-p full-file)
       (message ">>> %s" full-file)
-      (if (called-interactively-p)
-          (org-babel-load-file full-file)
-        (ignore-errors (org-babel-load-file full-file))))))
+        (org-babel-load-file full-file))))
 #+end_src
 
 Notice that when we call this function /non-interactively/ (e.g. from the Lisp function, =cyz-emacs-reload-all=), we suppress any errors. Obviously, I want to see the errors when calling interactively.
@@ -297,4 +296,3 @@ Let's provide a name so we can =require= this file:
 #+end_src
 
 Before you can build this on a new system, make sure that you put the cursor over any of these properties, and hit: ~C-c C-c~
-
