@@ -790,8 +790,8 @@ While I grew up on =Control S=, I am liking the /mental model/ associated with t
 
     :bind (("<f18>" . avy-goto-char-timer)
            ("s-g"   . avy-goto-char-timer)
-           ("s-e"   . avy-next)
-           ("s-a"   . avy-prev)
+           ("s-n"   . avy-next)
+           ("s-p"   . avy-prev)
            :map isearch-mode-map ("s-g" . avy-isearch)))
 #+end_src
 *Note:* The links should be shorter near the point as opposed to starting from the top of the window.

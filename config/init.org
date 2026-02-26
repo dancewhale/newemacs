@@ -22,20 +22,29 @@
 ** key map
 #+name: global
 #+begin_src emacs-lisp :comments link
-(straight-use-package 'general)
-(require 'general)
-(general-define-key
-    "s-f s-f"    'View-scroll-half-page-forward
-    "s-f s-b"    'View-scroll-half-page-backward
-    "C-c l"      'org-store-link
-)
+  (straight-use-package 'general)
+  (require 'general)
 
-(general-define-key
-  :keymaps 'ivy-minibuffer-map
-    "C-w"  'evil-delete-backward-word)
-(general-define-key
-  :keymaps 'minibuffer-mode-map
-    "C-w"  'evil-delete-backward-word)
+  (defvar cyz-tool-prefix-map (make-sparse-keymap)
+    "Keymap for other tool.")
+
+  (defvar cyz-super-e-prefix-map (make-sparse-keymap)
+    "Keymap for s-e keymap")
+
+  (general-define-key "s-e" cyz-super-e-prefix-map)
+
+  (general-define-key
+      "s-f s-f"    'View-scroll-half-page-forward
+      "s-f s-b"    'View-scroll-half-page-backward
+      "C-c l"      'org-store-link
+  )
+
+  (general-define-key
+    :keymaps 'ivy-minibuffer-map
+      "C-w"  'evil-delete-backward-word)
+  (general-define-key
+    :keymaps 'minibuffer-mode-map
+      "C-w"  'evil-delete-backward-word)
 #+end_src
 
 ** undo
@@ -271,3 +280,12 @@ Argument DIR-LIST is a list of directory paths."
 (general-define-key
  "s-e h h" #'learnify-open-emacsd-dir)
    #+end_src
+
+* Technical Artifacts                                :noexport:
+
+Let's =provide= a name so we can =require= this file:
+
+#+begin_src emacs-lisp :exports none
+  (provide 'init)
+  ;;; init.el ends here
+#+end_src

@@ -27,15 +27,6 @@ Configuration for programming interfaces and workflows that behave similarly.
 * General
 The following work for all programming languages.
 ** Key setting
-#+begin_src emacs-lisp :comments link
-  (defvar cyz-tool-prefix-map (make-sparse-keymap)
-    "Keymap for other tool.")
-
-  (defvar cyz-super-e-prefix-map (make-sparse-keymap)
-    "Keymap for s-e keymap")
-
-#+end_src
-
 #+name: open with tool
 #+begin_src emacs-lisp  :comments link
   (defun cyz-open-with-goland ()
@@ -1274,7 +1265,6 @@ Let’s just grab the environments to run:
     (interactive)
     (magit-status-setup-buffer "~/.emacs.d"))
 
-  (general-define-key "s-e" cyz-super-e-prefix-map)
 
   (general-define-key  :prefix "s-e"
         "g"      '(:ignore t  :which-key "magit prefix")
