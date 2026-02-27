@@ -28,32 +28,32 @@ A literate programming file for Chinese configure..
 这个配置文件用来配置我的chinese 相关包和配置.
 
 * rime
-** rime 安装和基础配置 
+** rime 安装和基础配置
 #+name: rime 配置
 #+begin_src emacs-lisp :comments link
   (straight-use-package 'rime)
+
   (setq default-input-method "rime")
     (with-eval-after-load 'rime
     (setq rime-disable-predicates '(rime-predicate-prog-in-code-p
-				     rime-predicate-punctuation-line-begin-p ;;在行首要输入符号时
-				     rime-predicate-after-alphabet-char-p ;;在英文字符串之后（必须为以字母开头的英文字符串）
-				     rime-predicate-current-input-punctuation-p ;;当要输入的是符号时
-				     ;; rime-predicate-after-ascii-char-p ;;任意英文字符后 ,enable this to use with <s
-				     rime-predicate-current-uppercase-letter-p ;; 将要输入的为大写字母时
-				     rime-predicate-space-after-cc-p ;;在中文字符且有空格之后
-				     )
-	   rime-show-candidate 'posframe
-	   rime-posframe-properties (list :internal-border-width 1)
-	   rime-user-data-dir "~/Dropbox/rimeSync/"
-	   rime-inline-ascii-trigger 'shift-r
-	   ))
-    (when (eq system-type 'darwin)
-      (setq
-       ;; rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/" ;; use build-emacs
-       rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"
-       rime-librime-root "~/Downloads/librime/dist"
-	   rime-share-data-dir "~/.local/share/rime/ice"
-       ))
+                                     rime-predicate-punctuation-line-begin-p ;;在行首要输入符号时
+                                     rime-predicate-after-alphabet-char-p ;;在英文字符串之后（必须为以字母开头的英文字符串）
+                                     rime-predicate-current-input-punctuation-p ;;当要输入的是符号时
+                                     ;; rime-predicate-after-ascii-char-p ;;任意英文字符后 ,enable this to use with <s
+                                     rime-predicate-current-uppercase-letter-p ;; 将要输入的为大写字母时
+                                     rime-predicate-space-after-cc-p ;;在中文字符且有空格之后
+                                     )
+           rime-show-candidate 'posframe
+           rime-posframe-properties (list :internal-border-width 1)
+           rime-user-data-dir "~/Dropbox/rimeSync/"
+           rime-inline-ascii-trigger 'shift-r))
+
+  (when (eq system-type 'darwin)
+    (setq
+      ;; rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include/" ;; use build-emacs
+      rime-emacs-module-header-root "/Applications/Emacs.app/Contents/Resources/include"
+      rime-librime-root "/opt/homebrew/opt/librime"
+      rime-share-data-dir "~/.local/share/rime/ice"))
 #+end_src
 ** rime 字库
 支持emacs启动、关闭时自动同步字库，解决字库无法正常使用问题。
@@ -70,8 +70,8 @@ A literate programming file for Chinese configure..
 #+name: rime 扩展函数
 #+begin_src emacs-lisp :comments link
     (setq rime-translate-keybindings
-	'("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
-	  "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
+        '("C-f" "C-b" "C-n" "C-p" "C-g" "C-h" "<left>" "<tab>" "C-<tab>" "C-d"
+          "<right>" "<up>" "<down>" "<prior>" "<next>" "<delete>" "C-e" "C-a"))
 
 
     (defun +rime-force-enable ()
@@ -81,13 +81,13 @@ A literate programming file for Chinese configure..
   `evil-insert-state'."
       (interactive)
       (let ((input-method "rime"))
-	(unless (string= current-input-method input-method)
-	(activate-input-method input-method))
-	(when (rime-predicate-evil-mode-p)
-	(if (= (1+ (point)) (line-end-position))
-	    (evil-append 1)
-	  (evil-insert 1)))
-	(rime-force-enable)))
+        (unless (string= current-input-method input-method)
+        (activate-input-method input-method))
+        (when (rime-predicate-evil-mode-p)
+        (if (= (1+ (point)) (line-end-position))
+            (evil-append 1)
+          (evil-insert 1)))
+        (rime-force-enable)))
 
     (defun +rime-convert-string-at-point ()
       "Convert the string at point to Chinese using the current input scheme.
@@ -98,43 +98,43 @@ A literate programming file for Chinese configure..
       (interactive)
       (+rime-force-enable)
       (let ((string (if mark-active
-		      (buffer-substring-no-properties
-		       (region-beginning) (region-end))
-		    (buffer-substring-no-properties
-		     (point) (max (line-beginning-position) (- (point) 80)))))
-	  code
-	  length)
-	(cond ((string-match "\\([a-z]+\\|[[:punct:]]\\)[[:blank:]]*$" string)
-	     (setq code (replace-regexp-in-string
-			 "^[-']" ""
-			 (match-string 0 string)))
-	     (setq length (length code))
-	     (setq code (replace-regexp-in-string " +" "" code))
-	     (if mark-active
-		 (delete-region (region-beginning) (region-end))
-	       (when (> length 0)
-		 (delete-char (- 0 length))))
-	     (when (> length 0)
-	       (setq unread-command-events
-		     (append (listify-key-sequence code)
-			     unread-command-events))))
-	    (t (message "`+rime-convert-string-at-point' did nothing.")))))
+                      (buffer-substring-no-properties
+                       (region-beginning) (region-end))
+                    (buffer-substring-no-properties
+                     (point) (max (line-beginning-position) (- (point) 80)))))
+          code
+          length)
+        (cond ((string-match "\\([a-z]+\\|[[:punct:]]\\)[[:blank:]]*$" string)
+             (setq code (replace-regexp-in-string
+                         "^[-']" ""
+                         (match-string 0 string)))
+             (setq length (length code))
+             (setq code (replace-regexp-in-string " +" "" code))
+             (if mark-active
+                 (delete-region (region-beginning) (region-end))
+               (when (> length 0)
+                 (delete-char (- 0 length))))
+             (when (> length 0)
+               (setq unread-command-events
+                     (append (listify-key-sequence code)
+                             unread-command-events))))
+            (t (message "`+rime-convert-string-at-point' did nothing.")))))
 
     (define-advice rime--posframe-display-content (:filter-args (args) resolve-posframe-issue-a)
       "给 `rime--posframe-display-content' 传入的字符串加一个全角空
   格，以解决 `posframe' 偶尔吃字的问题。"
       (cl-destructuring-bind (content) args
-	(let ((newresult (if (string-blank-p content)
-			   content
-			 (concat content "　"))))
-	(list newresult))))
+        (let ((newresult (if (string-blank-p content)
+                           content
+                         (concat content "　"))))
+        (list newresult))))
 
 (general-define-key
       "s-j"    #'+rime-convert-string-at-point)
 #+end_src
 
 ** rime escape 设置
-#+name: rime escape 
+#+name: rime escape
 #+begin_src emacs-lisp  :comments link
 (defun rime-evil-escape-advice (orig-fun key)
   "advice for `rime-input-method' to make it work together with `evil-escape'.
@@ -194,7 +194,7 @@ Let's provide a name so we can =require= this file.
 ;;; chinese.el ends here
 #+end_src
 
-Before you can build this on a new system, make sure that you put the cursor over any of these properties, 
+Before you can build this on a new system, make sure that you put the cursor over any of these properties,
 and hit: ~C-c C-c~
 
 #+description: A literate programming file for configuring chinese package.
