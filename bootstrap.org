@@ -285,7 +285,14 @@ my literate Emacs configuration code."
 
 Whew … and do it all:
 #+begin_src  emacs-lisp :comments link
-(cyz-emacs-reload-all)
+  (use-package kkp
+    :ensure t
+    :config
+    ;; (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
+    (global-kkp-mode +1))
+
+  (cyz-emacs-reload-all)
+
 #+end_src
 
 * Technical Artifacts :noexport:

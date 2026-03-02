@@ -251,12 +251,12 @@ To enable pbm on android while use nerd-icon on non-android, we can configure li
 
 
 * go-translate
-#+name: go-translate
+#+name: gt
 #+begin_src emacs-lisp  :comments link
-(straight-use-package 'go-translate)
+(straight-use-package 'gt)
 (straight-use-package 'plz)
 
-(require 'go-translate)
+(require 'gt)
 (require 'plz)
 
 (setq gt-langs '(en zh))
