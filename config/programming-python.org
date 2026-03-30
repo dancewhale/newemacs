@@ -467,10 +467,13 @@ I work with a lot of projects with my team where I need to /configure/ the proje
       (shell-command "pip install -r requirements-dev.txt")))
 #+end_src
 * venv
+你需要确保安装了virtualenv 和 virtualenvwrapper
 #+name: pyvenv
 #+begin_src emacs-lisp  :comments link
   (straight-use-package 'pyvenv)
   (require 'pyvenv)
+
+  (setq lsp-bridge-python-command (string-trim (shell-command-to-string "pyenv which python3")))
 
   (defun local/lsp-bridge-get-single-lang-server-by-project (project-path filepath)
     (let* ((json-object-type 'plist)
