@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2025-12-22 Mon]
+#+lastmod: [2026-04-15 Wed]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -95,6 +95,7 @@ Begin by initializing these org variables:
         org-confirm-babel-evaluate nil
         org-src-fontify-natively t
         org-src-tab-acts-natively t
+        org-id-link-to-org-use-id t
 
         ;; Updates the lastmod: when set in the file:
         time-stamp-active t
