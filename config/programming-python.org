@@ -263,49 +263,51 @@ Your project's =.envrc= file would contain something like:
 The [[https://elpy.readthedocs.io/en/latest/introduction.html][Elpy Project]] expands on the =python-mode=.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package elpy
-    :ensure t
-    :init
-    (elpy-enable))
+;  (use-package elpy
+;    :ensure t
+;    :init
+;    (elpy-enable)
+;    :config
+;    (setq elpy-rpc-pythonpath  (string-trim (shell-command-to-string "pyenv which python3"))))
 #+END_SRC
 
 Let’s expand our =major-mode-hydra= with some extras:
 
 #+begin_src emacs-lisp
-  (use-package major-mode-hydra
-    :after elpy
-    :config
-
-    (pretty-hydra-define python-evaluate (:color blue :quit-key "q"
-                                          :title ha-python-eval-title)
-      ("Section"
-       (("F" elpy-shell-send-defun "Function")
-        ("E" elpy-shell-send-statement "Statement")
-        (";" python-shell-send-string "Expression"))
-       "Entirety"
-       (("B" elpy-shell-send-buffer "Buffer")
-        ("r" elpy-shell-send-region-or-buffer "region"))
-       "And Step..."
-       (("f" elpy-shell-send-defun-and-step "Function" :color pink)
-        ("e" elpy-shell-send-statement-and-step "Statement" :color pink))))
-
-    (pretty-hydra-define+ python-refactor nil
-      ("Elpy"
-       (("r" elpy-refactor-rename "Rename")
-        ("i" elpy-refactor-inline "Inline var")
-        ("v" elpy-refactor-extract-variable "To variable")
-        ("f" elpy-refactor-extract-function "To function")
-        ("a" elpy-refactor-mode "All..."))))
-
-    (major-mode-hydra-define+ python-mode (:quit-key "q" :color blue)
-      ("Server"
-       (("s" elpy-shell-switch-to-shell "Go to Server")
-        ("C" elpy-config "Config Elpy"))
-       "Edit"
-       (("f" elpy-black-fix-code "Fix/format code"))
-       "Docs"
-       (("d" elpy-eldoc-documentation "Describe Symbol")
-        ("D" elpy-doc "Docs Symbol")))))
+;  (use-package major-mode-hydra
+;    :after elpy
+;    :config
+;
+;    (pretty-hydra-define python-evaluate (:color blue :quit-key "q"
+;                                          :title ha-python-eval-title)
+;      ("Section"
+;       (("F" elpy-shell-send-defun "Function")
+;        ("E" elpy-shell-send-statement "Statement")
+;        (";" python-shell-send-string "Expression"))
+;       "Entirety"
+;       (("B" elpy-shell-send-buffer "Buffer")
+;        ("r" elpy-shell-send-region-or-buffer "region"))
+;       "And Step..."
+;       (("f" elpy-shell-send-defun-and-step "Function" :color pink)
+;        ("e" elpy-shell-send-statement-and-step "Statement" :color pink))))
+;
+;    (pretty-hydra-define+ python-refactor nil
+;      ("Elpy"
+;       (("r" elpy-refactor-rename "Rename")
+;        ("i" elpy-refactor-inline "Inline var")
+;        ("v" elpy-refactor-extract-variable "To variable")
+;        ("f" elpy-refactor-extract-function "To function")
+;        ("a" elpy-refactor-mode "All..."))))
+;
+;    (major-mode-hydra-define+ python-mode (:quit-key "q" :color blue)
+;      ("Server"
+;       (("s" elpy-shell-switch-to-shell "Go to Server")
+;        ("C" elpy-config "Config Elpy"))
+;       "Edit"
+;       (("f" elpy-black-fix-code "Fix/format code"))
+;       "Docs"
+;       (("d" elpy-eldoc-documentation "Describe Symbol")
+;        ("D" elpy-doc "Docs Symbol")))))
 #+end_src
 
 * LSP Integration of Python

@@ -3,7 +3,7 @@
 #+date:   2020-09-18
 #+tags: emacs org
 #+startup: inlineimages
-#+lastmod: [2026-04-15 Wed]
+#+lastmod: [2026-04-16 Thu]
 
 A literate programming file for configuring org-mode and those files.
 
@@ -101,6 +101,7 @@ Begin by initializing these org variables:
         time-stamp-active t
         time-stamp-start "#\\+lastmod:[ \t]*"
         time-stamp-end "$"
+        org-clock-mode-line-total 'current
         system-time-locale "C"  ; 时间中只是用英文,go-org 不支持英文.
         time-stamp-format "[%04Y-%02m-%02d %a]")
 #+end_src

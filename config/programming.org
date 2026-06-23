@@ -483,7 +483,7 @@ At this point, we can now parse stuff using: =tree-sitter parse <source-code-fil
               ;; (julia      "https://github.com/tree-sitter/tree-sitter-julia" "master" "src")
               ;; (lua        "https://github.com/MunifTanjim/tree-sitter-lua" "main" "src")
               (make       "https://github.com/alemuller/tree-sitter-make")
-              (markdown   "https://github.com/ikatyang/tree-sitter-markdown")
+              ;;(markdown   "https://github.com/ikatyang/tree-sitter-markdown")
               ;; (meson      "https://github.com/Decodetalkers/tree-sitter-meson" "master" "src")
               (python     "https://github.com/tree-sitter/tree-sitter-python")
               (ruby       "https://github.com/tree-sitter/tree-sitter-ruby" "master" "src")
