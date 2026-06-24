@@ -35,12 +35,132 @@ A literate programming file for Chinese configure..
   (require 'rimel)
   (setq default-input-method "rimel"
         rimel-posframe-style 'horizontal)
+  (setq rimel-schema "rime_frost")
 
+  ;; 推荐配置：代码区 + 字母后 + 大写字母
+  (setq rimel-disable-predicates
+      '(rimel-predicate-prog-in-code-p
+        rimel-predicate-after-alphabet-char-p
+        rimel-predicate-current-uppercase-letter-p))
 
+  ;; Evil 用户推荐
+  (setq rimel-disable-predicates
+      '(rimel-predicate-prog-in-code-p
+        rimel-predicate-after-alphabet-char-p
+        rimel-predicate-current-uppercase-letter-p
+        rimel-predicate-evil-mode-p))
+
+  ;; Org 用户可以额外添加
+  (add-to-list 'rimel-disable-predicates 'rimel-predicate-org-in-src-block-p)
 
 
 
   #+end_src
+
+** rime 扩展函数
+#+name: rime 扩展函数
+#+begin_src emacs-lisp :comments link
+      (defvar-local +rimel-force-enable-next-key nil
+        "When non-nil, force next composable key to use Chinese input.")
+
+      (defun +rimel--force-enable-advice (orig-fn &rest args)
+        "Force `rimel--should-enable-p' once when requested."
+        (if +rimel-force-enable-next-key
+            (prog1 t
+              (setq +rimel-force-enable-next-key nil))
+          (apply orig-fn args)))
+
+      (advice-add 'rimel--should-enable-p
+                  :around #'+rimel--force-enable-advice)
+
+      (defun +rimel-force-enable ()
+        "[RIMEL] Force into Chinese input state.
+
+    If current input method is not `rimel', activate it first.
+    If currently in Evil non-editable state, switch to insert state.
+    The next composable key will bypass `rimel-disable-predicates'."
+        (interactive)
+        (unless (equal current-input-method "rimel")
+          (activate-input-method "rimel"))
+        (when (and (fboundp 'rimel-predicate-evil-mode-p)
+                   (rimel-predicate-evil-mode-p)
+                   (fboundp 'evil-insert))
+          (if (and (fboundp 'evil-append)
+                   (>= (1+ (point)) (line-end-position)))
+              (evil-append 1)
+            (evil-insert 1)))
+        (setq +rimel-force-enable-next-key t))
+
+    ;; ------------------------------------------------------------
+    ;; 3. 原来的 s-j：把光标前英文编码交给 rimel 转中文
+    ;; ------------------------------------------------------------
+
+    (defun +rimel-convert-string-at-point ()
+      "Convert the string at point to Chinese using current Rime schema.
+
+  If region is active, use region as input code.
+  Otherwise, search backward from point for available code and feed it
+  to `rimel'."
+      (interactive)
+      (+rimel-force-enable)
+      (let* ((use-region (use-region-p))
+             (string (if use-region
+                         (buffer-substring-no-properties
+                          (region-beginning) (region-end))
+                       (buffer-substring-no-properties
+                        (point)
+                        (max (line-beginning-position) (- (point) 80)))))
+             code
+             length)
+        (cond
+         ((string-match "\\([a-z]+\\|[[:punct:]]\\)[[:blank:]]*$" string)
+          (setq code (replace-regexp-in-string
+                      "^[-']" ""
+                      (match-string 0 string)))
+          (setq length (length code))
+          (setq code (replace-regexp-in-string " +" "" code))
+
+          (if use-region
+              (delete-region (region-beginning) (region-end))
+            (when (> length 0)
+              (delete-char (- 0 length))))
+
+          (when (> length 0)
+            ;; 确保这串 code 的第一个字符一定进入中文合成。
+            (setq +rimel-force-enable-next-key t)
+            (setq unread-command-events
+                  (append (listify-key-sequence code)
+                          unread-command-events))))
+         (t
+          (message "`+rimel-convert-string-at-point' did nothing.")))))
+
+
+    ;; ------------------------------------------------------------
+    ;; 4. 迁移 posframe 吃字 workaround
+    ;;
+    ;; emacs-rime 里是 advice `rime--posframe-display-content'。
+    ;; rimel 里候选字符串来自 `rimel--format-candidates'，
+    ;; 所以这里改为 filter-return。
+    ;; ------------------------------------------------------------
+
+    (define-advice rimel--format-candidates
+        (:filter-return (content) +resolve-posframe-issue-a)
+      "Append a full-width space to rimel posframe content.
+
+  This is a workaround for occasional posframe clipping/eating characters."
+      (if (and (eq rimel-show-candidate 'posframe)
+               (stringp content)
+               (not (string-blank-p content)))
+          (concat content "　")
+        content))
+
+    ;; ------------------------------------------------------------
+    ;; 5. 保留你的快捷键
+    ;; ------------------------------------------------------------
+
+    (general-define-key
+        "s-j"    #'+rimel-convert-string-at-point)
+#+end_src
 
 
 * posframe
