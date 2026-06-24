@@ -1262,7 +1262,6 @@ Let’s just grab the environments to run:
 
 #+end_src
 
-
 ** aidermacs
 #+name: aidermacs
 #+begin_src emacs-lisp  :comments link
@@ -1277,6 +1276,206 @@ Let’s just grab the environments to run:
   (aidermacs-use-architect-mode t)
   (aidermacs-default-model "gpt-4.1-2025-04-14")
   (aidermacs-editor-model "gemini-2.5-pro-preview-06-05"))
+#+end_src
+
+** agent-shell
+#+name: agent-shell
+#+begin_src emacs-lisp  :comments link
+  (straight-use-package 'agent-shell)
+  (straight-use-package 'shell-maker)
+  (straight-use-package 'acp)
+
+  (require 'shell-maker)
+
+  (use-package agent-shell
+    :ensure t
+    :commands (agent-shell
+               agent-shell-toggle
+               agent-shell-anthropic-start-claude-code
+               agent-shell-openai-start-codex
+               agent-shell-cursor-start-agent)
+    :init
+    ;; npm/brew 装的命令有时 Emacs GUI 里找不到，这里补一下常见路径。
+    (dolist (dir '("~/.npm-global/bin"
+                   "~/.local/bin"
+                   "~/.bun/bin"
+                   "~/.cargo/bin"
+                   "/opt/homebrew/bin"
+                   "/user/bin"
+                   "/usr/local/bin"))
+      (let ((expanded (expand-file-name dir)))
+        (when (file-directory-p expanded)
+          (add-to-list 'exec-path expanded)
+          (setenv "PATH" (concat expanded path-separator (getenv "PATH"))))))
+  (require 'auth-source)
+
+  (defun cyz/agent-shell-secret (host user)
+    "Read secret from ~/.authinfo.gpg by HOST and USER."
+    (let* ((entry (car (auth-source-search
+                        :host host
+                        :user user
+                        :require '(:secret)
+                        :max 1)))
+           (secret (plist-get entry :secret)))
+      (unless secret
+        (user-error "No secret found for machine=%s login=%s in auth-source"
+                    host user))
+      (if (functionp secret)
+          (funcall secret)
+        secret)))
+
+  ;; ===== 你需要改的地方 =====
+
+  ;; Claude Code 走中转站。一般是 Anthropic-compatible endpoint。
+  (defvar cyz/agent-shell-claude-gateway-base-url
+    "https://api.claudecode.net.cn/api/claudecode")
+
+  ;; Codex 走中转站。Codex 现在更推荐在 ~/.codex/config.toml 里配 base_url；
+  ;; Emacs 这里主要负责把 OPENAI_API_KEY 传进去。
+  (defvar cyz/agent-shell-codex-home
+    (expand-file-name "~/.codex"))
+
+  ;; DeepSeek 官方 Anthropic-compatible endpoint。
+  (defvar cyz/agent-shell-deepseek-anthropic-base-url
+    "https://api.deepseek.com/anthropic")
+
+  ;; DeepSeek 官方 OpenAI-compatible endpoint。
+  (defvar cyz/agent-shell-deepseek-openai-base-url
+    "https://api.deepseek.com")
+
+  :config
+  ;; 只在选择列表里保留你真正会用的三个 agent。
+  (setopt agent-shell-agent-configs
+          (list
+           (agent-shell-anthropic-make-claude-code-config)
+           (agent-shell-openai-make-codex-config)
+           (agent-shell-cursor-make-agent-config)))
+
+  ;; 默认 M-x agent-shell 打开 Claude Code。
+  (setopt agent-shell-preferred-agent-config 'claude-code)
+
+  ;; 每次启动时询问恢复旧 session / 新建 session。
+  (setopt agent-shell-session-strategy 'prompt)
+
+  ;; 恢复 session 时少刷历史，速度快一点。
+  (setopt agent-shell-session-restore-verbosity 'minimal)
+
+  ;; agent 修改文件时，临时关闭 aggressive-indent-mode，避免和自动缩进打架。
+  (setopt agent-shell-write-inhibit-minor-modes '(aggressive-indent-mode))
+
+  ;; 右侧窗口显示 agent-shell。
+  (setopt agent-shell-display-action
+          '((display-buffer-in-side-window)
+            (side . right)
+            (slot . 1)
+            (window-width . 0.42)))
+
+  ;; ===== Claude Code：默认走你的中转站 =====
+
+  (defun cyz/agent-shell-use-claude-gateway ()
+    "Use Anthropic-compatible gateway for Claude Code."
+    (interactive)
+    (setopt agent-shell-anthropic-claude-acp-command
+            '("claude-agent-acp"))
+    (setopt agent-shell-anthropic-authentication
+            (agent-shell-anthropic-make-authentication
+             :api-key (lambda ()
+                        (cyz/agent-shell-secret "llm-gateway" "anthropic"))))
+    (setopt agent-shell-anthropic-claude-environment
+            (agent-shell-make-environment-variables
+             "ANTHROPIC_BASE_URL" cyz/agent-shell-claude-gateway-base-url
+
+             ;; 这两个 model 名称按你的中转站实际支持来写。
+             ;; 有些中转站要求写 claude-sonnet-4-5 / claude-opus-4-5，
+             ;; 有些要求写它自己的模型别名。
+             "ANTHROPIC_MODEL" "YOUR-CLAUDE-MODEL"
+             "ANTHROPIC_SMALL_FAST_MODEL" "YOUR-CLAUDE-SMALL-MODEL")))
+
+  (cyz/agent-shell-use-claude-gateway)
+
+  ;; ===== Codex：默认走你的中转站 =====
+
+  (defun cyz/agent-shell-use-codex-gateway ()
+    "Use OpenAI-compatible gateway for Codex."
+    (interactive)
+    (setopt agent-shell-openai-codex-acp-command
+            '("codex-acp"))
+    (setopt agent-shell-openai-authentication
+            (agent-shell-openai-make-authentication
+             :api-key (lambda ()
+                        (cyz/agent-shell-secret "llm-gateway" "openai"))))
+    (setopt agent-shell-openai-codex-environment
+            (agent-shell-make-environment-variables
+             "CODEX_HOME" cyz/agent-shell-codex-home)))
+
+  (cyz/agent-shell-use-codex-gateway)
+
+  ;; ===== Cursor：用 Cursor 会员登录态 =====
+
+  (setopt agent-shell-cursor-acp-command '("cursor-agent-acp"))
+  (setopt agent-shell-cursor-environment nil)
+
+  ;; ===== DeepSeek：Claude Code 方式接入，推荐 =====
+  ;;
+  ;; DeepSeek 官方支持 Anthropic-compatible API：
+  ;; ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+  ;; ANTHROPIC_API_KEY=你的 DeepSeek token
+  ;;
+  ;; DeepSeek 会把 claude-opus* 映射到 deepseek-v4-pro，
+  ;; 把 claude-sonnet* / claude-haiku* 映射到 deepseek-v4-flash。
+  ;; 所以这里用 Claude 风格模型名，让 Claude Agent SDK/Claude Code 更容易接受。
+
+  (defun cyz/agent-shell-use-deepseek-for-claude ()
+    "Use official DeepSeek token as Claude-compatible backend."
+    (interactive)
+    (setopt agent-shell-anthropic-claude-acp-command
+            '("claude-agent-acp"))
+    (setopt agent-shell-anthropic-authentication
+            (agent-shell-anthropic-make-authentication
+             :api-key (lambda ()
+                        (cyz/agent-shell-secret "deepseek" "api"))))
+    (setopt agent-shell-anthropic-claude-environment
+            (agent-shell-make-environment-variables
+             "ANTHROPIC_BASE_URL" cyz/agent-shell-deepseek-anthropic-base-url
+             "ANTHROPIC_MODEL" "claude-sonnet-4-5"
+             "ANTHROPIC_SMALL_FAST_MODEL" "claude-haiku-4-5"))
+    (message "agent-shell: Claude backend switched to DeepSeek"))
+
+  (defun cyz/agent-shell-start-claude-gateway ()
+    "Start Claude Code via gateway."
+    (interactive)
+    (cyz/agent-shell-use-claude-gateway)
+    (agent-shell-anthropic-start-claude-code))
+
+  (defun cyz/agent-shell-start-claude-deepseek ()
+    "Start Claude Code via official DeepSeek token."
+    (interactive)
+    (cyz/agent-shell-use-deepseek-for-claude)
+    (agent-shell-anthropic-start-claude-code))
+
+  (defun cyz/agent-shell-start-codex-gateway ()
+    "Start Codex via gateway."
+    (interactive)
+    (cyz/agent-shell-use-codex-gateway)
+    (agent-shell-openai-start-codex))
+
+  (defun cyz/agent-shell-start-cursor ()
+    "Start Cursor Agent."
+    (interactive)
+    (agent-shell-cursor-start-agent))
+
+  ;; ===== 快捷键，可按你的 general.el 风格改 =====
+
+  (general-define-key  :prefix "s-e"
+        "m"      '(:ignore t  :which-key "ai prefix")
+        "m a"    #'agent-shell
+        "m c"    #'cyz/agent-shell-start-claude-gateway
+        "m d"    #'cyz/agent-shell-start-claude-deepseek
+        "m x"    #'cyz/agent-shell-start-codex-gateway
+        "m u"    #'cyz/agent-shell-start-cursor
+        "m t"    #'agent-shell-toggle))
+
+
 #+end_src
 
 * Magit
