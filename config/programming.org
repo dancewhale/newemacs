@@ -1279,6 +1279,24 @@ Let’s just grab the environments to run:
 #+end_src
 
 ** agent-shell
+#+name: 依赖安装
+#+begin_src sh :comments link
+  # Claude Code / Claude Agent ACP
+  npm install -g @agentclientprotocol/claude-agent-acp
+
+  # Codex ACP：新版推荐这个包
+  npm install -g @agentclientprotocol/codex-acp
+
+  # Cursor ACP
+  npm install -g @blowmage/cursor-agent-acp
+
+  # Cursor CLI，本机登录一次即可吃你的 Cursor 会员
+  curl https://cursor.com/install -fsSL | bash
+  cursor-agent login
+#+end_src
+
+
+
 #+name: agent-shell
 #+begin_src emacs-lisp  :comments link
   (straight-use-package 'agent-shell)
