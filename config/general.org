@@ -151,6 +151,16 @@ While we are at it, let’s readd, and relabel the ~z~ command functions:
              (kbd "z RET") nil ; evil-scroll-line-to-top
              (kbd "z <return>") nil)) ; evil-scroll-line-to-top
 #+end_src
+* clipboard
+#+name: cliboard-manager
+#+begin_src emacs-lisp  :comments link
+
+  (setq select-enable-clipboard t)   ; 将 kill-ring 与剪贴板绑定
+  (setq save-interprogram-paste-before-kill t)  ; 防止 kill 覆盖剪贴板内容
+  (setq x-select-enable-clipboard t)
+#+end_src
+
+
 * Top-Level Operations
 Let's try this general "space" prefix by defining some top-level operations, including hitting ~space~ twice to bring up the =M-x= collection of functions:
 #+begin_src emacs-lisp
