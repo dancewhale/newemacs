@@ -6,6 +6,7 @@ auto-save-list
 eln-cache
 transient
 cache/*
+elpa
 url
 eshell
 recentf
