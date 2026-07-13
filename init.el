@@ -18,7 +18,7 @@
 
 (setq emacs-source-dir   user-emacs-directory)
 (setq straight-base-dir (concat user-emacs-directory ".local/"))
-(setq user-emacs-directory (concat straight-base-dir  "cache/"))
+
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
