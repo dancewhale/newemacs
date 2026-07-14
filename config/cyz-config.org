@@ -396,7 +396,9 @@ Persist history over Emacs restarts using the built-in [[https://www.emacswiki.o
 #+begin_src emacs-lisp :comments link
   (use-package savehist
     :init
-    (savehist-mode))
+    (savehist-mode)
+    :config
+    (setq savehist-file (expand-file-name "history" cyz/emacs-cache-dir)))
 #+end_src
 *** Marginalia
 The [[https://github.com/minad/marginalia][marginalia]] package gives a preview of =M-x= functions with a one line description, extra information when selecting files, etc. Nice enhancement without learning any new keybindings.

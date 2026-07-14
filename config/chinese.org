@@ -31,6 +31,7 @@ A literate programming file for Chinese configure..
 #+name: rimel
 #+begin_src emacs-lisp  :comments link
   (straight-use-package 'liberime)
+  (setq liberime-user-data-dir  (expand-file-name "rime" cyz/emacs-cache-dir))
   (straight-use-package '(rimel :host github :repo "emacs-rime/rimel"))
   (require 'rimel)
   (setq default-input-method "rimel"

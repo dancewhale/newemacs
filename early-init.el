@@ -17,6 +17,7 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
+(defvar cyz/emacs-cache-dir (expand-file-name ".local/cache/" user-emacs-directory))
 
 ;; TODO: Let's build the \`exec-path' from the _real_ shell path:
 ;; (add-to-list 'exec-path "path")
@@ -27,4 +28,3 @@
 ;; End:
 
 ;;; early-init.el ends here
-

@@ -1517,6 +1517,8 @@ Let’s just grab the environments to run:
   (use-package projectile
     :ensure t
     :config
+    (setq projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" cyz/emacs-cache-dir)
+      projectile-cache-file (expand-file-name "projectile.cache" cyz/emacs-cache-dir))
     (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
     (projectile-mode +1))
