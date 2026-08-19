@@ -907,26 +907,6 @@ To options that might be interesting:
 
     #+end_src
 
-*** copilot
-#+name: copilot
-#+begin_src emacs-lisp  :comments link
-   (use-package copilot
-   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-   :ensure t)
-   (add-hook 'go-mode-hook 'copilot-mode)
-
-  (general-define-key  :prefix "s-l"
-           "c"      '(:ignore t  :which-key "copilot prefix")
-           "c c"    '(copilot-complete :which-key "complete")
-           "c C"    '(copilot-panel-complete :which-key "panel complete")
-           "c p"    '(copilot-previous-completion :which-key "select previous")
-           "c n"    '(copilot-next-completion :which-key "select next")
-           "c r"    '(copilot-accept-completion-by-line :which-key "accept by line")
-           "c w"    '(copilot-accept-completion-by-word :which-key "accept by word")
-           "c P"    '(copilot-accept-completion-by-paragraph :which-key "accept by paragraph")
-           "c a"    '(copilot-accept-completion :which-key "accept complete"))
-    #+end_src
-
 ** General Code Editing
 *** iEdit
 While there are language-specific ways to rename variables and functions, [[https://github.com/victorhge/iedit][iedit]] is often sufficient.

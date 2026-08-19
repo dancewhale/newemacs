@@ -160,6 +160,26 @@ While we are at it, let’s readd, and relabel the ~z~ command functions:
   (setq x-select-enable-clipboard t)
 #+end_src
 
+* dropdown
+#+name: quake-frame
+#+begin_src emacs-lisp  :comments link
+  (use-package quake-frame
+    :straight (:type git
+               :host codeberg
+               :repo "ctietze/quake-frame.el"
+               :files ("*.el" "bin"))
+    :bind (("C-`" . quake-frame-toggle))  ; Emacs 内部快捷键（可选）
+    :custom
+    ;; 根据个人喜好调整，以下是比较常用的设置
+    (quake-frame-width 0.9)          ; 宽度比例（相对屏幕）
+    (quake-frame-height 0.45)        ; 高度比例
+    (quake-frame-pos 'top)           ; 位置：'top / 'center / 'bottom
+    (quake-frame-border-width 0)     ; 无边框更接近 iTerm 风格
+    :config
+    )
+
+#+end_src
+
 
 * Top-Level Operations
 Let's try this general "space" prefix by defining some top-level operations, including hitting ~space~ twice to bring up the =M-x= collection of functions:
@@ -300,7 +320,7 @@ With these helper functions in place, I can create a leader collection for file-
     "f C-g" '(keyboard-escape-quit :which-key t))
 #+end_src
 
-The ~d~ brings up [[file:cyz-applications.org::*Dired][Dired]], and ~D~ pulls up a =dired=, not on a single directory, but based on a pattern given to =find= (see [[https://www.masteringemacs.org/article/working-multiple-files-dired][this discussion on Mastering Emacs]]).
+The ~d~ brings up Dired, and ~D~ pulls up a =dired=, not on a single directory, but based on a pattern given to =find= (see [[https://www.masteringemacs.org/article/working-multiple-files-dired][this discussion on Mastering Emacs]]).
 
 On Unix systems, the =locate= command is faster than =find= when searching the whole system, since it uses a pre-computed database, and =find= is faster if you need to search a specific directory instead of the whole system. On the Mac, we need to change the =locate= command:
 
@@ -836,7 +856,7 @@ Since I tweaked the help menu, I craft my own menu:
     "h C-g" '(keyboard-escape-quit :which-key t))
 #+end_src
 
-Some of these call the [[file:cyz-programming-elisp.org::*Helpful Functions][Helpful]] package:
+Some of these call the [[file:programming-elisp.org::*Helpful Functions][Helpful]] package:
 #+begin_src emacs-lisp
   (use-package helpful)
 #+end_src
