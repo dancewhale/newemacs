@@ -1214,9 +1214,10 @@ Let’s just grab the environments to run:
   (require 'auth-source)
   (defun cyz/ai-api-key (host)
     "Read API key for HOST from auth-source."
-    (auth-source-pick-first-password
-     :host host
-     :user "apikey"))
+    (lambda ()
+      (auth-source-pick-first-password
+       :host host
+       :user "apikey")))
 
   ;; OpenAI / Codex 相关：走 OpenAI API key
   (gptel-make-openai "OpenAI"
