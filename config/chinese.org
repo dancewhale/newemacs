@@ -35,7 +35,9 @@ A literate programming file for Chinese configure..
   (require 'rimel)
   (setq default-input-method "rimel"
         rimel-posframe-style 'horizontal)
-  (setq rimel-schema "rime_frost")
+  (setq rime-share-data-dir "~/.local/share/rime/frost"
+        liberime-shared-data-dir "~/.local/share/rime/frost"
+        rimel-schema "rime_frost")
 
   ;; 推荐配置：代码区 + 字母后 + 大写字母
   (setq rimel-disable-predicates
