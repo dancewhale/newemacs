@@ -112,6 +112,27 @@ Getting tired off all the packages that I load spewing a bunch of warnings that 
         native-comp-deferred-compilation t))
 #+end_src
 
+***  OS 相關基礎函數
+#+name: mac-shell
+#+begin_src emacs-lisp  :comments link
+  (defun my/mac-do-applescript (script)
+    "Execute an AppleScript string on macOS, with fallback for different Emacs builds.
+  SCRIPT is a string containing the AppleScript code."
+    (when (eq system-type 'darwin)
+      (cond
+       ;; Official NS port
+       ((fboundp 'ns-do-applescript)
+        (ns-do-applescript script))
+       ;; emacs-mac port (Mitsuharu Yamamoto)
+       ((fboundp 'mac-osa-script)
+        (mac-osa-script script))
+       ;; Universal fallback
+       (t
+        (call-process "osascript" nil nil nil "-e" script)))))
+
+#+end_src
+
+
 
 * Basic Libraries
 The following packages come with Emacs, but seems like they still need loading:
