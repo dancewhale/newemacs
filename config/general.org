@@ -195,6 +195,44 @@ While we are at it, let’s readd, and relabel the ~z~ command functions:
 
 #+end_src
 
+* auto save
+#+name: auto-save
+#+begin_src emacs-lisp  :comments link
+  (defconst my-seafile-dirs
+    '("~/Seafile/work/"
+      "~/Seafile/Dropbox/"
+      "~/Dropbox/"))
+
+  (defun my-seafile-file-p ()
+    "当前文件是否位于某个 Seafile 同步目录中。"
+    (and buffer-file-name
+         (seq-some
+          (lambda (dir)
+            (let ((dir (expand-file-name dir)))
+              (and (file-directory-p dir)
+                   (file-in-directory-p buffer-file-name dir))))
+          my-seafile-dirs)))
+
+  ;; 本地修改：空闲 2 秒后写回原文件。
+  (setq auto-save-visited-interval 2
+        auto-save-visited-predicate
+        (lambda ()
+          (and (my-seafile-file-p)
+               (verify-visited-file-modtime (current-buffer)))))
+
+  (auto-save-visited-mode 1)
+
+  ;; Seafile / 外部程序修改磁盘文件：自动更新 buffer。
+  (setq auto-revert-interval 2)
+
+  (defun my-seafile-setup ()
+    (when (my-seafile-file-p)
+      (auto-revert-mode 1)))
+
+  (add-hook 'find-file-hook #'my-seafile-setup)
+#+end_src
+
+
 
 * Top-Level Operations
 Let's try this general "space" prefix by defining some top-level operations, including hitting ~space~ twice to bring up the =M-x= collection of functions:
