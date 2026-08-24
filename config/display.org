@@ -7,7 +7,7 @@ A literate programming file to configure the Emacs UI.
 
 #+begin_src emacs-lisp :comments link :exports none
 ;;; display --- Emacs UI configuration. -*- lexical-binding: t; -*-
-;; 
+;;
 ;; © 2020-2023  Borrow From Howard X. Abrams <http://gitlab.com/howardabrams>
 ;;   Licensed under a Creative Commons Attribution 4.0 International License.
 ;;   See http://creativecommons.org/licenses/by/4.0/
@@ -79,14 +79,14 @@ Let's install and load some of packages from the [[https://github.com/hlissner/d
 #+name: basic-style
 #+begin_src emacs-lisp :comments link
 (setq org-auto-align-tags nil
-	org-tags-column 0
-	org-ellipsis "⤵"
-	org-hide-emphasis-markers t
-	org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
-	org-habit-graph-column 50
-	;; Agenda styling
-	org-agenda-tags-column 0
-	)
+        org-tags-column 0
+        org-ellipsis "⤵"
+        org-hide-emphasis-markers t
+        org-pretty-entities nil ;; can perfor ui such as "a_words" into small "awords"
+        org-habit-graph-column 50
+        ;; Agenda styling
+        org-agenda-tags-column 0
+        )
 #+end_src
 
 ** org-appear
@@ -173,9 +173,9 @@ And if I can’t find the cursor, and don’t want to move it to see it, I can h
 
 * Font Configuration
 [[http://blogs.adobe.com/typblography/2012/09/source-code-pro.html][Source Code Pro]]  编程字体
-[[https://github.com/i-tu/Hasklig][Hasklig]]     [[https://github.com/tonsky/FiraCode][Fira]]  [[https://typeof.net/Iosevka/][Iosevka]] 
-Microsoft 字体 [[https://docs.microsoft.com/en-us/windows/terminal/cascadia-code][Cascadia]] 
-[[https://github.com/ryanoasis/nerd-fonts][Nerd Font project]] 
+[[https://github.com/i-tu/Hasklig][Hasklig]]     [[https://github.com/tonsky/FiraCode][Fira]]  [[https://typeof.net/Iosevka/][Iosevka]]
+Microsoft 字体 [[https://docs.microsoft.com/en-us/windows/terminal/cascadia-code][Cascadia]]
+[[https://github.com/ryanoasis/nerd-fonts][Nerd Font project]]
 ** cnfont
 #+name: cnfont
 #+begin_src emacs-lisp  :comments link
@@ -235,16 +235,16 @@ brew install --cask font-hack-nerd-font
       (or
        (seq-first
         (seq-filter (lambda (font) (when (x-list-fonts font) font))
-      	      '("LXGW Bright code"
+              '("LXGW Bright code"
                    "Iosevka"
-    	        "Iosevka Nerd Font Mono"
+                "Iosevka Nerd Font Mono"
                    "CaskaydiaCove Nerd Font"
-      		"FiraCode Nerd Font"
-      		"mononoki"
-      		"JetBrains Mono"
+                "FiraCode Nerd Font"
+                "mononoki"
+                "JetBrains Mono"
                    "PragmataPro"
-      		"Iosevka Nerd Font"
-      		"Fantasque Sans Mono")))
+                "Iosevka Nerd Font"
+                "Fantasque Sans Mono")))
        "monospaced"))
         "My fixed width font based on what I have installed.")
 #+end_src
@@ -258,9 +258,9 @@ brew install --cask font-hack-nerd-font
                     '("LXGW Bright Code"
                       "LXGW WenKai"
                       "LXGW WenKai Mono"
-  		    "LXGW WenKai Mono Screen"
+                    "LXGW WenKai Mono Screen"
                       "Sarasa Term Sc Nerd"
-  		    "HarmonyOS"
+                    "HarmonyOS"
                       "harmonyOS Sans")))
        (warn "Cannot find a Chinese Font.  Install 等宽字体."))))
   #+end_src
@@ -478,13 +478,41 @@ And some keybindings to call them:
 设置org-mode 的head 字体大小.
 #+name: ef-themes
 #+begin_src emacs-lisp :comments link
-(use-package ef-themes
-  :config
-  (setq ef-themes-mixed-fonts nil
-        ef-themes-variable-pitch-ui nil)
-  (mapc  #'disable-theme custom-enabled-themes)
-  (load-theme 'ef-melissa-light :no-confirm)
- )
+  ;; 1. 先安装/注册 Modus
+  (straight-use-package
+   '(modus-themes
+     :type git
+     :host github
+     :repo "protesilaos/modus-themes"))
+
+  ;; 2. 非常关键：
+  ;; straight-use-package 不等于 require。
+  ;; Ef 的 theme autoload 会直接调用 modus-themes-theme，
+  ;; 所以必须在处理 Ef 之前真正加载 Modus。
+  (require 'modus-themes)
+
+  ;; 3. 安装 Ef，但禁止 straight 生成 Ef 的 autoload。
+  ;; Ef 2.x 的 theme-autoload 与 straight 的加载顺序会产生冲突。
+  (straight-use-package
+   '(ef-themes
+     :type git
+     :host github
+     :repo "protesilaos/ef-themes"
+     :build (:not autoloads)))
+
+  ;; 4. 显式加载 Ef 主文件。
+  ;; ef-themes.el 自己会 require modus-themes，
+  ;; 并负责初始化 Ef 的主题信息。
+  (require 'ef-themes)
+
+  ;; 5. 配置
+  (setq modus-themes-mixed-fonts nil
+        modus-themes-variable-pitch-ui nil)
+
+  (ef-themes-take-over-modus-themes-mode 1)
+
+  ;; 6. 加载主题
+  (modus-themes-load-theme 'ef-maris-dark)
 #+end_src
 
 
@@ -495,9 +523,10 @@ Most of the time, Emacs is on my desk is a darkened room, so I choose the dark t
 (defun laptop-inside ()
   "Customize the theme for inside programming."
   (interactive)
-  (mapc  #'disable-theme custom-enabled-themes)
-  (disable-theme 'ef-melissa-light)
-  (load-theme 'ef-maris-dark t)
+  ;; modus-thems-load auto disable theme.
+  ;;(mapc  #'disable-theme custom-enabled-themes)
+  ;;(disable-theme 'ef-melissa-light)
+  (modus-themes-load-theme 'ef-maris-dark)
   ;; turn on the line highlighting:
   (global-hl-line-mode 1)
 )
@@ -509,9 +538,10 @@ But, when feeling adventurous, I /sometimes/ take my laptop outside:
 (defun laptop-in-the-sun ()
   "Customize the theme for outside programming."
   (interactive)
-  (mapc  #'disable-theme custom-enabled-themes)
-  (disable-theme 'ef-melissa-dark)
-  (load-theme 'ef-melissa-light t)
+  ;; modus-thems-load auto disable theme.
+  ;;(mapc  #'disable-theme custom-enabled-themes)
+  ;;(disable-theme 'ef-melissa-dark)
+  (modus-themes-load-theme 'ef-melissa-light)
   (global-hl-line-mode -1)
   (set-face-attribute 'default nil :foreground "#0c0906")
   (set-face-attribute 'region nil :background "orange")
