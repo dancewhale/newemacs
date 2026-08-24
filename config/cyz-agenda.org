@@ -26,7 +26,7 @@ A literate programming file for configuring org agenda view.
 #+end_src
 * Introduction
 这个配置文件用来配置我的agenda 相关配置.
-* agenda 文件引入和跳转 
+* agenda 文件引入和跳转
 引入org-starter 包用来管理agenda file 的list.
 #+name: org-starter
 #+begin_src emacs-lisp  :comments link
@@ -44,7 +44,7 @@ A literate programming file for configuring org agenda view.
     "C-c a"    #'org-agenda
     "s-e j i"  #'org-starter-find-file-by-key)
 #+end_src
-    
+
 * org-super-agenda
 安装对应的包
 #+name: super-agenda-package
@@ -184,14 +184,79 @@ A literate programming file for configuring org agenda view.
                     :super-groups '((:auto-tags))))))
 
   (general-define-key  :prefix "s-e"
-	"a"      '(:ignore t  :which-key "cyz agenda prefix")
-	"a a"    #'org-ql-view
-	"a s"    #'org-ql-view-sidebar)
-   #+end_src
+        "a"      '(:ignore t  :which-key "cyz agenda prefix")
+        "a a"    #'org-ql-view
+        "a s"    #'org-ql-view-sidebar)
+#+end_src
 
 
 
 * org-clock
+** pomodoro
+#+name: clock-genera
+#+begin_src emacs-lisp  :comments link
+  (require 'org-timer)
+
+  (use-package org-pomodoro
+    :ensure t
+    :commands org-pomodoro
+    :config
+    (setq org-pomodoro-length 25
+          org-pomodoro-short-break-length 5
+          org-pomodoro-long-break-length 20))
+
+  (defun my/xbar-pomodoro-status ()
+    "Return current org-pomodoro status for xbar."
+    (require 'org-pomodoro)
+
+    (cond
+     ((not (org-pomodoro-active-p))
+      "IDLE")
+
+     ((eq org-pomodoro-state :pomodoro)
+      (format "WORK\t%s\t%s"
+              (org-pomodoro-format-seconds)
+              (if (bound-and-true-p org-clock-heading)
+                  (substring-no-properties org-clock-heading)
+                "")))
+
+     ((eq org-pomodoro-state :short-break)
+      (format "SHORT_BREAK\t%s"
+              (org-pomodoro-format-seconds)))
+
+     ((eq org-pomodoro-state :long-break)
+      (format "LONG_BREAK\t%s"
+              (org-pomodoro-format-seconds)))
+
+     ((eq org-pomodoro-state :overtime)
+      (format "OVERTIME\t%s"
+              (org-pomodoro-format-seconds)))
+
+     (t
+      "IDLE")))
+
+  (defun my/xbar-show-current-task ()
+    "Open current Org task in the Quake frame."
+    (interactive)
+    (require 'quake-frame)
+    (require 'org-clock)
+
+    ;; Make sure the Quake frame exists/is visible.
+    (quake-frame-show)
+
+    ;; Run org-clock-goto *inside* the Quake frame.
+    (when (and (boundp 'quake-frame--frame)
+               (frame-live-p quake-frame--frame))
+      (with-selected-frame quake-frame--frame
+        (when (org-clocking-p)
+          (org-clock-goto))
+
+        (raise-frame)
+        (select-frame-set-input-focus quake-frame--frame))))
+
+#+end_src
+
+
 ** org-mru-clock
 这个包支持选择clock 的历史历史记录
 #+name: org-mru-clock
@@ -263,7 +328,7 @@ Let's provide a name so we can =require= this file.
   ;;; cyz-agenda.el ends here
 #+end_src
 
-Before you can build this on a new system, make sure that you put the cursor over any of these properties, 
+Before you can build this on a new system, make sure that you put the cursor over any of these properties,
 and hit: ~C-c C-c~
 
 #+description: A literate programming file for configuring org agenda view.
@@ -273,5 +338,5 @@ and hit: ~C-c C-c~
 #+property:    header-args    :results none :eval no-export :comments no mkdirp yes
 
 #+options:     num:nil toc:t todo:nil tasks:nil tags:nil date:nil
-#+options:     skip:nil author:nil email:nil creator:nil timestamp:nil
+#+options:     author:nil email:nil creator:nil timestamp:nil
 #+infojs_opt:  view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
