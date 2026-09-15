@@ -163,6 +163,20 @@ While we are at it, let’s readd, and relabel the ~z~ command functions:
 * dropdown
 #+name: quake-frame
 #+begin_src emacs-lisp  :comments link
+  (defun my-quake-frame-height (height)
+    "Correct HEIGHT for PGTK HiDPI scaling."
+    (if (eq window-system 'pgtk)
+        (let ((scale
+               (alist-get
+                'scale-factor
+                (frame-monitor-attributes))))
+          (/ height
+             (if (and (numberp scale)
+                      (> scale 0))
+                 (float scale)
+               1.0)))
+      height))
+
   (use-package quake-frame
     :straight (:type git
                :host codeberg
@@ -172,7 +186,7 @@ While we are at it, let’s readd, and relabel the ~z~ command functions:
     :custom
     ;; 根据个人喜好调整，以下是比较常用的设置
     (quake-frame-width 0.9)          ; 宽度比例（相对屏幕）
-    (quake-frame-height 0.45)        ; 高度比例
+    (quake-frame-height (my-quake-frame-height 0.45))        ; 高度比例
     (quake-frame-pos 'top)           ; 位置：'top / 'center / 'bottom
     (quake-frame-border-width 0)     ; 无边框更接近 iTerm 风格
     :config
